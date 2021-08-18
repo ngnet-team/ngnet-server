@@ -3,7 +3,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+using Ngnet.Data;
 using System.Text;
+using Microsoft.EntityFrameworkCore;
+using Ngnet.Data.DbModels;
 
 namespace Ngnet.Web.Infrastructure
 {
@@ -11,30 +14,31 @@ namespace Ngnet.Web.Infrastructure
     {
         public static ApplicationSettingsModel GetApplicationSettings(this IServiceCollection services, IConfiguration configuration)
         {
-            var applicationSettingsConfiguration = configuration.GetSection("ApplicationSettings");
-            services.Configure<ApplicationSettingsModel>(applicationSettingsConfiguration);
-            return applicationSettingsConfiguration.Get<ApplicationSettingsModel>();
+            var applicationSettings = configuration.GetSection("ApplicationSettings");
+            services.Configure<ApplicationSettingsModel>(applicationSettings);
+            return applicationSettings.Get<ApplicationSettingsModel>();
         }
 
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            return services;
-            //.AddDbContext<NgnetDbContext>(options =>
-            //  options.UseSqlServer(configuration.GetDefaultConnectionString()));
+            return services.AddDbContext<NgnetDbContext>(
+                options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
         }
 
         public static IServiceCollection AddIdentity(this IServiceCollection services)
         {
+            services
+                .AddIdentity<User, Role>(options => 
+                {
+                    options.Password.RequiredLength = 6;
+                    options.Password.RequireDigit = false;
+                    options.Password.RequireLowercase = false;
+                    options.Password.RequireNonAlphanumeric = false;
+                    options.Password.RequireUppercase = false;
+                })
+                .AddEntityFrameworkStores<NgnetDbContext>();
+
             return services;
-            //.AddIdentity<User, IdentityRole>(options =>
-            //{
-            //    options.Password.RequiredLength = 6;
-            //    options.Password.RequireDigit = false;
-            //    options.Password.RequireLowercase = false;
-            //    options.Password.RequireNonAlphanumeric = false;
-            //    options.Password.RequireUppercase = false;
-            //})
-            //.AddEntityFrameworkStores<NgnetDbContext>();
         }
 
         public static IServiceCollection AddJwtAuthentication(this IServiceCollection services, ApplicationSettingsModel appSettings)
@@ -67,14 +71,6 @@ namespace Ngnet.Web.Infrastructure
         {
             //chain the services
             return services;
-        }
-
-        public static IServiceCollection AddSwagger(this IServiceCollection services)
-        {
-            return services.AddSwaggerGen(options =>
-            {
-                options.SwaggerDoc("v1", new OpenApiInfo { Title = "Ngnet.Web", Version = "v1" });
-            });
         }
     }
 }

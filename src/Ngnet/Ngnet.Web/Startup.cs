@@ -21,9 +21,10 @@ namespace Ngnet.Web
             services
                 .AddDatabase(this.Configuration)
                 .AddIdentity()
+                .AddAuthorization()
                 .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
                 .AddServices()
-                .AddSwagger();
+                .AddControllers();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -31,21 +32,21 @@ namespace Ngnet.Web
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "Ngnet.Web v1"));
             }
 
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseAuthentication();
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app
+                .UseRouting()
+                .UseCors(options => options
+                      .AllowAnyOrigin()
+                      .AllowAnyHeader()
+                      .AllowAnyMethod())
+                .UseAuthentication()
+                .UseAuthorization()
+                .UseEndpoints(endpoints =>
+                {
+                    endpoints.MapControllers();
+                })
+                .ApplyMigrations();
         }
     }
 }

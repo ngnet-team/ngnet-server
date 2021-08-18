@@ -13,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ngnet.Data\Ngnet.Data.csproj" />
     <ProjectReference Include="..\Ngnet.Services\Ngnet.Services.csproj" />
   </ItemGroup>
 
