@@ -1,20 +1,24 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Ngnet.Data;
+using Ngnet.Data.Seeding;
 
 namespace Ngnet.Web.Infrastructure
 {
     public static class ConfigureExtension
     {
-        public static void ApplyMigrations(this IApplicationBuilder app)
+        public static void ApplyMigrations(this IApplicationBuilder app, IConfiguration configuration)
         {
-            using var services = app.ApplicationServices.CreateScope();
+            using var servicesScope = app.ApplicationServices.CreateScope();
 
-            var dbContext = services.ServiceProvider.GetService<NgnetDbContext>();
+            var dbContext = servicesScope.ServiceProvider.GetService<NgnetDbContext>();
 
-            //dbContext.Database.EnsureCreated();
             dbContext.Database.Migrate();
+
+            var adminSeederModel = configuration.GetSection("Admin").Get<AdminSeederModel>();
+            new DatabaseSeeder(adminSeederModel).SeedAsync(dbContext, servicesScope.ServiceProvider).GetAwaiter().GetResult();
         }
     }
 }

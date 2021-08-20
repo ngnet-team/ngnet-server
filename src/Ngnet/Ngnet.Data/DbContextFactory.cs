@@ -9,14 +9,14 @@ namespace Ngnet.Data
     {
         public NgnetDbContext CreateDbContext(string[] args)
         {
-            var configuration = new ConfigurationBuilder()
+            var connectionString = new ConfigurationBuilder()
                 .SetBasePath(Directory.GetCurrentDirectory())
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .Build();
+                .Build()
+                .GetSection("ConnectionStrings");
 
             var builder = new DbContextOptionsBuilder<NgnetDbContext>();
-            var connectionString = configuration.GetConnectionString("DefaultConnection");
-            builder.UseSqlServer(connectionString);
+            builder.UseSqlServer(connectionString["DefaultConnection"]);
 
             return new NgnetDbContext(builder.Options);
         }

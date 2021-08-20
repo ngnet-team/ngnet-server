@@ -48,7 +48,7 @@ namespace Ngnet.Web
                 {
                     endpoints.MapControllers();
                 })
-                .ApplyMigrations();
+                .ApplyMigrations(this.Configuration);
         }
     }
 }
