@@ -11,7 +11,6 @@ namespace Ngnet.Data
         {
         }
 
-
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //add custom builders

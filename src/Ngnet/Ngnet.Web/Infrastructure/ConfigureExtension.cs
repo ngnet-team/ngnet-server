@@ -13,6 +13,7 @@ namespace Ngnet.Web.Infrastructure
 
             var dbContext = services.ServiceProvider.GetService<NgnetDbContext>();
 
+            //dbContext.Database.EnsureCreated();
             dbContext.Database.Migrate();
         }
     }

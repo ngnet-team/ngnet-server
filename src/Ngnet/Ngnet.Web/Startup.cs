@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Ngnet.Data;
 using Ngnet.Web.Infrastructure;
 
 namespace Ngnet.Web
@@ -20,6 +21,7 @@ namespace Ngnet.Web
         {
             services
                 .AddDatabase(this.Configuration)
+                .AddDbContext<NgnetDbContext>()
                 .AddIdentity()
                 .AddAuthorization()
                 .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))

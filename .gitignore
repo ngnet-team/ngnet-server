@@ -358,3 +358,6 @@ appsettings.Development.json
 appsettings.Production.json
 *.min.css
 *.min.js
+
+#migrations-folder
+src/Ngnet/Ngnet.Data/Migrations/
