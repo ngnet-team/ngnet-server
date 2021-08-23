@@ -6,6 +6,7 @@ using Ngnet.Data;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Ngnet.Data.DbModels;
+using Ngnet.Services;
 
 namespace Ngnet.Web.Infrastructure
 {
@@ -69,7 +70,8 @@ namespace Ngnet.Web.Infrastructure
         public static IServiceCollection AddServices(this IServiceCollection services)
         {
             //chain the services
-            return services;
+            return services
+                .AddTransient<UserService>();
         }
     }
 }

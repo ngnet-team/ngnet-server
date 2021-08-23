@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
+using Ngnet.Common;
 using Ngnet.Data.DbModels;
 using System;
 using System.Threading.Tasks;
@@ -12,9 +13,9 @@ namespace Ngnet.Data.Seeding
 
         public AdminSeeder(AdminSeederModel adminSeederModel)
         {
-            if (adminSeederModel.UserName == null || adminSeederModel.Password == null)
+            if (adminSeederModel?.Email == null || adminSeederModel?.UserName == null || adminSeederModel?.Password == null)
             {
-                throw new DataMisalignedException("You must create appsetting.Developer.json file with Admin { Username and Password } properties");
+                throw new DataMisalignedException(ValidationMessages.RequiredAppSettingDevelopment, new Exception(ValidationMessages.ByAuthor("Dimitar Sotirov")));
             }
 
             this.adminSeederModel = adminSeederModel;
@@ -30,6 +31,7 @@ namespace Ngnet.Data.Seeding
             {
                 user = new User() 
                 { 
+                    Email = this.adminSeederModel.Email,
                     UserName = this.adminSeederModel.UserName,
                     FirstName = this.adminSeederModel?.FirstName,
                     LastName = this.adminSeederModel?.LastName,
