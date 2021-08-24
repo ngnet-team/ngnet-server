@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -18,13 +19,22 @@ namespace Ngnet.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
         private readonly IConfiguration configuration;
+        private readonly IMapper mapper;
 
-        public UsersController(UserService userService, UserManager<User> userManager, RoleManager<Role> roleManager, IConfiguration configuration)
+        public UsersController
+            (
+             UserService userService, 
+             UserManager<User> userManager, 
+             RoleManager<Role> roleManager, 
+             IConfiguration configuration,
+             IMapper mapper
+            )
         {
             this.userService = userService;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.configuration = configuration;
+            this.mapper = mapper;
         }
 
         [HttpPost]
@@ -85,13 +95,7 @@ namespace Ngnet.Web.Controllers
         {
             var users = await this.userManager.Users.ToArrayAsync();
 
-            return users.Select(u => new UsersResponseModel 
-            {
-                Email = u.Email,
-                UserName = u.UserName,
-                FirstName = u.FirstName,
-                LastName = u.LastName
-            }).ToArray();
+            return users.Select(u => this.mapper.Map<UsersResponseModel>(u)).ToArray();
         }
     }
 }

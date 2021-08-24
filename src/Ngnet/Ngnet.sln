@@ -11,7 +11,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.Data", "Ngnet.Data\Ng
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.Tests", "Ngnet.Tests\Ngnet.Tests.csproj", "{CC120728-FD95-427E-97ED-201671F04062}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ngnet.Common", "Ngnet.Common\Ngnet.Common.csproj", "{2A46DEB0-B329-49FE-AB7E-A38911150AC5}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.Common", "Ngnet.Common\Ngnet.Common.csproj", "{2A46DEB0-B329-49FE-AB7E-A38911150AC5}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.Mapper", "Ngnet.Mapper\Ngnet.Mapper.csproj", "{72F06FD4-7C33-4FC5-AF8F-B1DCA7AF6034}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ngnet.WebModels", "Ngnet.WebModels\Ngnet.WebModels.csproj", "{C19DC0CD-F72A-4425-80C8-9E5D8AB0A773}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -39,6 +43,14 @@ Global
 		{2A46DEB0-B329-49FE-AB7E-A38911150AC5}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2A46DEB0-B329-49FE-AB7E-A38911150AC5}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2A46DEB0-B329-49FE-AB7E-A38911150AC5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72F06FD4-7C33-4FC5-AF8F-B1DCA7AF6034}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72F06FD4-7C33-4FC5-AF8F-B1DCA7AF6034}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72F06FD4-7C33-4FC5-AF8F-B1DCA7AF6034}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72F06FD4-7C33-4FC5-AF8F-B1DCA7AF6034}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C19DC0CD-F72A-4425-80C8-9E5D8AB0A773}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C19DC0CD-F72A-4425-80C8-9E5D8AB0A773}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C19DC0CD-F72A-4425-80C8-9E5D8AB0A773}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C19DC0CD-F72A-4425-80C8-9E5D8AB0A773}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

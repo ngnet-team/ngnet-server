@@ -20,6 +20,7 @@ namespace Ngnet.Web
         public void ConfigureServices(IServiceCollection services)
         {
             services
+                .AddAutoMapper()
                 .AddDatabase(this.Configuration)
                 .AddDbContext<NgnetDbContext>()
                 .AddIdentity()

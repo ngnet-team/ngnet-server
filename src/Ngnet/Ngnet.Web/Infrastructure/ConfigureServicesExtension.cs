@@ -7,6 +7,8 @@ using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Ngnet.Data.DbModels;
 using Ngnet.Services;
+using AutoMapper;
+using Ngnet.Mapper;
 
 namespace Ngnet.Web.Infrastructure
 {
@@ -17,6 +19,19 @@ namespace Ngnet.Web.Infrastructure
             var applicationSettings = configuration.GetSection("ApplicationSettings");
             services.Configure<ApplicationSettingsModel>(applicationSettings);
             return applicationSettings.Get<ApplicationSettingsModel>();
+        }
+
+        public static IServiceCollection AddAutoMapper(this IServiceCollection services)
+        {
+            var config = new MapperConfiguration(c =>
+            {
+                c.AddProfile(new MappingFactory());
+            });
+
+            IMapper mapper = config.CreateMapper();
+            services.AddSingleton(mapper);
+
+            return services;
         }
 
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)

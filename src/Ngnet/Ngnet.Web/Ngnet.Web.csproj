@@ -14,7 +14,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ngnet.Data\Ngnet.Data.csproj" />
+    <ProjectReference Include="..\Ngnet.Mapper\Ngnet.Mapper.csproj" />
     <ProjectReference Include="..\Ngnet.Services\Ngnet.Services.csproj" />
+    <ProjectReference Include="..\Ngnet.WebModels\Ngnet.WebModels.csproj" />
   </ItemGroup>
 
 </Project>
