@@ -2,6 +2,7 @@
 ASP.NET Web API
 
 Steps before launching:
+
 		- Clone "appSettings.json" file to an "appSettings.Development.json" one and add the followng structior:
 		
 		"Admin": {
