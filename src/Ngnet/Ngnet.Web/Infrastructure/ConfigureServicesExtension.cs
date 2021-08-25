@@ -86,7 +86,7 @@ namespace Ngnet.Web.Infrastructure
         {
             //chain the services
             return services
-                .AddTransient<UserService>();
+                .AddTransient<AuthService>();
         }
     }
 }

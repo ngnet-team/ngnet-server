@@ -8,11 +8,11 @@ using System.Text;
 
 namespace Ngnet.Services
 {
-    public class UserService : IUserService
+    public class AuthService : IAuthService
     {
         private readonly NgnetDbContext database;
 
-        public UserService(NgnetDbContext database)
+        public AuthService(NgnetDbContext database)
         {
             this.database = database;
         }

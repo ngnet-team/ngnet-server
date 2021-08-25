@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ngnet.ApiModels\Ngnet.ApiModels.csproj" />
     <ProjectReference Include="..\Ngnet.Data\Ngnet.Data.csproj" />
-    <ProjectReference Include="..\Ngnet.WebModels\Ngnet.WebModels.csproj" />
   </ItemGroup>
 
 </Project>

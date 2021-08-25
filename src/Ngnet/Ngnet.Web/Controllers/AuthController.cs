@@ -13,17 +13,17 @@ using System.Threading.Tasks;
 
 namespace Ngnet.Web.Controllers
 {
-    public class UsersController : ApiController
+    public class AuthController : ApiController
     {
-        private readonly UserService userService;
+        private readonly AuthService userService;
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
         private readonly IConfiguration configuration;
         private readonly IMapper mapper;
 
-        public UsersController
+        public AuthController
             (
-             UserService userService, 
+             AuthService userService, 
              UserManager<User> userManager, 
              RoleManager<Role> roleManager, 
              IConfiguration configuration,
