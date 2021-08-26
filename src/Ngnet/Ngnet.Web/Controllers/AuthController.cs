@@ -4,10 +4,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Ngnet.ApiModels;
 using Ngnet.Data.DbModels;
 using Ngnet.Services;
 using Ngnet.Web.Infrastructure;
 using Ngnet.Web.Models.UserModels;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -43,7 +45,8 @@ namespace Ngnet.Web.Controllers
         {
             if (model.Password != model.RepeatPassword)
             {
-                return ValidationProblem(ValidationMessages.NotEquealPasswords);
+                var errors = new List<AuthErrorModel> { new AuthErrorModel(ValidationMessages.NotEquealPasswords) };
+                return BadRequest(errors);
             }
 
             var user = new User 
@@ -73,14 +76,16 @@ namespace Ngnet.Web.Controllers
 
             if (user == null)
             {
-                return Unauthorized();
+                var errors = new List<AuthErrorModel> { new AuthErrorModel(ValidationMessages.InvalidUsername) };
+                return Unauthorized(errors);
             }
 
             var validPassword = await this.userManager.CheckPasswordAsync(user, model.Password);
 
             if (!validPassword)
             {
-                return Unauthorized();
+                var errors = new List<AuthErrorModel> { new AuthErrorModel(ValidationMessages.InvalidPasswords) };
+                return Unauthorized(errors);
             }
 
             string token = this.userService.CreateJwtToken(user.Id, user.UserName, this.configuration["ApplicationSettings:Secret"]);
