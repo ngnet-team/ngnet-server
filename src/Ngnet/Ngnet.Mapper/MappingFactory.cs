@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
+using Ngnet.ApiModels.UserModels;
 using Ngnet.Data.DbModels;
-using Ngnet.Web.Models.UserModels;
 
 namespace Ngnet.Mapper
 {
@@ -8,7 +8,7 @@ namespace Ngnet.Mapper
     {
         public MappingFactory()
         {
-            CreateMap<User, UsersResponseModel>();
+            CreateMap<User, UserResponseModel>();
         }
     }
 }

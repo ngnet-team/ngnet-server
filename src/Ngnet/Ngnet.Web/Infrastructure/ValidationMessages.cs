@@ -7,5 +7,9 @@
         public const string InvalidUsername = "The username is invalid!";
 
         public const string InvalidPasswords = "The password is invalid!";
+
+        public const string UserNotFound = "No user found!";
+
+        public const string UsersNotFound = "No users found!";
     }
 }
