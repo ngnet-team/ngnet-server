@@ -1,6 +1,6 @@
-﻿namespace Ngnet.Web.Models.UserModels
+﻿namespace Ngnet.ApiModels.UserModels
 {
-    public class UsersResponseModel
+    public class UserResponseModel
     {
         public string Email { get; set; }
 
@@ -11,5 +11,7 @@
         public string LastName { get; set; }
 
         public int? Age { get; set; }
+
+        public string RoleName { get; set; }
     }
 }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ngnet.ApiModels;
+using Ngnet.ApiModels.UserModels;
 using Ngnet.Data.DbModels;
 using Ngnet.Services;
 using Ngnet.Web.Infrastructure;
@@ -45,8 +46,8 @@ namespace Ngnet.Web.Controllers
         {
             if (model.Password != model.RepeatPassword)
             {
-                var errors = new List<AuthErrorModel> { new AuthErrorModel(ValidationMessages.NotEquealPasswords) };
-                return BadRequest(errors);
+                var errors = this.GetErrors(ValidationMessages.NotEquealPasswords);
+                return this.BadRequest(errors);
             }
 
             var user = new User 
@@ -60,12 +61,12 @@ namespace Ngnet.Web.Controllers
             var action = await this.userManager.CreateAsync(user, model.Password);
             if (!action.Succeeded)
             {
-                return BadRequest(action.Errors);
+                return this.BadRequest(action.Errors);
             }
 
             await this.userManager.AddToRoleAsync(user, "User");
 
-            return Ok();
+            return this.Ok();
         }
 
         [HttpPost]
@@ -76,16 +77,16 @@ namespace Ngnet.Web.Controllers
 
             if (user == null)
             {
-                var errors = new List<AuthErrorModel> { new AuthErrorModel(ValidationMessages.InvalidUsername) };
-                return Unauthorized(errors);
+                var errors = this.GetErrors(ValidationMessages.InvalidUsername);
+                return this.Unauthorized(errors);
             }
 
             var validPassword = await this.userManager.CheckPasswordAsync(user, model.Password);
 
             if (!validPassword)
             {
-                var errors = new List<AuthErrorModel> { new AuthErrorModel(ValidationMessages.InvalidPasswords) };
-                return Unauthorized(errors);
+                var errors = this.GetErrors(ValidationMessages.InvalidPasswords);
+                return this.Unauthorized(errors);
             }
 
             string token = this.userService.CreateJwtToken(user.Id, user.UserName, this.configuration["ApplicationSettings:Secret"]);
@@ -94,13 +95,42 @@ namespace Ngnet.Web.Controllers
         }
 
         [Authorize]
-        [HttpGet]
+        [HttpPost]
         [Route(nameof(All))]
-        public async Task<UsersResponseModel[]> All()
+        public async Task<ActionResult<UserResponseModel[]>> All()
         {
             var users = await this.userManager.Users.ToArrayAsync();
 
-            return users.Select(u => this.mapper.Map<UsersResponseModel>(u)).ToArray();
+            if (users.Length == 0)
+            {
+                var errors = this.GetErrors(ValidationMessages.UsersNotFound);
+                return this.BadRequest(errors);
+            }
+
+            return users.Select(u => this.mapper.Map<UserResponseModel>(u)).ToArray();
+        }
+
+        [Authorize]
+        [HttpGet]
+        [Route(nameof(Profile))]
+        public async Task<ActionResult<UserResponseModel>> Profile()
+        {
+            User user = await this.userManager.FindByIdAsync(this.User.GetId());
+
+            if (user == null)
+            {
+                var errors = this.GetErrors(ValidationMessages.UserNotFound);
+                return this.Unauthorized(errors);
+            }
+
+            var response =  this.mapper.Map<UserResponseModel>(user);
+            response.RoleName = this.userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
+            return response;
+        }
+
+        private List<AuthErrorModel> GetErrors(string error)
+        {
+            return new List<AuthErrorModel> { new AuthErrorModel(error) };
         }
     }
 }
