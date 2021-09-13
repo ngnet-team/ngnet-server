@@ -9,6 +9,8 @@ using Ngnet.Data.DbModels;
 using Ngnet.Services;
 using AutoMapper;
 using Ngnet.Mapper;
+using Ngnet.Services.Contracts;
+using Ngnet.Services.Email;
 
 namespace Ngnet.Web.Infrastructure
 {
@@ -82,11 +84,12 @@ namespace Ngnet.Web.Infrastructure
             return services;
         }
 
-        public static IServiceCollection AddServices(this IServiceCollection services)
+        public static IServiceCollection AddServices(this IServiceCollection services, IConfiguration configuration)
         {
             //chain the services
             return services
-                .AddTransient<AuthService>();
+                .AddTransient<IAuthService, AuthService>()
+                .AddSingleton<IEmailSenderService, EmailSenderService>(x => new EmailSenderService(configuration.GetSection("EmailSender:Key").ToString()));
         }
     }
 }
