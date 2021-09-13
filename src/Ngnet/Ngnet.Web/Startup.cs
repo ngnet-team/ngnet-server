@@ -26,7 +26,7 @@ namespace Ngnet.Web
                 .AddIdentity()
                 .AddAuthorization()
                 .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
-                .AddServices()
+                .AddServices(this.Configuration)
                 .AddControllers();
         }
 
