@@ -2,7 +2,7 @@
 
 namespace Ngnet.Data.DbModels
 {
-    public class Company
+    public class Company : BaseModel<int>
     {
         [Required]
         public string Name { get; set; }

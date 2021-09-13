@@ -3,7 +3,7 @@ using System;
 
 namespace Ngnet.Data.DbModels
 {
-    public class Role : IdentityRole
+    public class Role : IdentityRole, IBaseModel
     {
         public Role()
             : this(null)
@@ -15,5 +15,13 @@ namespace Ngnet.Data.DbModels
         {
             this.Id = Guid.NewGuid().ToString();
         }
+
+        public DateTime CreatedOn { get; set; }
+
+        public DateTime? ModifiedOn { get; set; }
+
+        public DateTime? DeletedOn { get; set; }
+
+        public bool IsDeleted { get; set; }
     }
 }

@@ -5,7 +5,7 @@ using Ngnet.Data.DbModels;
 using System;
 using System.Threading.Tasks;
 
-namespace Ngnet.Data.Seeding
+namespace Ngnet.Data.Seeding.Seeders
 {
     public class AdminSeeder : ISeeder
     {
@@ -35,6 +35,7 @@ namespace Ngnet.Data.Seeding
                     UserName = this.adminSeederModel.UserName,
                     FirstName = this.adminSeederModel?.FirstName,
                     LastName = this.adminSeederModel?.LastName,
+                    CreatedOn = DateTime.UtcNow,
                 };
                 var result = await userManager.CreateAsync(user, this.adminSeederModel.Password);
                 

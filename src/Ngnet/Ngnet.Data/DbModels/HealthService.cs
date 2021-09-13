@@ -3,16 +3,17 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ngnet.Data.DbModels
 {
-    public class CarNotes
+    public class HealthService : BaseModel<string>
     {
+        public HealthService()
+        {
+            this.Id = Guid.NewGuid().ToString();
+        }
+
         [Required]
         public string Name { get; set; }
 
-        public DateTime? StartDate { get; set; }
-
-        public DateTime? EndDate { get; set; }
-
-        public DateTime? PaidEndDate { get; set; }
+        public DateTime? Date { get; set; }
 
         public DateTime? Reminder { get; set; }
 
@@ -22,5 +23,9 @@ namespace Ngnet.Data.DbModels
         public Company Company { get; set; }
 
         public string Notes { get; set; }
+
+        public string UserId { get; set; }
+
+        public User User { get; set; }
     }
 }

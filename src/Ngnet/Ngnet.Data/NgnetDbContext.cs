@@ -11,6 +11,16 @@ namespace Ngnet.Data
         {
         }
 
+        public DbSet<Company> Companies { get; set; }
+
+        public DbSet<CarService> CarServices { get; set; }
+
+        public DbSet<HealthService> HealthServices { get; set; }
+
+        public DbSet<CarServiceName> CarServiceNames { get; set; }
+
+        public DbSet<HealthServiceName> HealthServiceNames { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //add custom builders
