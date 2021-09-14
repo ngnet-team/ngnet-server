@@ -1,0 +1,52 @@
+﻿{
+  "cars": {
+    "EN": [
+      "AIG EUROPE LIMITED",
+      "BULSTRAD VIENNA INSURANCE GROUP",
+      "ALLIANZ BULGARIA HOLDING JSC",
+      "BUL INS INSURANCE JSC",
+      "BULSTRAD VIENNA INSURANCE GROUP INSURANCE JSC",
+      "GENERALI BULGARIA HOLDING SJSC",
+      "DZI – GENERAL INSURANCE SJSC",
+      "GROUPAMA INSURANCE SJSC",
+      "EUROINS INSURANCE JSC",
+      "LEV INS INSURANCE JSC",
+      "OZK INSURANCE INSURANCE JSC",
+      "UNICA BULGARIA INSURANCE COMPANY",
+      "MONDIAL ASSISTANCE",
+      "BULGARIA INSURANCE COMPANY"
+    ],
+    "BG": [
+      "АИГ",
+      "Булстрад",
+      "Алианц",
+      "Бул Инс",
+      "Булстрад",
+      "Генерали",
+      "ДЗИ",
+      "Групама",
+      "Евро Инс",
+      "Лев Инс",
+      "ОЗК",
+      "Уника",
+      "Мондиал",
+      "Българска Застрахователна Компания"
+    ]
+  },
+  "health": {
+    "EN": [
+      "Adipharm",
+      "Biomeda 2000 Ltd",
+      "Biotonika",
+      "Bora Clinic",
+      "Clinic Dr. Mihailov"
+    ],
+    "BG": [
+      "Адифарма",
+      "Биомеда",
+      "Биотоника",
+      "Бора Клиник",
+      "Клиника д-р Михайлов"
+    ]
+  }
+}

@@ -1,0 +1,20 @@
+﻿{
+  "EN": [
+    "Dentist",
+    "Eye doctor",
+    "Allergists/Immunologists",
+    "Cardiologists",
+    "Dermatologists",
+    "Gastroenterologists",
+    "Nephrologists"
+  ],
+  "BG": [
+    "Зъболекар",
+    "Очен лекар",
+    "Алерголог/имунолог",
+    "Кардиолог",
+    "Дерматолог",
+    "Гастроентеролог",
+    "Нефролог"
+  ]
+}
