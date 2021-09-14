@@ -7,7 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Ngnet.ApiModels;
 using Ngnet.ApiModels.UserModels;
 using Ngnet.Data.DbModels;
-using Ngnet.Services;
+using Ngnet.Services.Contracts;
 using Ngnet.Web.Infrastructure;
 using Ngnet.Web.Models.UserModels;
 using System.Collections.Generic;
@@ -18,7 +18,7 @@ namespace Ngnet.Web.Controllers
 {
     public class AuthController : ApiController
     {
-        private readonly AuthService userService;
+        private readonly IAuthService userService;
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
         private readonly IConfiguration configuration;
@@ -26,7 +26,7 @@ namespace Ngnet.Web.Controllers
 
         public AuthController
             (
-             AuthService userService, 
+             IAuthService userService, 
              UserManager<User> userManager, 
              RoleManager<Role> roleManager, 
              IConfiguration configuration,
