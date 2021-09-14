@@ -3,9 +3,9 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Ngnet.Data.DbModels
 {
-    public class CarService : BaseModel<string>
+    public class VehicleCare : BaseModel<string>
     {
-        public CarService()
+        public VehicleCare()
         {
             this.Id = Guid.NewGuid().ToString();
         }

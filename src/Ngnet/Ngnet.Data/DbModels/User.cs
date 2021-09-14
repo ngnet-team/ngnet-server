@@ -10,8 +10,8 @@ namespace Ngnet.Data.DbModels
         {
             this.Id = Guid.NewGuid().ToString();
 
-            this.CarNotes = new HashSet<CarService>();
-            this.HealthNotes = new HashSet<HealthService>();
+            this.CarNotes = new HashSet<VehicleCare>();
+            this.HealthNotes = new HashSet<HealthCare>();
         }
 
         public string FirstName { get; set; }
@@ -20,9 +20,9 @@ namespace Ngnet.Data.DbModels
 
         public int? Age { get; set; }
 
-        public ICollection<CarService> CarNotes { get; set; }
+        public ICollection<VehicleCare> CarNotes { get; set; }
 
-        public ICollection<HealthService> HealthNotes { get; set; }
+        public ICollection<HealthCare> HealthNotes { get; set; }
 
         public DateTime CreatedOn { get; set; }
 

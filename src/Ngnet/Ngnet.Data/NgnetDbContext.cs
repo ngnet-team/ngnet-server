@@ -13,15 +13,15 @@ namespace Ngnet.Data
 
         public DbSet<Company> Companies { get; set; }
 
-        public DbSet<CarService> CarServices { get; set; }
+        public DbSet<VehicleCare> VehicleCares { get; set; }
 
-        public DbSet<HealthService> HealthServices { get; set; }
+        public DbSet<HealthCare> HealthCares { get; set; }
 
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //add custom builders
-            builder.Entity<CarService>().Property(b => b.Price).HasColumnType("decimal");
-            builder.Entity<HealthService>().Property(b => b.Price).HasColumnType("decimal");
+            builder.Entity<VehicleCare>().Property(b => b.Price).HasColumnType("decimal");
+            builder.Entity<HealthCare>().Property(b => b.Price).HasColumnType("decimal");
 
             base.OnModelCreating(builder);
         }
