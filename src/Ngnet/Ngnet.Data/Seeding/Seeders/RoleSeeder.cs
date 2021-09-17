@@ -4,7 +4,7 @@ using Ngnet.Data.DbModels;
 using System;
 using System.Threading.Tasks;
 
-namespace Ngnet.Data.Seeding
+namespace Ngnet.Data.Seeding.Seeders
 {
     public class RoleSeeder : ISeeder
     {
@@ -23,7 +23,7 @@ namespace Ngnet.Data.Seeding
             var role = await roleManager.FindByNameAsync(roleName);
             if (role == null)
             {
-                var result = await roleManager.CreateAsync(new Role(roleName));
+                var result = await roleManager.CreateAsync(new Role(roleName) { CreatedOn = DateTime.UtcNow });
                 if (!result.Succeeded)
                 {
                     throw new Exception(result.Errors.ToString());

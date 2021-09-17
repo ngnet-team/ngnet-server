@@ -1,6 +1,9 @@
-﻿namespace Ngnet.ApiModels.UserModels
+﻿using Ngnet.Data.DbModels;
+using Ngnet.Mapper;
+
+namespace Ngnet.ApiModels.UserModels
 {
-    public class UserResponseModel
+    public class UserResponseModel : IMapFrom<User>
     {
         public string Email { get; set; }
 

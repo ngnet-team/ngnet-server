@@ -27,12 +27,11 @@ namespace Ngnet.Web.Infrastructure
         {
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfile(new MappingFactory());
+                c.AddProfile(new MappingProfile());
             });
 
             IMapper mapper = config.CreateMapper();
             services.AddSingleton(mapper);
-
             return services;
         }
 
@@ -89,6 +88,7 @@ namespace Ngnet.Web.Infrastructure
             //chain the services
             return services
                 .AddTransient<IAuthService, AuthService>()
+                .AddTransient<IVehicleCareService, VehicleCareService>()
                 .AddSingleton<IEmailSenderService, EmailSenderService>(x => new EmailSenderService(configuration.GetSection("EmailSender:Key").ToString()));
         }
     }

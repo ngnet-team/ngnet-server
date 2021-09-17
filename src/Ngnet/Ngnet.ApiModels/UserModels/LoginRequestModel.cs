@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Ngnet.Data.DbModels;
+using Ngnet.Mapper;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ngnet.Web.Models.UserModels
 {
-    public class LoginRequestModel
+    public class LoginRequestModel : IMapTo<User>
     {
         [Required]
         public string UserName { get; set; }

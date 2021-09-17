@@ -9,7 +9,9 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Ngnet.ApiModels\Ngnet.ApiModels.csproj" />
     <ProjectReference Include="..\Ngnet.Data\Ngnet.Data.csproj" />
+    <ProjectReference Include="..\Ngnet.Mapper\Ngnet.Mapper.csproj" />
   </ItemGroup>
 
 </Project>

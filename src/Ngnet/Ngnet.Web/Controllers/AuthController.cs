@@ -1,16 +1,13 @@
-﻿using AutoMapper;
-using Microsoft.AspNetCore.Authorization;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Ngnet.ApiModels;
 using Ngnet.ApiModels.UserModels;
 using Ngnet.Data.DbModels;
 using Ngnet.Services.Contracts;
 using Ngnet.Web.Infrastructure;
 using Ngnet.Web.Models.UserModels;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -22,22 +19,19 @@ namespace Ngnet.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
         private readonly IConfiguration configuration;
-        private readonly IMapper mapper;
 
         public AuthController
             (
              IAuthService userService, 
              UserManager<User> userManager, 
              RoleManager<Role> roleManager, 
-             IConfiguration configuration,
-             IMapper mapper
+             IConfiguration configuration
             )
         {
             this.userService = userService;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.configuration = configuration;
-            this.mapper = mapper;
         }
 
         [HttpPost]
@@ -107,7 +101,15 @@ namespace Ngnet.Web.Controllers
                 return this.BadRequest(errors);
             }
 
-            return users.Select(u => this.mapper.Map<UserResponseModel>(u)).ToArray();
+            return users.Select(u => new UserResponseModel()
+            {
+                RoleName = this.userManager.GetRolesAsync(u).GetAwaiter().GetResult().FirstOrDefault(),
+                Email = u.Email,
+                UserName = u.UserName,
+                FirstName = u.FirstName,
+                LastName = u.LastName,
+                Age = u.Age
+            }).ToArray();
         }
 
         [Authorize]
@@ -123,14 +125,15 @@ namespace Ngnet.Web.Controllers
                 return this.Unauthorized(errors);
             }
 
-            var response =  this.mapper.Map<UserResponseModel>(user);
-            response.RoleName = this.userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault();
-            return response;
-        }
-
-        private List<AuthErrorModel> GetErrors(string error)
-        {
-            return new List<AuthErrorModel> { new AuthErrorModel(error) };
+            return new UserResponseModel() 
+            {
+                RoleName = this.userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault(),
+                Email = user.Email,
+                UserName = user.UserName,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Age = user.Age
+            };
         }
     }
 }
