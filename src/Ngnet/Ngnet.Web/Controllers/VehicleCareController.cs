@@ -2,7 +2,6 @@
 using Ngnet.ApiModels;
 using System.Threading.Tasks;
 using Ngnet.Web.Infrastructure;
-using System;
 using Ngnet.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
 
@@ -23,18 +22,30 @@ namespace Ngnet.Web.Controllers
         public async Task<ActionResult> Save(VehicleCareRequestModel model)
         {
             string userId = this.User.GetId();
-            Console.WriteLine(userId);
             if (userId == null)
             {
-                return this.Unauthorized(ValidationMessages.UserNotFound);
-                //var errors = this.GetErrors(ValidationMessages.UserNotFound);
-                //return this.Unauthorized(errors);
+                var errors = this.GetErrors(ValidationMessages.UserNotFound);
+                return this.Unauthorized(errors);
             }
 
             model.UserId = userId;
-            await this.vehicleCareService.SaveAsync(model);
+            var result = await this.vehicleCareService.SaveAsync(model);
 
-            return this.Ok();
+            return this.Ok(result);
+        }
+
+        [HttpPost]
+        [Route(nameof(Single))]
+        public VehicleCareResponseModel Single(VehicleCareRequestModel model)
+        {
+            return this.vehicleCareService.GetByVehicleCareId<VehicleCareResponseModel>(model.Id);
+        }
+
+        [HttpPost]
+        [Route(nameof(Multiple))]
+        public VehicleCareResponseModel[] Multiple(VehicleCareRequestModel model)
+        {
+            return this.vehicleCareService.GetByUserId<VehicleCareResponseModel>(model.UserId);
         }
     }
 }

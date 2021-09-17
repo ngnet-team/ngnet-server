@@ -1,11 +1,15 @@
-﻿using System;
+﻿using AutoMapper;
+using Ngnet.Data.DbModels;
+using Ngnet.Mapper;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ngnet.ApiModels
 {
-    public class VehicleCareRequestModel
+    public class VehicleCareRequestModel : IMapTo<VehicleCare>, IHaveCustomMappings
     {
-        [Required]
+        public string Id { get; set; }
+
         public string Name { get; set; }
 
         public DateTime? StartDate { get; set; }
@@ -24,5 +28,12 @@ namespace Ngnet.ApiModels
         public string Notes { get; set; }
 
         public string UserId { get; set; }
+
+        public bool IsDeleted { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<VehicleCareRequestModel, VehicleCare>().ForMember(x => x.Id, opt => opt.Condition(c => c.Id != null));
+        }
     }
 }

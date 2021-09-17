@@ -27,12 +27,11 @@ namespace Ngnet.Web.Infrastructure
         {
             var config = new MapperConfiguration(c =>
             {
-                c.AddProfile(new MappingFactory());
+                c.AddProfile(new MappingProfile());
             });
 
             IMapper mapper = config.CreateMapper();
             services.AddSingleton(mapper);
-
             return services;
         }
 
