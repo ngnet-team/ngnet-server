@@ -127,7 +127,7 @@ namespace Ngnet.Web.Controllers
 
             return new UserResponseModel() 
             {
-                RoleName = this.userManager.GetRolesAsync(user).GetAwaiter().GetResult().FirstOrDefault(),
+                RoleName = await this.User.GetRoleAsync(this.userManager),
                 Email = user.Email,
                 UserName = user.UserName,
                 FirstName = user.FirstName,

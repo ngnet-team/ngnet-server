@@ -4,6 +4,8 @@ using Ngnet.Web.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Ngnet.ApiModels.VehicleModels ;
 using Ngnet.Services.Vehicle;
+using Microsoft.AspNetCore.Identity;
+using Ngnet.Data.DbModels;
 
 namespace Ngnet.Web.Controllers
 {
@@ -11,10 +13,12 @@ namespace Ngnet.Web.Controllers
     public class VehicleCareController : ApiController
     {
         private readonly IVehicleCareService vehicleCareService;
+        private readonly UserManager<User> userManager;
 
-        public VehicleCareController(IVehicleCareService vehicleCareService)
+        public VehicleCareController(IVehicleCareService vehicleCareService, UserManager<User> userManager)
         {
             this.vehicleCareService = vehicleCareService;
+            this.userManager = userManager;
         }
 
         [HttpPost]
@@ -28,7 +32,18 @@ namespace Ngnet.Web.Controllers
                 return this.Unauthorized(errors);
             }
 
-            model.UserId = userId;
+            var role = await this.User.GetRoleAsync(this.userManager);
+
+            if (model.UserId == null)
+            {
+                model.UserId = userId;
+            }
+            else if (model.UserId != userId && role != "Admin")
+            {
+                var errors = this.GetErrors(ValidationMessages.NoPermissions);
+                return this.Unauthorized(errors);
+            }
+
             var result = await this.vehicleCareService.SaveAsync(model);
 
             return this.Ok(result);
@@ -43,7 +58,7 @@ namespace Ngnet.Web.Controllers
             if (response == null)
             {
                 var errors = this.GetErrors(ValidationMessages.VehicleCareNotFound);
-                return this.Unauthorized(errors);
+                return this.NotFound(errors);
             }
 
             return response;
@@ -58,7 +73,7 @@ namespace Ngnet.Web.Controllers
             if (response.Length == 0)
             {
                 var errors = this.GetErrors(ValidationMessages.VehicleCaresNotFound);
-                return this.Unauthorized(errors);
+                return this.NotFound(errors);
             }
 
             return response;
@@ -73,7 +88,7 @@ namespace Ngnet.Web.Controllers
             if (response.Length == 0)
             {
                 var errors = this.GetErrors(ValidationMessages.VehicleCaresNotFound);
-                return this.Unauthorized(errors);
+                return this.NotFound(errors);
             }
 
             return response;
