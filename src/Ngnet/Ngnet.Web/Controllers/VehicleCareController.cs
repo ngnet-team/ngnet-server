@@ -93,5 +93,28 @@ namespace Ngnet.Web.Controllers
 
             return response;
         }
+
+        [HttpPost]
+        [Route(nameof(Delete))]
+        public async Task<ActionResult> Delete(VehicleCareRequestModel model)
+        {
+            var role = await this.User.GetRoleAsync(this.userManager);
+
+            if (role != "Admin")
+            {
+                var errors = this.GetErrors(ValidationMessages.NoPermissions);
+                return this.Unauthorized(errors);
+            }
+
+            var result = await this.vehicleCareService.DeleteAsync(model.Id, true);
+
+            if (result == 0)
+            {
+                var errors = this.GetErrors(ValidationMessages.VehicleCareNotFound);
+                return this.NotFound(errors);
+            }
+
+            return this.Ok(result);
+        }
     }
 }

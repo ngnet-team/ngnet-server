@@ -4,6 +4,7 @@ using Ngnet.Data.DbModels;
 using Ngnet.Mapper;
 using System.Linq;
 using System.Threading.Tasks;
+using System;
 
 namespace Ngnet.Services.Vehicle
 {
@@ -14,6 +15,28 @@ namespace Ngnet.Services.Vehicle
         public VehicleCareService(NgnetDbContext database)
         {
             this.database = database;
+        }
+
+        public async Task<int> DeleteAsync(string vehicleCareId, bool hardDelete = false)
+        {
+            var vehicleCare = this.database.VehicleCares.FirstOrDefault(x => x.Id == vehicleCareId);
+
+            if (vehicleCare == null)
+            {
+                return 0;
+            }
+
+            if (hardDelete)
+            {
+                this.database.VehicleCares.Remove(vehicleCare);
+            }
+            else
+            {
+                vehicleCare.IsDeleted = true;
+                vehicleCare.DeletedOn = DateTime.UtcNow;
+            }
+
+            return await this.database.SaveChangesAsync();
         }
 
         public T[] GetByUserId<T>(string userId)
@@ -60,9 +83,9 @@ namespace Ngnet.Services.Vehicle
             vehicleCare.Reminder = mappedModel.Reminder == null ? vehicleCare.Reminder : mappedModel.Reminder;
             vehicleCare.Price = mappedModel.Price == null ? vehicleCare.Price : mappedModel.Price;
             vehicleCare.Notes = mappedModel.Notes == null ? vehicleCare.Notes : mappedModel.Notes;
-            vehicleCare.ModifiedOn = System.DateTime.UtcNow;
+            vehicleCare.ModifiedOn = DateTime.UtcNow;
             vehicleCare.IsDeleted = mappedModel.IsDeleted == true ? mappedModel.IsDeleted : vehicleCare.IsDeleted;
-            vehicleCare.DeletedOn = mappedModel.IsDeleted == true ? System.DateTime.UtcNow : vehicleCare.DeletedOn;
+            vehicleCare.DeletedOn = mappedModel.IsDeleted == true ? DateTime.UtcNow : vehicleCare.DeletedOn;
 
             return vehicleCare;
         }
