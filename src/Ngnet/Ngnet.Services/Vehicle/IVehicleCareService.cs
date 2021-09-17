@@ -1,8 +1,7 @@
-﻿using Ngnet.ApiModels;
-using Ngnet.Data.DbModels;
+﻿using Ngnet.ApiModels.VehicleModels;
 using System.Threading.Tasks;
 
-namespace Ngnet.Services.Contracts
+namespace Ngnet.Services.Vehicle
 {
     public interface IVehicleCareService
     {

@@ -1,12 +1,11 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Ngnet.Data;
-using Ngnet.Services.Contracts;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 
-namespace Ngnet.Services
+namespace Ngnet.Services.Auth
 {
     public class AuthService : IAuthService
     {

@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
-using Ngnet.ApiModels.UserModels;
+using Ngnet.ApiModels.AuthModels;
 using Ngnet.Data.DbModels;
-using Ngnet.Services.Contracts;
+using Ngnet.Services.Auth;
 using Ngnet.Web.Infrastructure;
-using Ngnet.Web.Models.UserModels;
+using Ngnet.Web.Models.AuthModels;
 using System.Linq;
 using System.Threading.Tasks;
 

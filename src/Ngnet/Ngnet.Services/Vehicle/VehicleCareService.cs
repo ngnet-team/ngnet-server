@@ -1,12 +1,11 @@
-﻿using Ngnet.ApiModels;
+﻿using Ngnet.ApiModels.VehicleModels;
 using Ngnet.Data;
 using Ngnet.Data.DbModels;
 using Ngnet.Mapper;
-using Ngnet.Services.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ngnet.Services
+namespace Ngnet.Services.Vehicle
 {
     public class VehicleCareService : IVehicleCareService
     {

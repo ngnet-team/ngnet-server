@@ -1,7 +1,7 @@
 ﻿using Ngnet.Data.DbModels;
 using Ngnet.Mapper;
 
-namespace Ngnet.ApiModels
+namespace Ngnet.ApiModels.CompanyModels
 {
     public class CompanyResponseModel : IMapFrom<Company>
     {

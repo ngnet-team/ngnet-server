@@ -1,7 +1,7 @@
 ﻿using Ngnet.Data.DbModels;
 using Ngnet.Mapper;
 
-namespace Ngnet.ApiModels.UserModels
+namespace Ngnet.ApiModels.AuthModels
 {
     public class UserResponseModel : IMapFrom<User>
     {

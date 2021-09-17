@@ -11,5 +11,9 @@
         public const string UserNotFound = "No user found!";
 
         public const string UsersNotFound = "No users found!";
+
+        public const string VehicleCareNotFound = "There is no vehicle service found!";
+
+        public const string VehicleCaresNotFound = "There are no vehicle services found!";
     }
 }

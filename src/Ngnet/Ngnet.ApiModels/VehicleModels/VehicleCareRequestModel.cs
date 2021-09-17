@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using Ngnet.ApiModels.CompanyModels;
 using Ngnet.Data.DbModels;
 using Ngnet.Mapper;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Ngnet.ApiModels
+namespace Ngnet.ApiModels.VehicleModels
 {
     public class VehicleCareRequestModel : IMapTo<VehicleCare>, IHaveCustomMappings
     {

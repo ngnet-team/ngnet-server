@@ -2,7 +2,7 @@
 using Ngnet.Mapper;
 using System.ComponentModel.DataAnnotations;
 
-namespace Ngnet.Web.Models.UserModels
+namespace Ngnet.Web.Models.AuthModels
 {
     public class LoginRequestModel : IMapTo<User>
     {

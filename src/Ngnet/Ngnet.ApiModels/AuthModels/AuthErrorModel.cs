@@ -1,4 +1,4 @@
-﻿namespace Ngnet.ApiModels
+﻿namespace Ngnet.ApiModels.AuthModels
 {
     public class AuthErrorModel
     {
