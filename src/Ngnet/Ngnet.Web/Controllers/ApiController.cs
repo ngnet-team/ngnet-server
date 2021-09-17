@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Ngnet.ApiModels;
+using Ngnet.ApiModels.AuthModels;
 using System.Collections.Generic;
 
 namespace Ngnet.Web.Controllers

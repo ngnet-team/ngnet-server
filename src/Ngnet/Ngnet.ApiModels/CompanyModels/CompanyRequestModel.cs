@@ -1,8 +1,10 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Ngnet.Data.DbModels;
+using Ngnet.Mapper;
+using System.ComponentModel.DataAnnotations;
 
-namespace Ngnet.ApiModels
+namespace Ngnet.ApiModels.CompanyModels
 {
-    public class CompanyRequestModel
+    public class CompanyRequestModel : IMapTo<Company>
     {
         [Required]
         public string Name { get; set; }

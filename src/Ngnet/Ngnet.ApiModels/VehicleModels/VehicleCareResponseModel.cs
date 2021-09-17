@@ -1,8 +1,9 @@
-﻿using Ngnet.Data.DbModels;
+﻿using Ngnet.ApiModels.CompanyModels;
+using Ngnet.Data.DbModels;
 using Ngnet.Mapper;
 using System;
 
-namespace Ngnet.ApiModels
+namespace Ngnet.ApiModels.VehicleModels
 {
     public class VehicleCareResponseModel : IMapFrom<VehicleCare>
     {

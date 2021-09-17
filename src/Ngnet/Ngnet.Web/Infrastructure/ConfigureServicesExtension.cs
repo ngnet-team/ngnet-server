@@ -9,8 +9,9 @@ using Ngnet.Data.DbModels;
 using Ngnet.Services;
 using AutoMapper;
 using Ngnet.Mapper;
-using Ngnet.Services.Contracts;
 using Ngnet.Services.Email;
+using Ngnet.Services.Auth;
+using Ngnet.Services.Vehicle;
 
 namespace Ngnet.Web.Infrastructure
 {

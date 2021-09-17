@@ -1,10 +1,9 @@
-using AutoMapper;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Ngnet.ApiModels;
+using Ngnet.ApiModels.AuthModels;
 using Ngnet.Data;
 using Ngnet.Mapper;
 using Ngnet.Web.Infrastructure;

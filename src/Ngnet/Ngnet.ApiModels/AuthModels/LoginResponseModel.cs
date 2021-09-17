@@ -1,4 +1,4 @@
-﻿namespace Ngnet.Web.Models.UserModels
+﻿namespace Ngnet.Web.Models.AuthModels
 {
     public class LoginResponseModel
     {

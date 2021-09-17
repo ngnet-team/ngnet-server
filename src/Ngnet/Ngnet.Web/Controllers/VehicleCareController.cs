@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Ngnet.ApiModels;
 using System.Threading.Tasks;
 using Ngnet.Web.Infrastructure;
-using Ngnet.Services.Contracts;
 using Microsoft.AspNetCore.Authorization;
+using Ngnet.ApiModels.VehicleModels ;
+using Ngnet.Services.Vehicle;
 
 namespace Ngnet.Web.Controllers
 {
@@ -35,17 +35,48 @@ namespace Ngnet.Web.Controllers
         }
 
         [HttpPost]
-        [Route(nameof(Single))]
-        public VehicleCareResponseModel Single(VehicleCareRequestModel model)
+        [Route(nameof(ById))]
+        public ActionResult<VehicleCareResponseModel> ById(VehicleCareRequestModel model)
         {
-            return this.vehicleCareService.GetByVehicleCareId<VehicleCareResponseModel>(model.Id);
+            VehicleCareResponseModel response = this.vehicleCareService.GetByVehicleCareId<VehicleCareResponseModel>(model.Id);
+
+            if (response == null)
+            {
+                var errors = this.GetErrors(ValidationMessages.VehicleCareNotFound);
+                return this.Unauthorized(errors);
+            }
+
+            return response;
         }
 
         [HttpPost]
-        [Route(nameof(Multiple))]
-        public VehicleCareResponseModel[] Multiple(VehicleCareRequestModel model)
+        [Route(nameof(ByUserId))]
+        public ActionResult<VehicleCareResponseModel[]> ByUserId(VehicleCareRequestModel model)
         {
-            return this.vehicleCareService.GetByUserId<VehicleCareResponseModel>(model.UserId);
+            VehicleCareResponseModel[] response = this.vehicleCareService.GetByUserId<VehicleCareResponseModel>(model.UserId);
+
+            if (response.Length == 0)
+            {
+                var errors = this.GetErrors(ValidationMessages.VehicleCaresNotFound);
+                return this.Unauthorized(errors);
+            }
+
+            return response;
+        }
+
+        [HttpGet]
+        [Route(nameof(Self))]
+        public ActionResult<VehicleCareResponseModel[]> Self()
+        {
+            VehicleCareResponseModel[] response = this.vehicleCareService.GetByUserId<VehicleCareResponseModel>(this.User.GetId());
+
+            if (response.Length == 0)
+            {
+                var errors = this.GetErrors(ValidationMessages.VehicleCaresNotFound);
+                return this.Unauthorized(errors);
+            }
+
+            return response;
         }
     }
 }

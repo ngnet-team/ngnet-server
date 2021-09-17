@@ -1,4 +1,4 @@
-﻿namespace Ngnet.Services.Contracts
+﻿namespace Ngnet.Services.Auth
 {
     public interface IAuthService
     {
