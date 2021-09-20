@@ -6,6 +6,7 @@ using Ngnet.ApiModels.VehicleModels ;
 using Ngnet.Services.Vehicle;
 using Microsoft.AspNetCore.Identity;
 using Ngnet.Data.DbModels;
+using Ngnet.Common.Json.Models;
 
 namespace Ngnet.Web.Controllers
 {
@@ -115,6 +116,21 @@ namespace Ngnet.Web.Controllers
             }
 
             return this.Ok(result);
+        }
+
+        [HttpGet]
+        [Route(nameof(Names))]
+        public ActionResult<VehicleCareName> Names()
+        {
+            var result = this.vehicleCareService.GetNames<VehicleCareName>();
+
+            if (result == null)
+            {
+                var errors = this.GetErrors(ValidationMessages.VehicleCareNamesNotFound);
+                return this.NotFound(errors);
+            }
+
+            return result;
         }
     }
 }

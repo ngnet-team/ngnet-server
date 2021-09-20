@@ -17,5 +17,7 @@
         public const string VehicleCaresNotFound = "There are no vehicle services found!";
 
         public const string NoPermissions = "You do NOT have permissions!";
+
+        public const string VehicleCareNamesNotFound = "There are no vehicle care names found!";
     }
 }

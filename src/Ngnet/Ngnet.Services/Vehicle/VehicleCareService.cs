@@ -5,6 +5,9 @@ using Ngnet.Mapper;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Newtonsoft.Json;
+using System.IO;
+using Ngnet.Common;
 
 namespace Ngnet.Services.Vehicle
 {
@@ -53,6 +56,19 @@ namespace Ngnet.Services.Vehicle
                 .Where(x => x.Id == vehicleCareId)
                 .To<T>()
                 .FirstOrDefault();
+        }
+
+        public T GetNames<T>()
+        {
+            try
+            {
+                var jsonFile = File.ReadAllText(Paths.JsonDirectory + Paths.VehicleCareNames);
+                return JsonConvert.DeserializeObject<T>(jsonFile);
+            }
+            catch (Exception)
+            {
+                return default(T);
+            }
         }
 
         public async Task<int> SaveAsync(VehicleCareRequestModel apiModel)
