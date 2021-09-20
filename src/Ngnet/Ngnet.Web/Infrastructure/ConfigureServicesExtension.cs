@@ -12,6 +12,7 @@ using Ngnet.Mapper;
 using Ngnet.Services.Email;
 using Ngnet.Services.Auth;
 using Ngnet.Services.Vehicle;
+using Ngnet.Common.Json;
 
 namespace Ngnet.Web.Infrastructure
 {
@@ -90,7 +91,8 @@ namespace Ngnet.Web.Infrastructure
             return services
                 .AddTransient<IAuthService, AuthService>()
                 .AddTransient<IVehicleCareService, VehicleCareService>()
-                .AddSingleton<IEmailSenderService, EmailSenderService>(x => new EmailSenderService(configuration.GetSection("EmailSender:Key").ToString()));
+                .AddSingleton<IEmailSenderService, EmailSenderService>(x => new EmailSenderService(configuration.GetSection("EmailSender:Key").ToString()))
+                .AddSingleton<JsonService>();
         }
     }
 }
