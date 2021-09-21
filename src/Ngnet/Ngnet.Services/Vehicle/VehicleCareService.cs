@@ -5,16 +5,20 @@ using Ngnet.Mapper;
 using System.Linq;
 using System.Threading.Tasks;
 using System;
+using Ngnet.Common;
+using Ngnet.Common.Json;
 
 namespace Ngnet.Services.Vehicle
 {
     public class VehicleCareService : IVehicleCareService
     {
         private readonly NgnetDbContext database;
+        private readonly JsonService jsonService;
 
-        public VehicleCareService(NgnetDbContext database)
+        public VehicleCareService(NgnetDbContext database, JsonService jsonService)
         {
             this.database = database;
+            this.jsonService = jsonService;
         }
 
         public async Task<int> DeleteAsync(string vehicleCareId, bool hardDelete = false)
@@ -53,6 +57,11 @@ namespace Ngnet.Services.Vehicle
                 .Where(x => x.Id == vehicleCareId)
                 .To<T>()
                 .FirstOrDefault();
+        }
+
+        public T GetNames<T>()
+        {
+            return this.jsonService.Deserialiaze<T>(Paths.VehicleCareNames);
         }
 
         public async Task<int> SaveAsync(VehicleCareRequestModel apiModel)

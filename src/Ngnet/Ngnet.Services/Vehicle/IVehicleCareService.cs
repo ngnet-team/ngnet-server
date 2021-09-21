@@ -12,5 +12,7 @@ namespace Ngnet.Services.Vehicle
         public T[] GetByUserId<T>(string userId);
 
         public Task<int> DeleteAsync(string vehicleCareId, bool hardDelete);
+
+        public T GetNames<T>();
     }
 }
