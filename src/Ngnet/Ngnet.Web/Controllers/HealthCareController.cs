@@ -1,30 +1,28 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using System.Threading.Tasks;
-using Ngnet.Web.Infrastructure;
-using Microsoft.AspNetCore.Authorization;
-using Ngnet.ApiModels.VehicleModels ;
-using Ngnet.Services.Vehicle;
-using Microsoft.AspNetCore.Identity;
-using Ngnet.Data.DbModels;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
+using Ngnet.ApiModels.HealthModels;
 using Ngnet.Common.Json.Models;
+using Ngnet.Data.DbModels;
+using Ngnet.Services.Health;
+using Ngnet.Web.Infrastructure;
+using System.Threading.Tasks;
 
 namespace Ngnet.Web.Controllers
 {
-    [Authorize]
-    public class VehicleCareController : ApiController
+    public class HealthCareController : ApiController
     {
-        private readonly IVehicleCareService vehicleCareService;
+        private readonly IHealthCareService healthCareService;
         private readonly UserManager<User> userManager;
 
-        public VehicleCareController(IVehicleCareService vehicleCareService, UserManager<User> userManager)
+        public HealthCareController(IHealthCareService healthCareService, UserManager<User> userManager)
         {
-            this.vehicleCareService = vehicleCareService;
+            this.healthCareService = healthCareService;
             this.userManager = userManager;
         }
 
         [HttpPost]
         [Route(nameof(Save))]
-        public async Task<ActionResult> Save(VehicleCareRequestModel model)
+        public async Task<ActionResult> Save(HealthCareRequestModel model)
         {
             string userId = this.User.GetId();
             if (userId == null)
@@ -45,16 +43,16 @@ namespace Ngnet.Web.Controllers
                 return this.Unauthorized(errors);
             }
 
-            var result = await this.vehicleCareService.SaveAsync(model);
+            var result = await this.healthCareService.SaveAsync(model);
 
             return this.Ok(result);
         }
 
         [HttpPost]
         [Route(nameof(ById))]
-        public ActionResult<VehicleCareResponseModel> ById(VehicleCareRequestModel model)
+        public ActionResult<HealthCareResponseModel> ById(HealthCareRequestModel model)
         {
-            VehicleCareResponseModel response = this.vehicleCareService.GetById<VehicleCareResponseModel>(model.Id);
+            HealthCareResponseModel response = this.healthCareService.GetById<HealthCareResponseModel>(model.Id);
 
             if (response == null)
             {
@@ -67,9 +65,9 @@ namespace Ngnet.Web.Controllers
 
         [HttpPost]
         [Route(nameof(ByUserId))]
-        public ActionResult<VehicleCareResponseModel[]> ByUserId(VehicleCareRequestModel model)
+        public ActionResult<HealthCareResponseModel[]> ByUserId(HealthCareRequestModel model)
         {
-            VehicleCareResponseModel[] response = this.vehicleCareService.GetByUserId<VehicleCareResponseModel>(model.UserId);
+            HealthCareResponseModel[] response = this.healthCareService.GetByUserId<HealthCareResponseModel>(model.UserId);
 
             if (response.Length == 0)
             {
@@ -82,13 +80,13 @@ namespace Ngnet.Web.Controllers
 
         [HttpGet]
         [Route(nameof(Self))]
-        public ActionResult<VehicleCareResponseModel[]> Self()
+        public ActionResult<HealthCareResponseModel[]> Self()
         {
-            VehicleCareResponseModel[] response = this.vehicleCareService.GetByUserId<VehicleCareResponseModel>(this.User.GetId());
+            HealthCareResponseModel[] response = this.healthCareService.GetByUserId<HealthCareResponseModel>(this.User.GetId());
 
             if (response.Length == 0)
             {
-                var errors = this.GetErrors(ValidationMessages.VehicleCaresNotFound);
+                var errors = this.GetErrors(ValidationMessages.HealthCaresNotFound);
                 return this.NotFound(errors);
             }
 
@@ -97,7 +95,7 @@ namespace Ngnet.Web.Controllers
 
         [HttpPost]
         [Route(nameof(Delete))]
-        public async Task<ActionResult> Delete(VehicleCareRequestModel model)
+        public async Task<ActionResult> Delete(HealthCareResponseModel model)
         {
             var role = await this.User.GetRoleAsync(this.userManager);
 
@@ -107,11 +105,11 @@ namespace Ngnet.Web.Controllers
                 return this.Unauthorized(errors);
             }
 
-            var result = await this.vehicleCareService.DeleteAsync(model.Id, true);
+            var result = await this.healthCareService.DeleteAsync(model.Id, true);
 
             if (result == 0)
             {
-                var errors = this.GetErrors(ValidationMessages.VehicleCareNotFound);
+                var errors = this.GetErrors(ValidationMessages.HealthCareNotFound);
                 return this.NotFound(errors);
             }
 
@@ -120,13 +118,13 @@ namespace Ngnet.Web.Controllers
 
         [HttpGet]
         [Route(nameof(Names))]
-        public ActionResult<VehicleCareName> Names()
+        public ActionResult<HealthCareName> Names()
         {
-            var result = this.vehicleCareService.GetNames<VehicleCareName>();
+            var result = this.healthCareService.GetNames<HealthCareName>();
 
             if (result == null)
             {
-                var errors = this.GetErrors(ValidationMessages.VehicleCareNamesNotFound);
+                var errors = this.GetErrors(ValidationMessages.HealthCareNamesNotFound);
                 return this.NotFound(errors);
             }
 

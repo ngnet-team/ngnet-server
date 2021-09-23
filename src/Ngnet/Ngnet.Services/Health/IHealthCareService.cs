@@ -1,11 +1,11 @@
-﻿using Ngnet.ApiModels.VehicleModels;
+﻿using Ngnet.ApiModels.HealthModels;
 using System.Threading.Tasks;
 
-namespace Ngnet.Services.Vehicle
+namespace Ngnet.Services.Health
 {
-    public interface IVehicleCareService
+    public interface IHealthCareService
     {
-        public Task<int> SaveAsync(VehicleCareRequestModel apiModel);
+        public Task<int> SaveAsync(HealthCareRequestModel apiModel);
 
         public T GetById<T>(string id);
 

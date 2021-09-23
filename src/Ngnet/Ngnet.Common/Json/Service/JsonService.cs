@@ -2,7 +2,7 @@
 using System;
 using System.IO;
 
-namespace Ngnet.Common.Json
+namespace Ngnet.Common.Json.Service
 {
     public class JsonService : IJsonService
     {

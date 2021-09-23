@@ -2,21 +2,16 @@
 using Ngnet.ApiModels.CompanyModels;
 using Ngnet.Data.DbModels;
 using Ngnet.Mapper;
-using System;
 
-namespace Ngnet.ApiModels.VehicleModels
+namespace Ngnet.ApiModels.HealthModels
 {
-    public class VehicleCareResponseModel : IMapFrom<VehicleCare>, IHaveCustomMappings
+    public class HealthCareResponseModel : IMapFrom<HealthCare>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
         public string Name { get; set; }
 
-        public string StartDate { get; set; }
-
-        public string EndDate { get; set; }
-
-        public string PaidEndDate { get; set; }
+        public string Date { get; set; }
 
         public string Reminder { get; set; }
 
@@ -34,10 +29,8 @@ namespace Ngnet.ApiModels.VehicleModels
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<VehicleCare, VehicleCareResponseModel>()
-                .ForMember(x => x.StartDate, opt => opt.MapFrom(x => x.StartDate.ToString().Substring(0, 10)))
-                .ForMember(x => x.EndDate, opt => opt.MapFrom(x => x.EndDate.ToString().Substring(0, 10)))
-                .ForMember(x => x.PaidEndDate, opt => opt.MapFrom(x => x.PaidEndDate.ToString().Substring(0, 10)))
+            configuration.CreateMap<HealthCare, HealthCareResponseModel>()
+                .ForMember(x => x.Date, opt => opt.MapFrom(x => x.Date.ToString().Substring(0, 10)))
                 .ForMember(x => x.Reminder, opt => opt.MapFrom(x => x.Reminder.ToString().Substring(0, 10)))
                 .ForMember(x => x.DeletedOn, opt => opt.MapFrom(x => x.DeletedOn.ToString().Substring(0, 10)));
         }

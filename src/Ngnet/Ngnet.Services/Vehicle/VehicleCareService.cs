@@ -6,7 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using System;
 using Ngnet.Common;
-using Ngnet.Common.Json;
+using Ngnet.Common.Json.Service;
 
 namespace Ngnet.Services.Vehicle
 {
@@ -51,7 +51,7 @@ namespace Ngnet.Services.Vehicle
                 .ToArray();
         }
 
-        public T GetByVehicleCareId<T>(string vehicleCareId)
+        public T GetById<T>(string vehicleCareId)
         {
             return this.database.VehicleCares
                 .Where(x => x.Id == vehicleCareId)
