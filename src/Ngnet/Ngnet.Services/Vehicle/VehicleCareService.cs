@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using System;
 using Ngnet.Common;
 using Ngnet.Common.Json.Service;
+using Ngnet.Services.Companies;
 
 namespace Ngnet.Services.Vehicle
 {
@@ -14,11 +15,13 @@ namespace Ngnet.Services.Vehicle
     {
         private readonly NgnetDbContext database;
         private readonly JsonService jsonService;
+        private readonly ICompanyService companyService;
 
-        public VehicleCareService(NgnetDbContext database, JsonService jsonService)
+        public VehicleCareService(NgnetDbContext database, JsonService jsonService, ICompanyService companyService)
         {
             this.database = database;
             this.jsonService = jsonService;
+            this.companyService = companyService;
         }
 
         public async Task<int> DeleteAsync(string vehicleCareId, bool hardDelete = false)
@@ -67,6 +70,11 @@ namespace Ngnet.Services.Vehicle
         public async Task<int> SaveAsync(VehicleCareRequestModel apiModel)
         {
             VehicleCare vehicleCare = this.database.VehicleCares.FirstOrDefault(x => x.Id == apiModel.Id);
+
+            if (apiModel.Company?.Id != null)
+            {
+                await this.companyService.SaveAsync(apiModel.Company);
+            }
 
             if (vehicleCare != null)
             {

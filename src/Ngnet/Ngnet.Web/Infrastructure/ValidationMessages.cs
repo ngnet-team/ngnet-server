@@ -20,6 +20,8 @@
 
         public const string VehicleCareNamesNotFound = "There are no vehicle care names found!";
 
+        public const string CompanyNamesNotFound = "There are no company names found!";
+
         public const string HealthCareNamesNotFound = "There are no health care names found!";
 
         public const string HealthCareNotFound = "There is no health service found!";
