@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Ngnet.Common.Json.Models;
 using Ngnet.Data.DbModels;
-using Ngnet.Services.Company;
+using Ngnet.Services.Companies;
 using Ngnet.Web.Infrastructure;
 
 namespace Ngnet.Web.Controllers
@@ -11,7 +11,6 @@ namespace Ngnet.Web.Controllers
     {
         private readonly ICompanyService companyService;
         private readonly UserManager<User> userManager;
-        private object jsonService;
 
         public CompanyController(ICompanyService companyService, UserManager<User> userManager)
         {

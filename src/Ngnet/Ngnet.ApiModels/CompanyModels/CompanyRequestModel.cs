@@ -1,11 +1,14 @@
-﻿using Ngnet.Data.DbModels;
+﻿using AutoMapper;
+using Ngnet.Data.DbModels;
 using Ngnet.Mapper;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ngnet.ApiModels.CompanyModels
 {
-    public class CompanyRequestModel : IMapTo<Company>
+    public class CompanyRequestModel : IMapTo<Company>, IHaveCustomMappings
     {
+        public int? Id { get; set; }
+
         [Required]
         public string Name { get; set; }
 
@@ -18,5 +21,10 @@ namespace Ngnet.ApiModels.CompanyModels
         public string WebSite { get; set; }
 
         public string Address { get; set; }
+
+        public void CreateMappings(IProfileExpression configuration)
+        {
+            configuration.CreateMap<CompanyRequestModel, Company>().ForMember(x => x.Id, opt => opt.Condition(c => c.Id != null));
+        }
     }
 }
