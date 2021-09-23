@@ -118,9 +118,9 @@ namespace Ngnet.Web.Controllers
 
         [HttpGet]
         [Route(nameof(Names))]
-        public ActionResult<HealthCareName> Names()
+        public ActionResult<SimpleDropDownModel> Names()
         {
-            var result = this.healthCareService.GetNames<HealthCareName>();
+            var result = this.healthCareService.GetNames<SimpleDropDownModel>();
 
             if (result == null)
             {

@@ -14,6 +14,7 @@ using Ngnet.Services.Auth;
 using Ngnet.Services.Vehicle;
 using Ngnet.Common.Json.Service;
 using Ngnet.Services.Health;
+using Ngnet.Services.Company;
 
 namespace Ngnet.Web.Infrastructure
 {
@@ -93,6 +94,7 @@ namespace Ngnet.Web.Infrastructure
                 .AddTransient<IAuthService, AuthService>()
                 .AddTransient<IVehicleCareService, VehicleCareService>()
                 .AddTransient<IHealthCareService, HealthCareService>()
+                .AddTransient<ICompanyService, CompanyService>()
                 .AddSingleton<IEmailSenderService, EmailSenderService>(x => new EmailSenderService(configuration.GetSection("EmailSender:Key").ToString()))
                 .AddSingleton<JsonService>();
         }

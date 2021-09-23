@@ -120,9 +120,9 @@ namespace Ngnet.Web.Controllers
 
         [HttpGet]
         [Route(nameof(Names))]
-        public ActionResult<VehicleCareName> Names()
+        public ActionResult<SimpleDropDownModel> Names()
         {
-            var result = this.vehicleCareService.GetNames<VehicleCareName>();
+            var result = this.vehicleCareService.GetNames<SimpleDropDownModel>();
 
             if (result == null)
             {

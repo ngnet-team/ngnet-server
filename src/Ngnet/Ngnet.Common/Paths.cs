@@ -7,5 +7,7 @@
         public static string VehicleCareNames = "vehicleCareNames.json";
 
         public static string HealthCareNames = "healthCareNames.json";
+
+        public static string CompanyNames = "companyNames.json";
     }
 }

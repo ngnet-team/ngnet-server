@@ -11,6 +11,7 @@ namespace Ngnet.ApiModels.VehicleModels
     {
         public string Id { get; set; }
 
+        [Required]
         public string Name { get; set; }
 
         public DateTime? StartDate { get; set; }
