@@ -7,6 +7,7 @@ using Ngnet.Services.Vehicle;
 using Microsoft.AspNetCore.Identity;
 using Ngnet.Data.DbModels;
 using Ngnet.Common.Json.Models;
+using System.Linq;
 
 namespace Ngnet.Web.Controllers
 {
@@ -85,12 +86,6 @@ namespace Ngnet.Web.Controllers
         public ActionResult<VehicleCareResponseModel[]> Self()
         {
             VehicleCareResponseModel[] response = this.vehicleCareService.GetByUserId<VehicleCareResponseModel>(this.User.GetId());
-
-            if (response.Length == 0)
-            {
-                var errors = this.GetErrors(ValidationMessages.VehicleCaresNotFound);
-                return this.NotFound(errors);
-            }
 
             return response;
         }
