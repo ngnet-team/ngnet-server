@@ -71,19 +71,23 @@ namespace Ngnet.Services.Vehicle
         {
             VehicleCare vehicleCare = this.database.VehicleCares.FirstOrDefault(x => x.Id == apiModel.Id);
 
-            if (apiModel.Company?.Id != null)
-            {
-                await this.companyService.SaveAsync(apiModel.Company);
-            }
-
-            if (vehicleCare != null)
-            {
-                vehicleCare = this.ModifyEntity<VehicleCareRequestModel>(apiModel, vehicleCare);
-            }
-            else
+            //Create new entity
+            if (vehicleCare == null)
             {
                 vehicleCare = MappingFactory.Mapper.Map<VehicleCare>(apiModel);
                 await this.database.VehicleCares.AddAsync(vehicleCare);
+            }
+            else
+            {
+                bool companyReceived = apiModel?.Company != null;
+
+                if (companyReceived)
+                {
+                    apiModel.Company.Id = await this.companyService.SaveAsync(apiModel.Company);
+                }
+
+                //Modify existing entity
+                vehicleCare = this.ModifyEntity<VehicleCareRequestModel>(apiModel, vehicleCare);
             }
 
             return await this.database.SaveChangesAsync();
@@ -99,6 +103,7 @@ namespace Ngnet.Services.Vehicle
             vehicleCare.PaidEndDate = mappedModel.PaidEndDate == null ? vehicleCare.PaidEndDate : mappedModel.PaidEndDate;
             vehicleCare.Reminder = mappedModel.Reminder == null ? vehicleCare.Reminder : mappedModel.Reminder;
             vehicleCare.Price = mappedModel.Price == null ? vehicleCare.Price : mappedModel.Price;
+            vehicleCare.CompanyId = mappedModel?.Company?.Id == null ? vehicleCare.CompanyId : mappedModel.Company.Id;
             vehicleCare.Notes = mappedModel.Notes == null ? vehicleCare.Notes : mappedModel.Notes;
             vehicleCare.ModifiedOn = DateTime.UtcNow;
             vehicleCare.IsDeleted = mappedModel.IsDeleted == true ? mappedModel.IsDeleted : vehicleCare.IsDeleted;

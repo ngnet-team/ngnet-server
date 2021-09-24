@@ -28,19 +28,20 @@ namespace Ngnet.Services.Companies
         }
         public async Task<int> SaveAsync(CompanyRequestModel apiModel)
         {
-            Company company = this.database.Companies.FirstOrDefault(x => x.Id == apiModel.Id);
-
-            if (company != null)
-            {
-                company = this.ModifyEntity<CompanyRequestModel>(apiModel, company);
-            }
-            else
+            Company company;
+            if (apiModel?.Id == null)
             {
                 company = MappingFactory.Mapper.Map<Company>(apiModel);
                 await this.database.Companies.AddAsync(company);
             }
+            else
+            {
+                company = this.database.Companies.FirstOrDefault(x => x.Id == apiModel.Id);
+                company = this.ModifyEntity<CompanyRequestModel>(apiModel, company);
+            }
 
-            return await this.database.SaveChangesAsync();
+            await this.database.SaveChangesAsync();
+            return company.Id;
         }
         private Company ModifyEntity<T>(T apiModel, Company company)
         {
