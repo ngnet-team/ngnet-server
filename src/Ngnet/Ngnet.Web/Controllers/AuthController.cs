@@ -83,6 +83,12 @@ namespace Ngnet.Web.Controllers
                 return this.Unauthorized(errors);
             }
 
+            if (user.IsDeleted)
+            {
+                var errors = this.GetErrors(ValidationMessages.UserNotFound);
+                return this.NotFound(errors);
+            }
+
             string token = this.userService.CreateJwtToken(user.Id, user.UserName, this.configuration["ApplicationSettings:Secret"]);
 
             return new LoginResponseModel { Token = token };
@@ -134,6 +140,15 @@ namespace Ngnet.Web.Controllers
                 LastName = user.LastName,
                 Age = user.Age
             };
+        }
+
+        [HttpPost]
+        [Route(nameof(Update))]
+        public async Task<ActionResult> Update(UserRequestModel model)
+        {
+            int result = await this.userService.Update<UserRequestModel>(model);
+
+            return this.Ok(result);
         }
     }
 }
