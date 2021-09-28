@@ -1,9 +1,13 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Ngnet.Data;
+using Ngnet.Data.DbModels;
+using Ngnet.Mapper;
 using System;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Ngnet.Services.Auth
 {
@@ -35,6 +39,34 @@ namespace Ngnet.Services.Auth
             var encryptedToken = tokenHandler.WriteToken(token);
 
             return encryptedToken;
+        }
+
+        public async Task<int> Update<T>(T model)
+        {
+            User mappedModel = MappingFactory.Mapper.Map<User>(model);
+
+            User user = this.database.Users.FirstOrDefault(x => x.Id == mappedModel.Id);
+            if (user == null)
+            {
+                return 0;
+            }
+
+            user = this.ModifyEntity(mappedModel, user);
+
+            return await this.database.SaveChangesAsync();
+        }
+
+        private User ModifyEntity(User mappedModel, User user)
+        {
+            user.FirstName = mappedModel.FirstName == null ? user.FirstName : mappedModel.FirstName;
+            user.LastName = mappedModel.LastName == null ? user.LastName : mappedModel.LastName;
+            user.Age = mappedModel.Age == null ? user.Age : mappedModel.Age;
+
+            user.ModifiedOn = DateTime.UtcNow;
+            user.IsDeleted = mappedModel.IsDeleted == true ? mappedModel.IsDeleted : user.IsDeleted;
+            user.DeletedOn = mappedModel.IsDeleted == true ? DateTime.UtcNow : user.DeletedOn;
+
+            return user;
         }
     }
 }
