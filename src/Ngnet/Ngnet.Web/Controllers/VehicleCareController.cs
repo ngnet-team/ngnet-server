@@ -7,7 +7,6 @@ using Ngnet.Services.Vehicle;
 using Microsoft.AspNetCore.Identity;
 using Ngnet.Data.DbModels;
 using Ngnet.Common.Json.Models;
-using System.Linq;
 
 namespace Ngnet.Web.Controllers
 {
