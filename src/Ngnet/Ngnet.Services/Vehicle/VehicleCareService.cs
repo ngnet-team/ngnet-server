@@ -49,7 +49,8 @@ namespace Ngnet.Services.Vehicle
         public T[] GetByUserId<T>(string userId)
         {
             return this.database.VehicleCares
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == userId && !x.IsDeleted)
+                .OrderByDescending(x => x.CreatedOn)
                 .To<T>()
                 .ToArray();
         }
