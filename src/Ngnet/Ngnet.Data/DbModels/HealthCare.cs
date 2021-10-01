@@ -20,6 +20,8 @@ namespace Ngnet.Data.DbModels
         [Range(0, 2147483647)]
         public decimal? Price { get; set; }
 
+        public int? CompanyId { get; set; }
+
         public Company Company { get; set; }
 
         public string Notes { get; set; }

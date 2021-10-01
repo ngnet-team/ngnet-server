@@ -4,6 +4,7 @@ using Ngnet.Common.Json.Service;
 using Ngnet.Data;
 using Ngnet.Data.DbModels;
 using Ngnet.Mapper;
+using Ngnet.Services.Companies;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
@@ -14,11 +15,13 @@ namespace Ngnet.Services.Health
     {
         private readonly NgnetDbContext database;
         private readonly JsonService jsonService;
+        private readonly ICompanyService companyService;
 
-        public HealthCareService(NgnetDbContext database, JsonService jsonService)
+        public HealthCareService(NgnetDbContext database, JsonService jsonService, ICompanyService companyService)
         {
             this.database = database;
             this.jsonService = jsonService;
+            this.companyService = companyService;
         }
 
         public async Task<int> DeleteAsync(string healthCareId, bool hardDelete)
@@ -68,14 +71,23 @@ namespace Ngnet.Services.Health
         {
             HealthCare healthCare = this.database.HealthCares.FirstOrDefault(x => x.Id == apiModel.Id);
 
-            if (healthCare != null)
-            {
-                healthCare = this.ModifyEntity<HealthCareRequestModel>(apiModel, healthCare);
-            }
-            else
+            //Create new entity
+            if (healthCare == null)
             {
                 healthCare = MappingFactory.Mapper.Map<HealthCare>(apiModel);
                 await this.database.HealthCares.AddAsync(healthCare);
+            }
+            else
+            {
+                bool companyReceived = apiModel?.Company != null;
+
+                if (companyReceived)
+                {
+                    apiModel.Company.Id = await this.companyService.SaveAsync(apiModel.Company);
+                }
+
+                //Modify existing entity
+                healthCare = this.ModifyEntity<HealthCareRequestModel>(apiModel, healthCare);
             }
 
             return await this.database.SaveChangesAsync();
@@ -89,6 +101,7 @@ namespace Ngnet.Services.Health
             healthCare.Date = mappedModel.Date == null ? healthCare.Date : mappedModel.Date;
             healthCare.Reminder = mappedModel.Reminder == null ? healthCare.Reminder : mappedModel.Reminder;
             healthCare.Price = mappedModel.Price == null ? healthCare.Price : mappedModel.Price;
+            healthCare.CompanyId = mappedModel?.Company?.Id == null ? healthCare.CompanyId : mappedModel.Company.Id;
             healthCare.Notes = mappedModel.Notes == null ? healthCare.Notes : mappedModel.Notes;
             healthCare.ModifiedOn = DateTime.UtcNow;
             healthCare.IsDeleted = mappedModel.IsDeleted == true ? mappedModel.IsDeleted : healthCare.IsDeleted;
