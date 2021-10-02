@@ -1,10 +1,14 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Ngnet.ApiModels;
 using Ngnet.ApiModels.HealthModels;
+using Ngnet.Common;
 using Ngnet.Common.Json.Models;
+using Ngnet.Common.Json.Service;
 using Ngnet.Data.DbModels;
 using Ngnet.Services.Health;
 using Ngnet.Web.Infrastructure;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Ngnet.Web.Controllers
@@ -14,7 +18,11 @@ namespace Ngnet.Web.Controllers
         private readonly IHealthCareService healthCareService;
         private readonly UserManager<User> userManager;
 
-        public HealthCareController(IHealthCareService healthCareService, UserManager<User> userManager)
+        public HealthCareController
+            (IHealthCareService healthCareService,
+            UserManager<User> userManager,
+            JsonService jsonService)
+            : base(jsonService)
         {
             this.healthCareService = healthCareService;
             this.userManager = userManager;
@@ -27,7 +35,7 @@ namespace Ngnet.Web.Controllers
             string userId = this.User.GetId();
             if (userId == null)
             {
-                var errors = this.GetErrors(ValidationMessages.UserNotFound);
+                var errors = this.GetErrors().UserNotFound;
                 return this.Unauthorized(errors);
             }
 
@@ -39,7 +47,7 @@ namespace Ngnet.Web.Controllers
             }
             else if (model.UserId != userId && role != "Admin")
             {
-                var errors = this.GetErrors(ValidationMessages.NoPermissions);
+                var errors = this.GetErrors().NoPermissions;
                 return this.Unauthorized(errors);
             }
 
@@ -56,7 +64,7 @@ namespace Ngnet.Web.Controllers
 
             if (response == null)
             {
-                var errors = this.GetErrors(ValidationMessages.VehicleCareNotFound);
+                var errors = this.GetErrors().VehicleCareNotFound;
                 return this.NotFound(errors);
             }
 
@@ -71,7 +79,7 @@ namespace Ngnet.Web.Controllers
 
             if (response.Length == 0)
             {
-                var errors = this.GetErrors(ValidationMessages.VehicleCaresNotFound);
+                var errors = this.GetErrors().VehicleCaresNotFound;
                 return this.NotFound(errors);
             }
 
@@ -86,7 +94,7 @@ namespace Ngnet.Web.Controllers
 
             if (response.Length == 0)
             {
-                var errors = this.GetErrors(ValidationMessages.HealthCaresNotFound);
+                var errors = this.GetErrors().HealthCaresNotFound;
                 return this.NotFound(errors);
             }
 
@@ -101,7 +109,7 @@ namespace Ngnet.Web.Controllers
 
             if (role != "Admin")
             {
-                var errors = this.GetErrors(ValidationMessages.NoPermissions);
+                var errors = this.GetErrors().NoPermissions;
                 return this.Unauthorized(errors);
             }
 
@@ -109,7 +117,7 @@ namespace Ngnet.Web.Controllers
 
             if (result == 0)
             {
-                var errors = this.GetErrors(ValidationMessages.HealthCareNotFound);
+                var errors = this.GetErrors().HealthCareNotFound;
                 return this.NotFound(errors);
             }
 
@@ -124,7 +132,7 @@ namespace Ngnet.Web.Controllers
 
             if (result == null)
             {
-                var errors = this.GetErrors(ValidationMessages.HealthCareNamesNotFound);
+                var errors = this.GetErrors().HealthCareNamesNotFound;
                 return this.NotFound(errors);
             }
 

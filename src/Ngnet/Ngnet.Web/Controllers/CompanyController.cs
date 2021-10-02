@@ -1,9 +1,9 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ngnet.Common.Json.Models;
+using Ngnet.Common.Json.Service;
 using Ngnet.Data.DbModels;
 using Ngnet.Services.Companies;
-using Ngnet.Web.Infrastructure;
 
 namespace Ngnet.Web.Controllers
 {
@@ -12,7 +12,8 @@ namespace Ngnet.Web.Controllers
         private readonly ICompanyService companyService;
         private readonly UserManager<User> userManager;
 
-        public CompanyController(ICompanyService companyService, UserManager<User> userManager)
+        public CompanyController(ICompanyService companyService, UserManager<User> userManager, JsonService jsonService)
+            :base (jsonService)
         {
             this.companyService = companyService;
             this.userManager = userManager;
@@ -26,7 +27,7 @@ namespace Ngnet.Web.Controllers
 
             if (result == null)
             {
-                var errors = this.GetErrors(ValidationMessages.CompanyNamesNotFound);
+                var errors = this.GetErrors().CompanyNamesNotFound;
                 return this.NotFound(errors);
             }
 

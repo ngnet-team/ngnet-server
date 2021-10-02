@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ngnet.ApiModels.AuthModels;
+using Ngnet.Common.Json.Service;
 using Ngnet.Data.DbModels;
 using Ngnet.Services.Auth;
 using Ngnet.Web.Infrastructure;
@@ -19,14 +20,15 @@ namespace Ngnet.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
         private readonly IConfiguration configuration;
+        private readonly JsonService jsonService;
 
         public AuthController
-            (
-             IAuthService userService, 
-             UserManager<User> userManager, 
-             RoleManager<Role> roleManager, 
-             IConfiguration configuration
-            )
+            (IAuthService userService,
+             UserManager<User> userManager,
+             RoleManager<Role> roleManager,
+             IConfiguration configuration,
+             JsonService jsonService)
+            : base(jsonService)
         {
             this.userService = userService;
             this.userManager = userManager;
@@ -40,11 +42,11 @@ namespace Ngnet.Web.Controllers
         {
             if (model.Password != model.RepeatPassword)
             {
-                var errors = this.GetErrors(ValidationMessages.NotEquealPasswords);
+                var errors = this.GetErrors().NotEqualPasswords;
                 return this.BadRequest(errors);
             }
 
-            var user = new User 
+            var user = new User
             {
                 Email = model.Email,
                 UserName = model.UserName,
@@ -71,7 +73,7 @@ namespace Ngnet.Web.Controllers
 
             if (user == null)
             {
-                var errors = this.GetErrors(ValidationMessages.InvalidUsername);
+                var errors = this.GetErrors().InvalidUsername;
                 return this.Unauthorized(errors);
             }
 
@@ -79,13 +81,13 @@ namespace Ngnet.Web.Controllers
 
             if (!validPassword)
             {
-                var errors = this.GetErrors(ValidationMessages.InvalidPasswords);
+                var errors = this.GetErrors().InvalidPasswords;
                 return this.Unauthorized(errors);
             }
 
             if (user.IsDeleted)
             {
-                var errors = this.GetErrors(ValidationMessages.UserNotFound);
+                var errors = this.GetErrors().UserNotFound;
                 return this.NotFound(errors);
             }
 
@@ -103,7 +105,7 @@ namespace Ngnet.Web.Controllers
 
             if (users.Length == 0)
             {
-                var errors = this.GetErrors(ValidationMessages.UsersNotFound);
+                var errors = this.GetErrors().UsersNotFound;
                 return this.BadRequest(errors);
             }
 
@@ -127,11 +129,12 @@ namespace Ngnet.Web.Controllers
 
             if (user == null)
             {
-                var errors = this.GetErrors(ValidationMessages.UserNotFound);
+                var errors = this.GetErrors().UserNotFound;
+
                 return this.Unauthorized(errors);
             }
 
-            return new UserResponseModel() 
+            return new UserResponseModel()
             {
                 RoleName = await this.User.GetRoleAsync(this.userManager),
                 Email = user.Email,
