@@ -27,8 +27,8 @@ namespace Ngnet.Web.Controllers
 
             if (result == null)
             {
-                var errors = this.GetErrors().CompanyNamesNotFound;
-                return this.NotFound(errors);
+                var error = this.GetError("CompanyNamesNotFound");
+                return this.NotFound(error);
             }
 
             return result;

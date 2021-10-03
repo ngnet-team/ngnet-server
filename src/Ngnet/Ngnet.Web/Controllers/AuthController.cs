@@ -20,10 +20,8 @@ namespace Ngnet.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
         private readonly IConfiguration configuration;
-        private readonly JsonService jsonService;
 
-        public AuthController
-            (IAuthService userService,
+        public AuthController(IAuthService userService,
              UserManager<User> userManager,
              RoleManager<Role> roleManager,
              IConfiguration configuration,
@@ -42,8 +40,8 @@ namespace Ngnet.Web.Controllers
         {
             if (model.Password != model.RepeatPassword)
             {
-                var errors = this.GetErrors().NotEqualPasswords;
-                return this.BadRequest(errors);
+                var error = this.GetError("NotEqualPasswords");
+                return this.BadRequest(error);
             }
 
             var user = new User
@@ -73,22 +71,22 @@ namespace Ngnet.Web.Controllers
 
             if (user == null)
             {
-                var errors = this.GetErrors().InvalidUsername;
-                return this.Unauthorized(errors);
+                var error = this.GetError("InvalidUsername");
+                return this.Unauthorized(error);
             }
 
             var validPassword = await this.userManager.CheckPasswordAsync(user, model.Password);
 
             if (!validPassword)
             {
-                var errors = this.GetErrors().InvalidPasswords;
-                return this.Unauthorized(errors);
+                var error = this.GetError("InvalidPasswords");
+                return this.Unauthorized(error);
             }
 
             if (user.IsDeleted)
             {
-                var errors = this.GetErrors().UserNotFound;
-                return this.NotFound(errors);
+                var error = this.GetError("UserNotFound");
+                return this.NotFound(error);
             }
 
             string token = this.userService.CreateJwtToken(user.Id, user.UserName, this.configuration["ApplicationSettings:Secret"]);
@@ -105,8 +103,8 @@ namespace Ngnet.Web.Controllers
 
             if (users.Length == 0)
             {
-                var errors = this.GetErrors().UsersNotFound;
-                return this.BadRequest(errors);
+                var error = this.GetError("UsersNotFound");
+                return this.BadRequest(error);
             }
 
             return users.Select(u => new UserResponseModel()
@@ -129,9 +127,9 @@ namespace Ngnet.Web.Controllers
 
             if (user == null)
             {
-                var errors = this.GetErrors().UserNotFound;
+                var error = this.GetError("UserNotFound");
 
-                return this.Unauthorized(errors);
+                return this.Unauthorized(error);
             }
 
             return new UserResponseModel()

@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Ngnet.Common;
 using Ngnet.ApiModels;
-using Ngnet.Common;
+using Ngnet.Common.Json.Models;
+using Microsoft.AspNetCore.Mvc;
 using Ngnet.Common.Json.Service;
+using Elmah;
 
 namespace Ngnet.Web.Controllers
 {
@@ -17,9 +18,13 @@ namespace Ngnet.Web.Controllers
             this.jsonService = jsonService;
         }
 
-        protected ErrorMessagesModel GetErrors()
+        protected SimpleDropDownModel GetError(string errorMessageName)
         {
-            return this.jsonService.Deserialiaze<ErrorMessagesModel>(Paths.ErrorMessages);
+            ErrorMessagesModel errors = this.jsonService.Deserialiaze<ErrorMessagesModel>(Paths.ErrorMessages);
+
+            SimpleDropDownModel error = (SimpleDropDownModel)DataBinder.Eval(errors, errorMessageName);
+
+            return error;
         }
     }
 }
