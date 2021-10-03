@@ -1,14 +1,11 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Ngnet.ApiModels;
+using Ngnet.Data.DbModels;
 using Ngnet.ApiModels.HealthModels;
-using Ngnet.Common;
 using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
-using Ngnet.Data.DbModels;
 using Ngnet.Services.Health;
 using Ngnet.Web.Infrastructure;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace Ngnet.Web.Controllers
@@ -35,8 +32,8 @@ namespace Ngnet.Web.Controllers
             string userId = this.User.GetId();
             if (userId == null)
             {
-                var error = this.GetError("UserNotFound");
-                return this.Unauthorized(error);
+                var errors = this.GetErrors().UserNotFound;
+                return this.Unauthorized(errors);
             }
 
             var role = await this.User.GetRoleAsync(this.userManager);
@@ -47,7 +44,7 @@ namespace Ngnet.Web.Controllers
             }
             else if (model.UserId != userId && role != "Admin")
             {
-                var errors = this.GetError("NoPermissions");
+                var errors = this.GetErrors().NoPermissions;
                 return this.Unauthorized(errors);
             }
 
@@ -64,8 +61,8 @@ namespace Ngnet.Web.Controllers
 
             if (response == null)
             {
-                var error = this.GetError("VehicleCareNotFound");
-                return this.NotFound(error);
+                var errors = this.GetErrors().VehicleCareNotFound;
+                return this.NotFound(errors);
             }
 
             return response;
@@ -79,8 +76,8 @@ namespace Ngnet.Web.Controllers
 
             if (response.Length == 0)
             {
-                var error = this.GetError("VehicleCaresNotFound");
-                return this.NotFound(error);
+                var errors = this.GetErrors().VehicleCaresNotFound;
+                return this.NotFound(errors);
             }
 
             return response;
@@ -94,8 +91,8 @@ namespace Ngnet.Web.Controllers
 
             if (response.Length == 0)
             {
-                var error = this.GetError("HealthCaresNotFound");
-                return this.NotFound(error);
+                var errors = this.GetErrors().HealthCaresNotFound;
+                return this.NotFound(errors);
             }
 
             return response;
@@ -109,16 +106,16 @@ namespace Ngnet.Web.Controllers
 
             if (role != "Admin")
             {
-                var error = this.GetError("NoPermissions");
-                return this.Unauthorized(error);
+                var errors = this.GetErrors().NoPermissions;
+                return this.Unauthorized(errors);
             }
 
             var result = await this.healthCareService.DeleteAsync(model.Id, true);
 
             if (result == 0)
             {
-                var error = this.GetError("HealthCareNotFound");
-                return this.NotFound(error);
+                var errors = this.GetErrors().HealthCareNotFound;
+                return this.NotFound(errors);
             }
 
             return this.Ok(result);
@@ -132,8 +129,8 @@ namespace Ngnet.Web.Controllers
 
             if (result == null)
             {
-                var error = this.GetError("HealthCareNamesNotFound");
-                return this.NotFound(error);
+                var errors = this.GetErrors().HealthCareNamesNotFound;
+                return this.NotFound(errors);
             }
 
             return result;

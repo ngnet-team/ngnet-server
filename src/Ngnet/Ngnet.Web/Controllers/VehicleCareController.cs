@@ -34,8 +34,8 @@ namespace Ngnet.Web.Controllers
             string userId = this.User.GetId();
             if (userId == null)
             {
-                var error = this.GetError("UserNotFound");
-                return this.Unauthorized(error);
+                var errors = this.GetErrors().UserNotFound;
+                return this.Unauthorized(errors);
             }
 
             var role = await this.User.GetRoleAsync(this.userManager);
@@ -46,8 +46,8 @@ namespace Ngnet.Web.Controllers
             }
             else if (model.UserId != userId && role != "Admin")
             {
-                var error = this.GetError("NoPermissions");
-                return this.Unauthorized(error);
+                var errors = this.GetErrors().NoPermissions;
+                return this.Unauthorized(errors);
             }
 
             var result = await this.vehicleCareService.SaveAsync(model);
@@ -63,8 +63,8 @@ namespace Ngnet.Web.Controllers
 
             if (response == null)
             {
-                var error = this.GetError("VehicleCareNotFound");
-                return this.NotFound(error);
+                var errors = this.GetErrors().VehicleCareNotFound;
+                return this.NotFound(errors);
             }
 
             return response;
@@ -78,8 +78,8 @@ namespace Ngnet.Web.Controllers
 
             if (response.Length == 0)
             {
-                var error = this.GetError("VehicleCaresNotFound");
-                return this.NotFound(error);
+                var errors = this.GetErrors().VehicleCaresNotFound;
+                return this.NotFound(errors);
             }
 
             return response;
@@ -102,16 +102,16 @@ namespace Ngnet.Web.Controllers
 
             if (role != "Admin")
             {
-                var error = this.GetError("NoPermissions");
-                return this.Unauthorized(error);
+                var errors = this.GetErrors().NoPermissions;
+                return this.Unauthorized(errors);
             }
 
             var result = await this.vehicleCareService.DeleteAsync(model.Id, true);
 
             if (result == 0)
             {
-                var error = this.GetError("VehicleCareNotFound");
-                return this.NotFound(error);
+                var errors = this.GetErrors().VehicleCareNotFound;
+                return this.NotFound(errors);
             }
 
             return this.Ok(result);
@@ -125,8 +125,8 @@ namespace Ngnet.Web.Controllers
 
             if (result == null)
             {
-                var error = this.GetError("VehicleCareNamesNotFound");
-                return this.NotFound(error);
+                var errors = this.GetErrors().VehicleCareNamesNotFound;
+                return this.NotFound(errors);
             }
 
             return result;
