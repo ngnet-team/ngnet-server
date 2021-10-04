@@ -9,5 +9,7 @@
         public static string HealthCareNames = "healthCareNames.json";
 
         public static string CompanyNames = "companyNames.json";
+
+        public static string ErrorMessages = "errorМessages.json";
     }
 }

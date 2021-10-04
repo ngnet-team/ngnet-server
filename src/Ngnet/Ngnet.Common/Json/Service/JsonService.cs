@@ -1,6 +1,6 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.IO;
+using System.Text.Json;
 
 namespace Ngnet.Common.Json.Service
 {
@@ -11,7 +11,10 @@ namespace Ngnet.Common.Json.Service
             try
             {
                 var jsonFile = File.ReadAllText(Paths.JsonDirectory + fileName);
-                return JsonConvert.DeserializeObject<T>(jsonFile);
+                return JsonSerializer.Deserialize<T>(jsonFile, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
             }
             catch (Exception)
             {
@@ -23,7 +26,7 @@ namespace Ngnet.Common.Json.Service
         {
             try
             {
-                return JsonConvert.SerializeObject(model);
+                return JsonSerializer.Serialize(model);
             }
             catch (Exception)
             {

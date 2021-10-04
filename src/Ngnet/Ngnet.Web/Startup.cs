@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Ngnet.ApiModels.AuthModels;
+using Ngnet.ApiModels;
 using Ngnet.Data;
 using Ngnet.Mapper;
 using Ngnet.Web.Infrastructure;
@@ -35,7 +35,7 @@ namespace Ngnet.Web
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            MappingFactory.GenerateMapper(typeof(AuthErrorModel).GetTypeInfo().Assembly);
+            MappingFactory.GenerateMapper(typeof(ErrorMessagesModel).GetTypeInfo().Assembly);
 
             if (env.IsDevelopment())
             {

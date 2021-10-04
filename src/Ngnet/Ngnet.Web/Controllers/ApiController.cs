@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Ngnet.ApiModels.AuthModels;
-using System.Collections.Generic;
+﻿using Ngnet.Common;
+using Ngnet.ApiModels;
+using Microsoft.AspNetCore.Mvc;
+using Ngnet.Common.Json.Service;
 
 namespace Ngnet.Web.Controllers
 {
@@ -8,9 +9,16 @@ namespace Ngnet.Web.Controllers
     [Route("[controller]")]
     public abstract class ApiController : ControllerBase
     {
-        protected List<AuthErrorModel> GetErrors(string error)
+        private readonly JsonService jsonService;
+
+        public ApiController(JsonService jsonService)
         {
-            return new List<AuthErrorModel> { new AuthErrorModel(error) };
+            this.jsonService = jsonService;
+        }
+
+        protected ErrorMessagesModel GetErrors()
+        {
+            return this.jsonService.Deserialiaze<ErrorMessagesModel>(Paths.ErrorMessages);
         }
     }
 }

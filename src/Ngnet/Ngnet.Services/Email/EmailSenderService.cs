@@ -16,7 +16,7 @@ namespace Ngnet.Services
             this.sender = new SendGridClient(key);
         }
 
-        public async Task<Response> SendEmailAsync(EmailSendetModel model)
+        public async Task<Response> SendEmailAsync(EmailSenderModel model)
         {
             if (string.IsNullOrWhiteSpace(model.FromAddress) && string.IsNullOrWhiteSpace(model.ToAddress))
             {

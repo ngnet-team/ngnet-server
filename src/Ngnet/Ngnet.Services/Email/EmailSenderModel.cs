@@ -1,6 +1,6 @@
 ﻿namespace Ngnet.Services.Email
 {
-    public class EmailSendetModel
+    public class EmailSenderModel
     {
         public string FromAddress { get; set; }
 
