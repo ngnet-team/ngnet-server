@@ -11,6 +11,11 @@ namespace Ngnet.Common.Json.Service
             try
             {
                 var jsonFile = File.ReadAllText(Paths.JsonDirectory + fileName);
+                var result = JsonSerializer.Deserialize<T>(jsonFile, new JsonSerializerOptions
+                {
+                    PropertyNameCaseInsensitive = true
+                });
+                
                 return JsonSerializer.Deserialize<T>(jsonFile);
             }
             catch (Exception)
