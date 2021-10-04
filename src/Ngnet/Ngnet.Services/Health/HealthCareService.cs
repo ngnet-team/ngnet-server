@@ -49,7 +49,8 @@ namespace Ngnet.Services.Health
         public T[] GetByUserId<T>(string userId)
         {
             return this.database.HealthCares
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == userId && !x.IsDeleted)
+                .OrderByDescending(x => x.CreatedOn)
                 .To<T>()
                 .ToArray();
         }
