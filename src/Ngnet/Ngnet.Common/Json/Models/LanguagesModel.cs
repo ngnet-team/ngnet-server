@@ -1,6 +1,6 @@
 ﻿namespace Ngnet.Common.Json.Models
 {
-    public class SimpleDropDownModel
+    public class LanguagesModel
     {
         public string[] En { get; set; }
 

@@ -20,5 +20,10 @@ namespace Ngnet.Web.Controllers
         {
             return this.jsonService.Deserialiaze<ErrorMessagesModel>(Paths.ErrorMessages);
         }
+
+        protected SuccessMessagesModel GetSuccessMsg()
+        {
+            return this.jsonService.Deserialiaze<SuccessMessagesModel>(Paths.SuccessMessages);
+        }
     }
 }

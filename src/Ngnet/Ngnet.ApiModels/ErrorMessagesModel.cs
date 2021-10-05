@@ -4,30 +4,30 @@ namespace Ngnet.ApiModels
 {
     public class ErrorMessagesModel
     {
-        public SimpleDropDownModel NotEqualPasswords { get; set; }
+        public LanguagesModel NotEqualPasswords { get; set; }
 
-        public SimpleDropDownModel InvalidUsername { get; set; }
+        public LanguagesModel InvalidUsername { get; set; }
 
-        public SimpleDropDownModel InvalidPasswords { get; set; }
+        public LanguagesModel InvalidPasswords { get; set; }
 
-        public SimpleDropDownModel UserNotFound { get; set; }
+        public LanguagesModel UserNotFound { get; set; }
 
-        public SimpleDropDownModel UsersNotFound { get; set; }
+        public LanguagesModel UsersNotFound { get; set; }
 
-        public SimpleDropDownModel VehicleCareNotFound { get; set; }
+        public LanguagesModel VehicleCareNotFound { get; set; }
 
-        public SimpleDropDownModel VehicleCaresNotFound { get; set; }
+        public LanguagesModel VehicleCaresNotFound { get; set; }
 
-        public SimpleDropDownModel NoPermissions { get; set; }
+        public LanguagesModel NoPermissions { get; set; }
 
-        public SimpleDropDownModel VehicleCareNamesNotFound { get; set; }
+        public LanguagesModel VehicleCareNamesNotFound { get; set; }
 
-        public SimpleDropDownModel CompanyNamesNotFound { get; set; }
+        public LanguagesModel CompanyNamesNotFound { get; set; }
 
-        public SimpleDropDownModel HealthCareNamesNotFound { get; set; }
+        public LanguagesModel HealthCareNamesNotFound { get; set; }
 
-        public SimpleDropDownModel HealthCareNotFound { get; set; }
+        public LanguagesModel HealthCareNotFound { get; set; }
 
-        public SimpleDropDownModel HealthCaresNotFound { get; set; }
+        public LanguagesModel HealthCaresNotFound { get; set; }
     }
 }

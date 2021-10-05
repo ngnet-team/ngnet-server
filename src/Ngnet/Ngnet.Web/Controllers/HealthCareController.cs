@@ -50,7 +50,7 @@ namespace Ngnet.Web.Controllers
 
             var result = await this.healthCareService.SaveAsync(model);
 
-            return this.Ok(result);
+            return this.Ok(this.GetSuccessMsg().HealthCareSaved);
         }
 
         [HttpPost]
@@ -118,14 +118,14 @@ namespace Ngnet.Web.Controllers
                 return this.NotFound(errors);
             }
 
-            return this.Ok(result);
+            return this.Ok(this.GetSuccessMsg().HealthCareDeleted);
         }
 
         [HttpGet]
         [Route(nameof(Names))]
-        public ActionResult<SimpleDropDownModel> Names()
+        public ActionResult<LanguagesModel> Names()
         {
-            var result = this.healthCareService.GetNames<SimpleDropDownModel>();
+            var result = this.healthCareService.GetNames<LanguagesModel>();
 
             if (result == null)
             {

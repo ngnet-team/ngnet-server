@@ -52,7 +52,7 @@ namespace Ngnet.Web.Controllers
 
             var result = await this.vehicleCareService.SaveAsync(model);
 
-            return this.Ok(result);
+            return this.Ok(this.GetSuccessMsg().VehicleCareSaved);
         }
 
         [HttpPost]
@@ -114,14 +114,14 @@ namespace Ngnet.Web.Controllers
                 return this.NotFound(errors);
             }
 
-            return this.Ok(result);
+            return this.Ok(this.GetSuccessMsg().VehicleCareDeleted);
         }
 
         [HttpGet]
         [Route(nameof(Names))]
-        public ActionResult<SimpleDropDownModel> Names()
+        public ActionResult<LanguagesModel> Names()
         {
-            var result = this.vehicleCareService.GetNames<SimpleDropDownModel>();
+            var result = this.vehicleCareService.GetNames<LanguagesModel>();
 
             if (result == null)
             {
