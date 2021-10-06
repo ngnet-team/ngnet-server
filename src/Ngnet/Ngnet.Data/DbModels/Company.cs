@@ -7,10 +7,8 @@ namespace Ngnet.Data.DbModels
         [Required]
         public string Name { get; set; }
 
-        [Phone]
         public string PhoneNumber { get; set; }
 
-        [EmailAddress]
         public string Email { get; set; }
 
         public string WebSite { get; set; }

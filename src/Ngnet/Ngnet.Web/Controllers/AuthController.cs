@@ -20,7 +20,7 @@ namespace Ngnet.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
         private readonly IConfiguration configuration;
- 
+
         public AuthController
             (IAuthService userService,
              UserManager<User> userManager,
@@ -61,7 +61,7 @@ namespace Ngnet.Web.Controllers
 
             await this.userManager.AddToRoleAsync(user, "User");
 
-            return this.Ok();
+            return this.Ok(this.GetSuccessMsg().UserRegistered);
         }
 
         [HttpPost]
@@ -92,7 +92,9 @@ namespace Ngnet.Web.Controllers
 
             string token = this.userService.CreateJwtToken(user.Id, user.UserName, this.configuration["ApplicationSettings:Secret"]);
 
-            return new LoginResponseModel { Token = token };
+            var responseMessage = this.GetSuccessMsg().UserLoggedIn;
+
+            return new LoginResponseModel { Token = token, ResponseMessage = responseMessage };
         }
 
         [Authorize]
@@ -150,7 +152,14 @@ namespace Ngnet.Web.Controllers
         {
             int result = await this.userService.Update<UserRequestModel>(model);
 
-            return this.Ok(result);
+            if (result == 0)
+            {
+                var errors = this.GetErrors().UserNotFound;
+
+                return this.Unauthorized(errors);
+            }
+
+            return this.Ok(this.GetSuccessMsg().UserUpdated);
         }
     }
 }

@@ -2,8 +2,8 @@
 {
     public class CompanyDropDownModel
     {
-        public SimpleDropDownModel Vehicle { get; set; }
+        public LanguagesModel Vehicle { get; set; }
 
-        public SimpleDropDownModel Health { get; set; }
+        public LanguagesModel Health { get; set; }
     }
 }

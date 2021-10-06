@@ -68,18 +68,24 @@ namespace Ngnet.Services.Vehicle
             return this.jsonService.Deserialiaze<T>(Paths.VehicleCareNames);
         }
 
-        public async Task<int> SaveAsync(VehicleCareRequestModel apiModel)
+        public async Task<CRUD> SaveAsync(VehicleCareRequestModel apiModel)
         {
+            CRUD response = CRUD.None;
+
             VehicleCare vehicleCare = this.database.VehicleCares.FirstOrDefault(x => x.Id == apiModel.Id);
 
             //Create new entity
             if (vehicleCare == null)
             {
+                response = CRUD.Created;
+
                 vehicleCare = MappingFactory.Mapper.Map<VehicleCare>(apiModel);
                 await this.database.VehicleCares.AddAsync(vehicleCare);
             }
             else
             {
+                response = apiModel.IsDeleted ? CRUD.Deleted : CRUD.Updated;
+
                 bool companyReceived = apiModel?.Company != null;
 
                 if (companyReceived)
@@ -91,7 +97,15 @@ namespace Ngnet.Services.Vehicle
                 vehicleCare = this.ModifyEntity<VehicleCareRequestModel>(apiModel, vehicleCare);
             }
 
-            return await this.database.SaveChangesAsync();
+            int result = await this.database.SaveChangesAsync();
+
+            //no changes in the database
+            if (result < 1)
+            {
+                response = CRUD.None;
+            }
+
+            return response;
         }
 
         private VehicleCare ModifyEntity<T>(T apiModel, VehicleCare vehicleCare)

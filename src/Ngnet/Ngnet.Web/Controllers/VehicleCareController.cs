@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Ngnet.Data.DbModels;
 using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
+using Ngnet.Common;
 
 namespace Ngnet.Web.Controllers
 {
@@ -50,9 +51,14 @@ namespace Ngnet.Web.Controllers
                 return this.Unauthorized(errors);
             }
 
-            var result = await this.vehicleCareService.SaveAsync(model);
+            CRUD result = await this.vehicleCareService.SaveAsync(model);
 
-            return this.Ok(result);
+            LanguagesModel msg =
+                result == CRUD.Created ? this.GetSuccessMsg().Created :
+                result == CRUD.Updated ? this.GetSuccessMsg().Updated :
+                result == CRUD.Deleted ? this.GetSuccessMsg().Deleted : null;
+
+            return this.Ok(msg);
         }
 
         [HttpPost]
@@ -114,14 +120,14 @@ namespace Ngnet.Web.Controllers
                 return this.NotFound(errors);
             }
 
-            return this.Ok(result);
+            return this.Ok(this.GetSuccessMsg().Deleted);
         }
 
         [HttpGet]
         [Route(nameof(Names))]
-        public ActionResult<SimpleDropDownModel> Names()
+        public ActionResult<LanguagesModel> Names()
         {
-            var result = this.vehicleCareService.GetNames<SimpleDropDownModel>();
+            var result = this.vehicleCareService.GetNames<LanguagesModel>();
 
             if (result == null)
             {

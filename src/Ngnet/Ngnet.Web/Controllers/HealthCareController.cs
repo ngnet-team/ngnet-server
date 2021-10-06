@@ -7,6 +7,7 @@ using Ngnet.Common.Json.Service;
 using Ngnet.Services.Health;
 using Ngnet.Web.Infrastructure;
 using System.Threading.Tasks;
+using Ngnet.Common;
 
 namespace Ngnet.Web.Controllers
 {
@@ -48,9 +49,14 @@ namespace Ngnet.Web.Controllers
                 return this.Unauthorized(errors);
             }
 
-            var result = await this.healthCareService.SaveAsync(model);
+            CRUD result = await this.healthCareService.SaveAsync(model);
 
-            return this.Ok(result);
+            LanguagesModel msg =
+                result == CRUD.Created ? this.GetSuccessMsg().Created :
+                result == CRUD.Updated ? this.GetSuccessMsg().Updated :
+                result == CRUD.Deleted ? this.GetSuccessMsg().Deleted : null;
+
+            return this.Ok(msg);
         }
 
         [HttpPost]
@@ -118,14 +124,14 @@ namespace Ngnet.Web.Controllers
                 return this.NotFound(errors);
             }
 
-            return this.Ok(result);
+            return this.Ok(this.GetSuccessMsg().Deleted);
         }
 
         [HttpGet]
         [Route(nameof(Names))]
-        public ActionResult<SimpleDropDownModel> Names()
+        public ActionResult<LanguagesModel> Names()
         {
-            var result = this.healthCareService.GetNames<SimpleDropDownModel>();
+            var result = this.healthCareService.GetNames<LanguagesModel>();
 
             if (result == null)
             {
