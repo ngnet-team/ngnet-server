@@ -23,36 +23,28 @@
       "Влязохте в системата успешно!"
     ]
   },
-  "HealthCareSaved": {
+  "Created": {
     "EN": [
-      "{0} is added successfully!"
+      "The record has been created successfully!"
     ],
     "BG": [
-      "{0} е добавен успешно!"
+      "Записът е създаден успешно!"
     ]
   },
-  "HealthCareDeleted": {
+  "Updated": {
     "EN": [
-      "{0} is deleted successfully!"
+      "The record has been updated successfully!"
     ],
     "BG": [
-      "{0} е изтрит успешно!"
+      "Записът е променен успешно!"
     ]
   },
-  "VehicleCareSaved": {
+  "Deleted": {
     "EN": [
-      "{0} is added successfully!"
+      "The record has been deleted successfully!"
     ],
     "BG": [
-      "{0} е добавен успешно!"
-    ]
-  },
-  "VehicleCareDeleted": {
-    "EN": [
-      "{0} is deleted successfully!"
-    ],
-    "BG": [
-      "{0} е изтрит успешно!"
+      "Записът е изтрит успешно!"
     ]
   }
 }

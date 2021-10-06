@@ -10,12 +10,10 @@ namespace Ngnet.ApiModels
 
         public LanguagesModel UserLoggedIn { get; set; }
 
-        public LanguagesModel HealthCareSaved { get; set; }
+        public LanguagesModel Created { get; set; }
 
-        public LanguagesModel HealthCareDeleted { get; set; }
+        public LanguagesModel Updated { get; set; }
 
-        public LanguagesModel VehicleCareSaved { get; set; }
-
-        public LanguagesModel VehicleCareDeleted { get; set; }
+        public LanguagesModel Deleted { get; set; }
     }
 }

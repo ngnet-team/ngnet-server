@@ -68,18 +68,24 @@ namespace Ngnet.Services.Health
             return this.jsonService.Deserialiaze<T>(Paths.HealthCareNames);
         }
 
-        public async Task<int> SaveAsync(HealthCareRequestModel apiModel)
+        public async Task<CRUD> SaveAsync(HealthCareRequestModel apiModel)
         {
+            CRUD response = CRUD.None;
+
             HealthCare healthCare = this.database.HealthCares.FirstOrDefault(x => x.Id == apiModel.Id);
 
             //Create new entity
             if (healthCare == null)
             {
+                response = CRUD.Created;
+
                 healthCare = MappingFactory.Mapper.Map<HealthCare>(apiModel);
                 await this.database.HealthCares.AddAsync(healthCare);
             }
             else
             {
+                response = apiModel.IsDeleted ? CRUD.Deleted : CRUD.Updated;
+
                 bool companyReceived = apiModel?.Company != null;
 
                 if (companyReceived)
@@ -91,7 +97,15 @@ namespace Ngnet.Services.Health
                 healthCare = this.ModifyEntity<HealthCareRequestModel>(apiModel, healthCare);
             }
 
-            return await this.database.SaveChangesAsync();
+            int result = await this.database.SaveChangesAsync();
+
+            //no changes in the database
+            if (result < 1)
+            {
+                response = CRUD.None;
+            }
+
+            return response;
         }
 
         private HealthCare ModifyEntity<T>(T apiModel, HealthCare healthCare)
