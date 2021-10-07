@@ -14,6 +14,8 @@ namespace Ngnet.ApiModels
 
         public LanguagesModel UsersNotFound { get; set; }
 
+        public LanguagesModel ExistingUserName { get; set; }
+
         public LanguagesModel VehicleCareNotFound { get; set; }
 
         public LanguagesModel VehicleCaresNotFound { get; set; }
