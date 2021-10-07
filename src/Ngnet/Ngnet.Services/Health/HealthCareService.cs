@@ -97,13 +97,7 @@ namespace Ngnet.Services.Health
                 healthCare = this.ModifyEntity<HealthCareRequestModel>(apiModel, healthCare);
             }
 
-            int result = await this.database.SaveChangesAsync();
-
-            //no changes in the database
-            if (result < 1)
-            {
-                response = CRUD.None;
-            }
+            await this.database.SaveChangesAsync();
 
             return response;
         }

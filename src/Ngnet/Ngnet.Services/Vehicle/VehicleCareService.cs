@@ -97,13 +97,7 @@ namespace Ngnet.Services.Vehicle
                 vehicleCare = this.ModifyEntity<VehicleCareRequestModel>(apiModel, vehicleCare);
             }
 
-            int result = await this.database.SaveChangesAsync();
-
-            //no changes in the database
-            if (result < 1)
-            {
-                response = CRUD.None;
-            }
+            await this.database.SaveChangesAsync();
 
             return response;
         }
