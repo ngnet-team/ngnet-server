@@ -45,7 +45,15 @@ namespace Ngnet.Web.Controllers
                 return this.BadRequest(errors);
             }
 
-            var user = new User
+            var user = await this.userManager.FindByNameAsync(model.UserName);
+
+            if (user != null)
+            {
+                var errors = this.GetErrors().ExistingUserName;
+                return this.BadRequest(errors);
+            }
+
+            user = new User
             {
                 Email = model.Email,
                 UserName = model.UserName,

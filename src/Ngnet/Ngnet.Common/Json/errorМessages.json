@@ -39,6 +39,14 @@
       "Не са намерени потребители!"
     ]
   },
+  "ExistingUserName": {
+    "EN": [
+      "The Username is already taken!"
+    ],
+    "BG": [
+      "Потребителското име е вече заето!"
+    ]
+  },
   "NoPermissions": {
     "EN": [
       "You do NOT have permissions!"
