@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 
-namespace Ngnet.Data.Seeding
+namespace Ngnet.SqlServer.Seeding
 {
     public interface ISeeder
     {

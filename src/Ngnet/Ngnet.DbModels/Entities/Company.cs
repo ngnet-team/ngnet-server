@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace Ngnet.Data.DbModels
+namespace Ngnet.DbModels.Entities
 {
     public class Company : BaseModel<int>
     {

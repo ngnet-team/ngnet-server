@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
-using Ngnet.Data.DbModels;
+using Ngnet.DbModels.Entities;
 using Ngnet.Services.Companies;
 
 namespace Ngnet.Web.Controllers

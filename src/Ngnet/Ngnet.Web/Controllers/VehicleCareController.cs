@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Authorization;
 using Ngnet.ApiModels.VehicleModels;
 using Ngnet.Services.Vehicle;
 using Microsoft.AspNetCore.Identity;
-using Ngnet.Data.DbModels;
+using Ngnet.DbModels.Entities;
 using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
 using Ngnet.Common;

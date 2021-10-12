@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Design;
 using Microsoft.Extensions.Configuration;
 using System.IO;
 
-namespace Ngnet.Data
+namespace Ngnet.SqlServer
 {
     public class DbContextFactory : IDesignTimeDbContextFactory<NgnetDbContext>
     {

@@ -10,7 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ngnet.Data\Ngnet.Data.csproj" />
+    <ProjectReference Include="..\Ngnet.SqlServer\Ngnet.SqlServer.csproj" />
   </ItemGroup>
 
 </Project>

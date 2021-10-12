@@ -4,7 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Ngnet.ApiModels;
-using Ngnet.Data;
+using Ngnet.SqlServer;
 using Ngnet.Mapper;
 using Ngnet.Web.Infrastructure;
 using System.Reflection;

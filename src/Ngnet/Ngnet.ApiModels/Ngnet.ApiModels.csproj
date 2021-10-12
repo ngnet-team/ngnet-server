@@ -5,7 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Ngnet.Data\Ngnet.Data.csproj" />
     <ProjectReference Include="..\Ngnet.Mapper\Ngnet.Mapper.csproj" />
   </ItemGroup>
 
