@@ -1,6 +1,6 @@
 ﻿using AutoMapper;
 using Ngnet.ApiModels.CompanyModels;
-using Ngnet.Data.DbModels;
+using Ngnet.DbModels.Entities;
 using Ngnet.Mapper;
 using System;
 using System.ComponentModel.DataAnnotations;

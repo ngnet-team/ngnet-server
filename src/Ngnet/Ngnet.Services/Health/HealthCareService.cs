@@ -1,8 +1,8 @@
 ﻿using Ngnet.ApiModels.HealthModels;
 using Ngnet.Common;
 using Ngnet.Common.Json.Service;
-using Ngnet.Data;
-using Ngnet.Data.DbModels;
+using Ngnet.SqlServer;
+using Ngnet.DbModels.Entities;
 using Ngnet.Mapper;
 using Ngnet.Services.Companies;
 using System;

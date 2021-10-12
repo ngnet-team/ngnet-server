@@ -7,8 +7,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.Web", "Ngnet.Web\Ngne
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.Services", "Ngnet.Services\Ngnet.Services.csproj", "{4AA01E08-3372-48F5-9452-503CB1F0F98E}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.Data", "Ngnet.Data\Ngnet.Data.csproj", "{786FC29A-BF5F-4A33-8023-5D4EA27A36BD}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.Tests", "Ngnet.Tests\Ngnet.Tests.csproj", "{CC120728-FD95-427E-97ED-201671F04062}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.Common", "Ngnet.Common\Ngnet.Common.csproj", "{2A46DEB0-B329-49FE-AB7E-A38911150AC5}"
@@ -16,6 +14,10 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.Mapper", "Ngnet.Mapper\Ngnet.Mapper.csproj", "{72F06FD4-7C33-4FC5-AF8F-B1DCA7AF6034}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.ApiModels", "Ngnet.ApiModels\Ngnet.ApiModels.csproj", "{E564DA07-8D06-4E8C-95E5-5160F88E66B3}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Ngnet.SqlServer", "Ngnet.SqlServer\Ngnet.SqlServer.csproj", "{03DD913B-4B9D-4FDE-B4D7-C934BEDEA424}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Ngnet.DbModels", "Ngnet.DbModels\Ngnet.DbModels.csproj", "{99180D35-B618-4898-B17E-32F8400DFB9F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,10 +33,6 @@ Global
 		{4AA01E08-3372-48F5-9452-503CB1F0F98E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4AA01E08-3372-48F5-9452-503CB1F0F98E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4AA01E08-3372-48F5-9452-503CB1F0F98E}.Release|Any CPU.Build.0 = Release|Any CPU
-		{786FC29A-BF5F-4A33-8023-5D4EA27A36BD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{786FC29A-BF5F-4A33-8023-5D4EA27A36BD}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{786FC29A-BF5F-4A33-8023-5D4EA27A36BD}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{786FC29A-BF5F-4A33-8023-5D4EA27A36BD}.Release|Any CPU.Build.0 = Release|Any CPU
 		{CC120728-FD95-427E-97ED-201671F04062}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{CC120728-FD95-427E-97ED-201671F04062}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CC120728-FD95-427E-97ED-201671F04062}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -51,6 +49,14 @@ Global
 		{E564DA07-8D06-4E8C-95E5-5160F88E66B3}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E564DA07-8D06-4E8C-95E5-5160F88E66B3}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E564DA07-8D06-4E8C-95E5-5160F88E66B3}.Release|Any CPU.Build.0 = Release|Any CPU
+		{03DD913B-4B9D-4FDE-B4D7-C934BEDEA424}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{03DD913B-4B9D-4FDE-B4D7-C934BEDEA424}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{03DD913B-4B9D-4FDE-B4D7-C934BEDEA424}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{03DD913B-4B9D-4FDE-B4D7-C934BEDEA424}.Release|Any CPU.Build.0 = Release|Any CPU
+		{99180D35-B618-4898-B17E-32F8400DFB9F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{99180D35-B618-4898-B17E-32F8400DFB9F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{99180D35-B618-4898-B17E-32F8400DFB9F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{99180D35-B618-4898-B17E-32F8400DFB9F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

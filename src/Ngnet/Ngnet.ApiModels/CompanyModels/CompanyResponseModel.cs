@@ -1,4 +1,4 @@
-﻿using Ngnet.Data.DbModels;
+﻿using Ngnet.DbModels.Entities;
 using Ngnet.Mapper;
 
 namespace Ngnet.ApiModels.CompanyModels

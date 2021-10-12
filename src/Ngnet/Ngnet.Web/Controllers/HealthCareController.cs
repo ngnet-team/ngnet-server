@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Ngnet.Data.DbModels;
+using Ngnet.DbModels.Entities;
 using Ngnet.ApiModels.HealthModels;
 using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;

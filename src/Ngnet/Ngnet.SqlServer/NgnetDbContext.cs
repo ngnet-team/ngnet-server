@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Ngnet.Data.DbModels;
+using Ngnet.DbModels.Entities;
 
-namespace Ngnet.Data
+namespace Ngnet.SqlServer
 {
     public class NgnetDbContext : IdentityDbContext<User, Role, string>
     {

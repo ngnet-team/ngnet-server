@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using Ngnet.Data.DbModels;
+using Ngnet.DbModels.Entities;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;

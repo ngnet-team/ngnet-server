@@ -1,5 +1,4 @@
 ﻿using AutoMapper;
-using Ngnet.Data.DbModels;
 
 namespace Ngnet.Mapper
 {

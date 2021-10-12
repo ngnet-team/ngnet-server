@@ -2,10 +2,10 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Ngnet.Data;
+using Ngnet.SqlServer;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using Ngnet.Data.DbModels;
+using Ngnet.DbModels.Entities;
 using Ngnet.Services;
 using AutoMapper;
 using Ngnet.Mapper;

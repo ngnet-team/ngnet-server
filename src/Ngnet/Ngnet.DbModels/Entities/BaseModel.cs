@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ngnet.Data.DbModels
+namespace Ngnet.DbModels.Entities
 {
     public class BaseModel<IdType> : IBaseModel
     {

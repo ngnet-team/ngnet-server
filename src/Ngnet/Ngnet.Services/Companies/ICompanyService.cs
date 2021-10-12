@@ -1,5 +1,5 @@
 ﻿using Ngnet.ApiModels.CompanyModels;
-using Ngnet.Data.DbModels;
+using Ngnet.DbModels.Entities;
 using System.Threading.Tasks;
 
 namespace Ngnet.Services.Companies

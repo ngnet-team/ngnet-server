@@ -1,10 +1,10 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Ngnet.Data.DbModels;
+using Ngnet.DbModels.Entities;
 using System;
 using System.Threading.Tasks;
 
-namespace Ngnet.Data.Seeding.Seeders
+namespace Ngnet.SqlServer.Seeding.Seeders
 {
     public class RoleSeeder : ISeeder
     {

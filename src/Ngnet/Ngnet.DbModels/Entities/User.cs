@@ -2,7 +2,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace Ngnet.Data.DbModels
+namespace Ngnet.DbModels.Entities
 {
     public class User : IdentityUser, IBaseModel
     {
