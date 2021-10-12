@@ -1,5 +1,5 @@
 ﻿using Ngnet.ApiModels.VehicleModels;
-using Ngnet.SqlServer;
+using Ngnet.Database;
 using Ngnet.DbModels.Entities;
 using Ngnet.Mapper;
 using System.Linq;
@@ -48,10 +48,12 @@ namespace Ngnet.Services.Vehicle
 
         public T[] GetByUserId<T>(string userId)
         {
-            return this.database.VehicleCares
+            var result = this.database.VehicleCares
                 .Where(x => x.UserId == userId && !x.IsDeleted)
                 .OrderByDescending(x => x.CreatedOn)
-                .To<T>()
+                .To<T>();
+
+            return result
                 .ToArray();
         }
 

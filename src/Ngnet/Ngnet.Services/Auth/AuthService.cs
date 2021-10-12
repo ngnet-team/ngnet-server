@@ -1,5 +1,5 @@
 ﻿using Microsoft.IdentityModel.Tokens;
-using Ngnet.SqlServer;
+using Ngnet.Database;
 using Ngnet.DbModels.Entities;
 using Ngnet.Mapper;
 using System;

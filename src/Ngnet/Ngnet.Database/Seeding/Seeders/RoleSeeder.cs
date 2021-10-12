@@ -4,7 +4,7 @@ using Ngnet.DbModels.Entities;
 using System;
 using System.Threading.Tasks;
 
-namespace Ngnet.SqlServer.Seeding.Seeders
+namespace Ngnet.Database.Seeding.Seeders
 {
     public class RoleSeeder : ISeeder
     {

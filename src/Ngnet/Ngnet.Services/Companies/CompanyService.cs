@@ -1,7 +1,7 @@
 ﻿using Ngnet.ApiModels.CompanyModels;
 using Ngnet.Common;
 using Ngnet.Common.Json.Service;
-using Ngnet.SqlServer;
+using Ngnet.Database;
 using Ngnet.DbModels.Entities;
 using Ngnet.Mapper;
 using System;
