@@ -2,8 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Ngnet.SqlServer;
-using Ngnet.SqlServer.Seeding;
+using Ngnet.Database;
+using Ngnet.Database.Seeding;
 
 namespace Ngnet.Web.Infrastructure
 {

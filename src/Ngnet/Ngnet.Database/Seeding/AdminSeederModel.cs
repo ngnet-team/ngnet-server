@@ -1,4 +1,4 @@
-﻿namespace Ngnet.SqlServer.Seeding
+﻿namespace Ngnet.Database.Seeding
 {
     public class AdminSeederModel
     {

@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Ngnet.DbModels.Entities;
 
-namespace Ngnet.SqlServer
+namespace Ngnet.Database
 {
     public class NgnetDbContext : IdentityDbContext<User, Role, string>
     {

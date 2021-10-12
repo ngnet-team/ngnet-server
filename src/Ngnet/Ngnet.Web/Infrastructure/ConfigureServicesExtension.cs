@@ -2,7 +2,7 @@
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
-using Ngnet.SqlServer;
+using Ngnet.Database;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
 using Ngnet.DbModels.Entities;
@@ -41,8 +41,17 @@ namespace Ngnet.Web.Infrastructure
 
         public static IServiceCollection AddDatabase(this IServiceCollection services, IConfiguration configuration)
         {
-            return services.AddDbContext<NgnetDbContext>(
-                options => options.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            return services.AddDbContext<NgnetDbContext>(options => 
+            {
+                if (configuration.GetValue<bool>("Database:SqlServer:Use"))
+                {
+                     options.UseSqlServer(configuration.GetValue<string>("Database:SqlServer:ConnectionString"));
+                }
+                else if (configuration.GetValue<bool>("Database:SqLite:Use"))
+                {
+                    options.UseSqlite(configuration.GetValue<string>("Database:SqLite:ConnectionString"));
+                }
+            });
         }
 
         public static IServiceCollection AddIdentity(this IServiceCollection services)

@@ -1,9 +1,9 @@
-﻿using Ngnet.SqlServer.Seeding.Seeders;
+﻿using Ngnet.Database.Seeding.Seeders;
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace Ngnet.SqlServer.Seeding
+namespace Ngnet.Database.Seeding
 {
     public class DatabaseSeeder : ISeeder
     {
