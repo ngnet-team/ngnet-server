@@ -1,5 +1,5 @@
 ﻿using AutoMapper;
-using Ngnet.DbModels.Entities;
+using Ngnet.Database.Models;
 using Ngnet.Mapper;
 using System.ComponentModel.DataAnnotations;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Ngnet.DbModels.Entities
+namespace Ngnet.Database.Models
 {
     public interface IBaseModel
     {

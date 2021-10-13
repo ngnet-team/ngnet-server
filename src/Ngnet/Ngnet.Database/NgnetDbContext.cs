@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Ngnet.DbModels.Entities;
+using Ngnet.Database.Models;
 
 namespace Ngnet.Database
 {

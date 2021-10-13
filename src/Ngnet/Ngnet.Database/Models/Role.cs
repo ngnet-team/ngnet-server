@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 
-namespace Ngnet.DbModels.Entities
+namespace Ngnet.Database.Models
 {
     public class Role : IdentityRole, IBaseModel
     {

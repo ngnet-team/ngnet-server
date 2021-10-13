@@ -1,6 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Ngnet.Database;
-using Ngnet.DbModels.Entities;
+using Ngnet.Database.Models;
 using Ngnet.Mapper;
 using System;
 using System.IdentityModel.Tokens.Jwt;

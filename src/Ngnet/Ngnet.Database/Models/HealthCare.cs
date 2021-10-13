@@ -1,24 +1,19 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Ngnet.DbModels.Entities
+namespace Ngnet.Database.Models
 {
-    public class VehicleCare : BaseModel<string>
+    public class HealthCare : BaseModel<string>
     {
-        public VehicleCare()
+        public HealthCare()
         {
             this.Id = Guid.NewGuid().ToString();
         }
 
         [Required]
-        [MaxLength(50)]
         public string Name { get; set; }
 
-        public DateTime? StartDate { get; set; }
-
-        public DateTime? EndDate { get; set; }
-
-        public DateTime? PaidEndDate { get; set; }
+        public DateTime? Date { get; set; }
 
         public DateTime? Reminder { get; set; }
 
@@ -29,7 +24,6 @@ namespace Ngnet.DbModels.Entities
 
         public Company Company { get; set; }
 
-        [MaxLength(500)]
         public string Notes { get; set; }
 
         public string UserId { get; set; }
