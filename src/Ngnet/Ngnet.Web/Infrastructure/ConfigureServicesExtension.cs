@@ -5,7 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using Ngnet.Database;
 using System.Text;
 using Microsoft.EntityFrameworkCore;
-using Ngnet.DbModels.Entities;
+using Ngnet.Database.Models;
 using Ngnet.Services;
 using AutoMapper;
 using Ngnet.Mapper;

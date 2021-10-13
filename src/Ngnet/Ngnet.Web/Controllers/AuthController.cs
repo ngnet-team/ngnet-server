@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ngnet.ApiModels.AuthModels;
 using Ngnet.Common.Json.Service;
-using Ngnet.DbModels.Entities;
+using Ngnet.Database.Models;
 using Ngnet.Services.Auth;
 using Ngnet.Web.Infrastructure;
 using Ngnet.Web.Models.AuthModels;

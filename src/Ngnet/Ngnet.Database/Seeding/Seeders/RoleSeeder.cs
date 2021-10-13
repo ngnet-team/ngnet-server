@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
-using Ngnet.DbModels.Entities;
+using Ngnet.Database.Models;
 using System;
 using System.Threading.Tasks;
 

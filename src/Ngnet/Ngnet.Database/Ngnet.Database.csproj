@@ -18,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Ngnet.Common\Ngnet.Common.csproj" />
-	<ProjectReference Include="..\Ngnet.DbModels\Ngnet.DbModels.csproj" />
   </ItemGroup>
 
 </Project>

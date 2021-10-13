@@ -1,6 +1,6 @@
 ﻿using Ngnet.ApiModels.VehicleModels;
 using Ngnet.Database;
-using Ngnet.DbModels.Entities;
+using Ngnet.Database.Models;
 using Ngnet.Mapper;
 using System.Linq;
 using System.Threading.Tasks;

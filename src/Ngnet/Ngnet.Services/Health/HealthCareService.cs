@@ -2,7 +2,7 @@
 using Ngnet.Common;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database;
-using Ngnet.DbModels.Entities;
+using Ngnet.Database.Models;
 using Ngnet.Mapper;
 using Ngnet.Services.Companies;
 using System;
