@@ -30,9 +30,9 @@ namespace Ngnet.ApiModels.HealthModels
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<HealthCare, HealthCareResponseModel>()
-                .ForMember(x => x.Date, opt => opt.MapFrom(x => x.Date.ToString().Substring(0, 10)))
-                .ForMember(x => x.Reminder, opt => opt.MapFrom(x => x.Reminder.ToString().Substring(0, 10)))
-                .ForMember(x => x.DeletedOn, opt => opt.MapFrom(x => x.DeletedOn.ToString().Substring(0, 10)));
+                .ForMember(x => x.Date, opt => opt.MapFrom(x => x.Date != null ? x.Date.ToString().Substring(0, 10) : null))
+                .ForMember(x => x.Reminder, opt => opt.MapFrom(x => x.Reminder != null ? x.Reminder.ToString().Substring(0, 10) : null))
+                .ForMember(x => x.DeletedOn, opt => opt.MapFrom(x => x.DeletedOn != null ? x.DeletedOn.ToString().Substring(0, 10) : null));
         }
     }
 }

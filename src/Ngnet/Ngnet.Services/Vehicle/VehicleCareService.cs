@@ -48,13 +48,10 @@ namespace Ngnet.Services.Vehicle
 
         public T[] GetByUserId<T>(string userId)
         {
-            var result = this.database.VehicleCares
+            return this.database.VehicleCares
                 .Where(x => x.UserId == userId && !x.IsDeleted)
                 .OrderByDescending(x => x.CreatedOn)
-                .To<T>();
-
-            return result
-                .ToArray();
+                .To<T>().ToArray();
         }
 
         public T GetById<T>(string vehicleCareId)

@@ -82,12 +82,6 @@ namespace Ngnet.Web.Controllers
         {
             VehicleCareResponseModel[] response = this.vehicleCareService.GetByUserId<VehicleCareResponseModel>(model.UserId);
 
-            if (response.Length == 0)
-            {
-                var errors = this.GetErrors().VehicleCaresNotFound;
-                return this.NotFound(errors);
-            }
-
             return response;
         }
 

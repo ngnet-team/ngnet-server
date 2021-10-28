@@ -13,6 +13,11 @@ namespace Ngnet.Web.Infrastructure
 
         public async static Task<string> GetRoleAsync(this ClaimsPrincipal user, UserManager<User> userManager)
         {
+            if (user == null)
+            {
+                return null;
+            }
+
             User u = await userManager.FindByIdAsync(GetId(user));
             string role = userManager.GetRolesAsync(u).GetAwaiter().GetResult().FirstOrDefault();
 
