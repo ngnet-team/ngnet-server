@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ngnet.Database.Models
 {
@@ -14,8 +15,10 @@ namespace Ngnet.Database.Models
             this.HealthNotes = new HashSet<HealthCare>();
         }
 
+        [MaxLength(50)]
         public string FirstName { get; set; }
 
+        [MaxLength(50)]
         public string LastName { get; set; }
 
         public int? Age { get; set; }

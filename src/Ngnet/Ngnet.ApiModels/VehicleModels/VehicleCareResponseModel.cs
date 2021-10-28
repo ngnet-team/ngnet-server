@@ -35,11 +35,11 @@ namespace Ngnet.ApiModels.VehicleModels
         public void CreateMappings(IProfileExpression configuration)
         {
             configuration.CreateMap<VehicleCare, VehicleCareResponseModel>()
-                .ForMember(x => x.StartDate, opt => opt.MapFrom(x => x.StartDate.ToString().Substring(0, 10)))
-                .ForMember(x => x.EndDate, opt => opt.MapFrom(x => x.EndDate.ToString().Substring(0, 10)))
-                .ForMember(x => x.PaidEndDate, opt => opt.MapFrom(x => x.PaidEndDate.ToString().Substring(0, 10)))
-                .ForMember(x => x.Reminder, opt => opt.MapFrom(x => x.Reminder.ToString().Substring(0, 10)))
-                .ForMember(x => x.DeletedOn, opt => opt.MapFrom(x => x.DeletedOn.ToString().Substring(0, 10)));
+                .ForMember(x => x.StartDate, opt => opt.MapFrom(x => x.StartDate != null ? x.StartDate.ToString().Substring(0, 10) : null))
+                .ForMember(x => x.EndDate, opt => opt.MapFrom(x => x.EndDate != null ? x.EndDate.ToString().Substring(0, 10) : null))
+                .ForMember(x => x.PaidEndDate, opt => opt.MapFrom(x => x.PaidEndDate != null ? x.PaidEndDate.ToString().Substring(0, 10) : null))
+                .ForMember(x => x.Reminder, opt => opt.MapFrom(x => x.Reminder != null ? x.Reminder.ToString().Substring(0, 10) : null))
+                .ForMember(x => x.DeletedOn, opt => opt.MapFrom(x => x.DeletedOn != null ? x.DeletedOn.ToString().Substring(0, 10) : null));
         }
     }
 }

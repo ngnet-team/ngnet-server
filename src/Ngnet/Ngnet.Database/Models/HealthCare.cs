@@ -11,6 +11,7 @@ namespace Ngnet.Database.Models
         }
 
         [Required]
+        [MaxLength(50)]
         public string Name { get; set; }
 
         public DateTime? Date { get; set; }
@@ -24,6 +25,7 @@ namespace Ngnet.Database.Models
 
         public Company Company { get; set; }
 
+        [MaxLength(500)]
         public string Notes { get; set; }
 
         public string UserId { get; set; }
