@@ -80,12 +80,6 @@ namespace Ngnet.Web.Controllers
         {
             HealthCareResponseModel[] response = this.healthCareService.GetByUserId<HealthCareResponseModel>(model.UserId);
 
-            if (response.Length == 0)
-            {
-                var errors = this.GetErrors().VehicleCaresNotFound;
-                return this.NotFound(errors);
-            }
-
             return response;
         }
 
@@ -94,12 +88,6 @@ namespace Ngnet.Web.Controllers
         public ActionResult<HealthCareResponseModel[]> Self()
         {
             HealthCareResponseModel[] response = this.healthCareService.GetByUserId<HealthCareResponseModel>(this.User.GetId());
-
-            if (response.Length == 0)
-            {
-                var errors = this.GetErrors().HealthCaresNotFound;
-                return this.NotFound(errors);
-            }
 
             return response;
         }
