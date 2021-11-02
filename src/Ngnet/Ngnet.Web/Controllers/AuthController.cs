@@ -150,6 +150,7 @@ namespace Ngnet.Web.Controllers
                 UserName = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                Gender = user.Gender,
                 Age = user.Age
             };
         }
@@ -158,6 +159,7 @@ namespace Ngnet.Web.Controllers
         [Route(nameof(Update))]
         public async Task<ActionResult> Update(UserRequestModel model)
         {
+            model.Id = this.User.GetId();
             int result = await this.userService.Update<UserRequestModel>(model);
 
             if (result == 0)
