@@ -201,7 +201,7 @@ namespace Ngnet.Web.Controllers
             {
                 case "email":
 
-                    if (model.New != user.Email)
+                    if (model.Old != user.Email)
                     {
                         errors = GetErrors().InvalidEmail;
                     }
