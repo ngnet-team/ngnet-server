@@ -7,6 +7,14 @@
       "Паролите трябва да бъдат еднакви!"
     ]
   },
+  "InvalidEmail": {
+    "EN": [
+      "The email is invalid!"
+    ],
+    "BG": [
+      "Невалиден имейл!"
+    ]
+  },
   "InvalidUsername": {
     "EN": [
       "The username is invalid!"
@@ -101,6 +109,14 @@
     ],
     "BG": [
       "Не са намерени здравни услуги!"
+    ]
+  },
+  "NotEqualFields": {
+    "EN": [
+      "Both fields should be equal!"
+    ],
+    "BG": [
+      "Полетата трябва да бъдат еднакви!"
     ]
   }
 }

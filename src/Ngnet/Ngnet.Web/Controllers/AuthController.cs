@@ -4,12 +4,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ngnet.ApiModels.AuthModels;
+using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database.Models;
 using Ngnet.Services.Auth;
 using Ngnet.Web.Infrastructure;
 using Ngnet.Web.Models.AuthModels;
 using System.Linq;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Ngnet.Web.Controllers
@@ -20,6 +22,8 @@ namespace Ngnet.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
         private readonly IConfiguration configuration;
+
+        private IdentityResult result;
 
         public AuthController
             (IAuthService userService,
@@ -150,14 +154,17 @@ namespace Ngnet.Web.Controllers
                 UserName = user.UserName,
                 FirstName = user.FirstName,
                 LastName = user.LastName,
+                Gender = user.Gender,
                 Age = user.Age
             };
         }
 
+        [Authorize]
         [HttpPost]
         [Route(nameof(Update))]
         public async Task<ActionResult> Update(UserRequestModel model)
         {
+            model.Id = this.User.GetId();
             int result = await this.userService.Update<UserRequestModel>(model);
 
             if (result == 0)
@@ -165,6 +172,73 @@ namespace Ngnet.Web.Controllers
                 var errors = this.GetErrors().UserNotFound;
 
                 return this.Unauthorized(errors);
+            }
+
+            return this.Ok(this.GetSuccessMsg().UserUpdated);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route(nameof(Change))]
+        public async Task<ActionResult> Change(ChangeRequestModel model)
+        {
+            User user = await this.userManager.FindByIdAsync(this.User.GetId());
+            LanguagesModel errors = null;
+
+            if (user == null)
+            {
+                errors = this.GetErrors().UserNotFound;
+                return this.Unauthorized(errors);
+            }
+
+            if (model.New != model.RepeatNew)
+            {
+                errors = this.GetErrors().NotEqualFields;
+                return this.Unauthorized(errors);
+            }
+
+            switch (model.Value.ToLower())
+            {
+                case "email":
+
+                    if (model.Old != user.Email)
+                    {
+                        errors = GetErrors().InvalidEmail;
+                    }
+
+                    //better email validation?!
+                    if (model.New.Length < 7 && !model.New.Contains('@') && !model.New.Contains('.'))
+                    {
+                        errors = GetErrors().InvalidEmail;
+                    }
+
+                    var token = await this.userManager.GenerateChangeEmailTokenAsync(user, model.New);
+                    this.result = await this.userManager.ChangeEmailAsync(user, model.New, token);
+                    break;
+
+                case "password":
+
+                    if (model.New.Length < 6)
+                    {
+                        errors = this.GetErrors().NotEqualPasswords;
+                        break;
+                    }
+
+                    this.result = await this.userManager.ChangePasswordAsync(user, model.Old, model.New);
+                    break;
+
+                default:
+                    break;
+            }
+
+            if (errors != null)
+            {
+                return this.BadRequest(errors);
+            }
+
+            if (!this.result.Succeeded)
+            {
+                return this.BadRequest(result.Errors.FirstOrDefault().Description);
             }
 
             return this.Ok(this.GetSuccessMsg().UserUpdated);

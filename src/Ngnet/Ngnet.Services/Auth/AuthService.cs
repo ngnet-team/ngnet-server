@@ -60,6 +60,7 @@ namespace Ngnet.Services.Auth
         {
             user.FirstName = mappedModel.FirstName == null ? user.FirstName : mappedModel.FirstName;
             user.LastName = mappedModel.LastName == null ? user.LastName : mappedModel.LastName;
+            user.Gender = mappedModel.Gender == null ? user.Gender : mappedModel.Gender;
             user.Age = mappedModel.Age == null ? user.Age : mappedModel.Age;
 
             user.ModifiedOn = DateTime.UtcNow;

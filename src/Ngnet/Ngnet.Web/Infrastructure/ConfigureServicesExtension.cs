@@ -15,6 +15,7 @@ using Ngnet.Services.Vehicle;
 using Ngnet.Common.Json.Service;
 using Ngnet.Services.Health;
 using Ngnet.Services.Companies;
+using Microsoft.AspNetCore.Identity;
 
 namespace Ngnet.Web.Infrastructure
 {
@@ -65,7 +66,8 @@ namespace Ngnet.Web.Infrastructure
                     options.Password.RequireNonAlphanumeric = false;
                     options.Password.RequireUppercase = false;
                 })
-                .AddEntityFrameworkStores<NgnetDbContext>();
+                .AddEntityFrameworkStores<NgnetDbContext>()
+                .AddDefaultTokenProviders();
 
             return services;
         }

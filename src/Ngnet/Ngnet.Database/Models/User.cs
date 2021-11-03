@@ -11,8 +11,8 @@ namespace Ngnet.Database.Models
         {
             this.Id = Guid.NewGuid().ToString();
 
-            this.CarNotes = new HashSet<VehicleCare>();
-            this.HealthNotes = new HashSet<HealthCare>();
+            this.VehicleCares = new HashSet<VehicleCare>();
+            this.HealthCares = new HashSet<HealthCare>();
         }
 
         [MaxLength(50)]
@@ -21,11 +21,13 @@ namespace Ngnet.Database.Models
         [MaxLength(50)]
         public string LastName { get; set; }
 
+        public string Gender { get; set; }
+
         public int? Age { get; set; }
 
-        public ICollection<VehicleCare> CarNotes { get; set; }
+        public ICollection<VehicleCare> VehicleCares { get; set; }
 
-        public ICollection<HealthCare> HealthNotes { get; set; }
+        public ICollection<HealthCare> HealthCares { get; set; }
 
         public DateTime CreatedOn { get; set; }
 
