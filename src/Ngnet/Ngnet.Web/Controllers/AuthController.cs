@@ -207,7 +207,7 @@ namespace Ngnet.Web.Controllers
                     }
 
                     //better email validation?!
-                    if (model.New.Length < 7 && !model.New.Contains('@') && !model.New.Contains('.'))
+                    if (model.New.Length < 7 || !model.New.Contains('@') || !model.New.Contains('.'))
                     {
                         errors = GetErrors().InvalidEmail;
                     }
