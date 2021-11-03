@@ -6,6 +6,8 @@ namespace Ngnet.ApiModels
     {
         public LanguagesModel NotEqualPasswords { get; set; }
 
+        public LanguagesModel InvalidEmail { get; set; }
+
         public LanguagesModel InvalidUsername { get; set; }
 
         public LanguagesModel InvalidPasswords { get; set; }
@@ -31,5 +33,7 @@ namespace Ngnet.ApiModels
         public LanguagesModel HealthCareNotFound { get; set; }
 
         public LanguagesModel HealthCaresNotFound { get; set; }
+
+        public LanguagesModel NotEqualFields { get; set; }
     }
 }
