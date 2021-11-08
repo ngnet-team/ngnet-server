@@ -14,7 +14,11 @@ namespace Ngnet.Database.Models
         [MaxLength(50)]
         public string Name { get; set; }
 
-        public DateTime? Date { get; set; }
+        public DateTime? StartDate { get; set; }
+
+        public DateTime? EndDate { get; set; }
+
+        public DateTime? PaidEndDate { get; set; }
 
         public DateTime? Reminder { get; set; }
 

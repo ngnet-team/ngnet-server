@@ -1,4 +1,4 @@
-﻿using Ngnet.ApiModels.HealthModels;
+﻿using Ngnet.ApiModels.CareModels;
 using Ngnet.Common;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database;
@@ -68,7 +68,7 @@ namespace Ngnet.Services.Health
             return this.jsonService.Deserialiaze<T>(Paths.HealthCareNames);
         }
 
-        public async Task<CRUD> SaveAsync(HealthCareRequestModel apiModel)
+        public async Task<CRUD> SaveAsync(CareRequestModel apiModel)
         {
             CRUD response = CRUD.None;
 
@@ -94,7 +94,7 @@ namespace Ngnet.Services.Health
                 }
 
                 //Modify existing entity
-                healthCare = this.ModifyEntity<HealthCareRequestModel>(apiModel, healthCare);
+                healthCare = this.ModifyEntity<CareRequestModel>(apiModel, healthCare);
             }
 
             await this.database.SaveChangesAsync();
@@ -107,7 +107,9 @@ namespace Ngnet.Services.Health
             var mappedModel = MappingFactory.Mapper.Map<HealthCare>(apiModel);
 
             healthCare.Name = mappedModel.Name == null ? healthCare.Name : mappedModel.Name;
-            healthCare.Date = mappedModel.Date == null ? healthCare.Date : mappedModel.Date;
+            healthCare.StartDate = mappedModel.StartDate == null ? healthCare.StartDate : mappedModel.StartDate;
+            healthCare.EndDate = mappedModel.EndDate == null ? healthCare.EndDate : mappedModel.EndDate;
+            healthCare.PaidEndDate = mappedModel.PaidEndDate == null ? healthCare.PaidEndDate : mappedModel.PaidEndDate;
             healthCare.Reminder = mappedModel.Reminder == null ? healthCare.Reminder : mappedModel.Reminder;
             healthCare.Price = mappedModel.Price == null ? healthCare.Price : mappedModel.Price;
             healthCare.CompanyId = mappedModel?.Company?.Id == null ? healthCare.CompanyId : mappedModel.Company.Id;

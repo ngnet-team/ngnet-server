@@ -5,9 +5,9 @@ using Ngnet.Mapper;
 using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace Ngnet.ApiModels.VehicleModels
+namespace Ngnet.ApiModels.CareModels
 {
-    public class VehicleCareRequestModel : IMapTo<VehicleCare>, IHaveCustomMappings
+    public class CareRequestModel : IMapTo<VehicleCare>, IMapTo<HealthCare>, IHaveCustomMappings
     {
         public string Id { get; set; }
 
@@ -35,7 +35,8 @@ namespace Ngnet.ApiModels.VehicleModels
 
         public void CreateMappings(IProfileExpression configuration)
         {
-            configuration.CreateMap<VehicleCareRequestModel, VehicleCare>().ForMember(x => x.Id, opt => opt.Condition(c => c.Id != null));
+            configuration.CreateMap<CareRequestModel, VehicleCare>().ForMember(x => x.Id, opt => opt.Condition(c => c.Id != null));
+            configuration.CreateMap<CareRequestModel, HealthCare>().ForMember(x => x.Id, opt => opt.Condition(c => c.Id != null));
         }
     }
 }

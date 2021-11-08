@@ -1,4 +1,4 @@
-﻿using Ngnet.ApiModels.VehicleModels;
+﻿using Ngnet.ApiModels.CareModels;
 using Ngnet.Database;
 using Ngnet.Database.Models;
 using Ngnet.Mapper;
@@ -67,7 +67,7 @@ namespace Ngnet.Services.Vehicle
             return this.jsonService.Deserialiaze<T>(Paths.VehicleCareNames);
         }
 
-        public async Task<CRUD> SaveAsync(VehicleCareRequestModel apiModel)
+        public async Task<CRUD> SaveAsync(CareRequestModel apiModel)
         {
             CRUD response = CRUD.None;
 
@@ -93,7 +93,7 @@ namespace Ngnet.Services.Vehicle
                 }
 
                 //Modify existing entity
-                vehicleCare = this.ModifyEntity<VehicleCareRequestModel>(apiModel, vehicleCare);
+                vehicleCare = this.ModifyEntity<CareRequestModel>(apiModel, vehicleCare);
             }
 
             await this.database.SaveChangesAsync();

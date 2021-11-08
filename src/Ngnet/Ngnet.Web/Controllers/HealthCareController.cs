@@ -1,13 +1,13 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Ngnet.Database.Models;
-using Ngnet.ApiModels.HealthModels;
 using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
 using Ngnet.Services.Health;
 using Ngnet.Web.Infrastructure;
 using System.Threading.Tasks;
 using Ngnet.Common;
+using Ngnet.ApiModels.CareModels;
 
 namespace Ngnet.Web.Controllers
 {
@@ -28,7 +28,7 @@ namespace Ngnet.Web.Controllers
 
         [HttpPost]
         [Route(nameof(Save))]
-        public async Task<ActionResult> Save(HealthCareRequestModel model)
+        public async Task<ActionResult> Save(CareRequestModel model)
         {
             string userId = this.User.GetId();
             if (userId == null)
@@ -61,9 +61,9 @@ namespace Ngnet.Web.Controllers
 
         [HttpPost]
         [Route(nameof(ById))]
-        public ActionResult<HealthCareResponseModel> ById(HealthCareRequestModel model)
+        public ActionResult<CareResponseModel> ById(CareRequestModel model)
         {
-            HealthCareResponseModel response = this.healthCareService.GetById<HealthCareResponseModel>(model.Id);
+            CareResponseModel response = this.healthCareService.GetById<CareResponseModel>(model.Id);
 
             if (response == null)
             {
@@ -76,25 +76,25 @@ namespace Ngnet.Web.Controllers
 
         [HttpPost]
         [Route(nameof(ByUserId))]
-        public ActionResult<HealthCareResponseModel[]> ByUserId(HealthCareRequestModel model)
+        public ActionResult<CareResponseModel[]> ByUserId(CareRequestModel model)
         {
-            HealthCareResponseModel[] response = this.healthCareService.GetByUserId<HealthCareResponseModel>(model.UserId);
+            CareResponseModel[] response = this.healthCareService.GetByUserId<CareResponseModel>(model.UserId);
 
             return response;
         }
 
         [HttpGet]
         [Route(nameof(Self))]
-        public ActionResult<HealthCareResponseModel[]> Self()
+        public ActionResult<CareResponseModel[]> Self()
         {
-            HealthCareResponseModel[] response = this.healthCareService.GetByUserId<HealthCareResponseModel>(this.User.GetId());
+            CareResponseModel[] response = this.healthCareService.GetByUserId<CareResponseModel>(this.User.GetId());
 
             return response;
         }
 
         [HttpPost]
         [Route(nameof(Delete))]
-        public async Task<ActionResult> Delete(HealthCareResponseModel model)
+        public async Task<ActionResult> Delete(CareResponseModel model)
         {
             var role = await this.User.GetRoleAsync(this.userManager);
 

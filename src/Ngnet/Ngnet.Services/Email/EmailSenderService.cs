@@ -1,4 +1,5 @@
-﻿using Ngnet.Common;
+﻿using Microsoft.Extensions.Configuration;
+using Ngnet.Common;
 using Ngnet.Services.Email;
 using SendGrid;
 using SendGrid.Helpers.Mail;
@@ -10,14 +11,23 @@ namespace Ngnet.Services
     public class EmailSenderService : IEmailSenderService
     {
         private readonly SendGridClient sender;
+        private readonly IConfiguration configuration;
 
-        public EmailSenderService(string key)
+        public EmailSenderService(IConfiguration configuration)
         {
+            this.configuration = configuration;
+
+            string key = this.configuration.GetSection("EmailSender:Key").ToString();
             this.sender = new SendGridClient(key);
         }
 
-        public async Task<Response> SendEmailAsync(EmailSenderModel model)
+        public async Task<Response> SendEmailAsync(string type, EmailSenderModel model)
         {
+            if (type == "Email confirmation") // needs to be put in types model
+            {
+                model = EmailConfirmation(model);
+            }
+
             if (string.IsNullOrWhiteSpace(model.FromAddress) && string.IsNullOrWhiteSpace(model.ToAddress))
             {
                 throw new ArgumentException(ValidationMessages.EmptryEmailSenderAddresses);
@@ -40,6 +50,20 @@ namespace Ngnet.Services
             }
 
             return response;
+        }
+
+        private EmailSenderModel EmailConfirmation(EmailSenderModel model)
+        {
+            var admin = this.configuration.GetSection("Admin");
+
+            return new EmailSenderModel()
+            {
+                FromAddress = admin.GetSection("Email").Value,
+                FromName = admin.GetSection("FirstName").Value + " " + admin.GetSection("LastName").Value,
+                ToAddress = model.ToAddress,
+                Subject = "Email confirmation message",
+                Content = "Please confirm your email by clicking the button below"
+            };
         }
     }
 }

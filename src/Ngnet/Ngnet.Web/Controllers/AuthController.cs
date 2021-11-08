@@ -8,8 +8,10 @@ using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database.Models;
 using Ngnet.Services.Auth;
+using Ngnet.Services.Email;
 using Ngnet.Web.Infrastructure;
 using Ngnet.Web.Models.AuthModels;
+using SendGrid;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -22,21 +24,24 @@ namespace Ngnet.Web.Controllers
         private readonly UserManager<User> userManager;
         private readonly RoleManager<Role> roleManager;
         private readonly IConfiguration configuration;
-
+        private readonly IEmailSenderService emailSenderService;
         private IdentityResult result;
+        private LanguagesModel errors;
 
         public AuthController
             (IAuthService userService,
              UserManager<User> userManager,
              RoleManager<Role> roleManager,
              IConfiguration configuration,
-             JsonService jsonService)
+             JsonService jsonService,
+             IEmailSenderService emailSenderService)
             : base(jsonService)
         {
             this.userService = userService;
             this.userManager = userManager;
             this.roleManager = roleManager;
             this.configuration = configuration;
+            this.emailSenderService = emailSenderService;
         }
 
         [HttpPost]
@@ -45,16 +50,16 @@ namespace Ngnet.Web.Controllers
         {
             if (model.Password != model.RepeatPassword)
             {
-                var errors = this.GetErrors().NotEqualPasswords;
-                return this.BadRequest(errors);
+                this.errors = this.GetErrors().NotEqualPasswords;
+                return this.BadRequest(this.errors);
             }
 
             var user = await this.userManager.FindByNameAsync(model.UserName);
 
             if (user != null)
             {
-                var errors = this.GetErrors().ExistingUserName;
-                return this.BadRequest(errors);
+                this.errors = this.GetErrors().ExistingUserName;
+                return this.BadRequest(this.errors);
             }
 
             user = new User
@@ -65,10 +70,10 @@ namespace Ngnet.Web.Controllers
                 LastName = model.LastName
             };
 
-            var action = await this.userManager.CreateAsync(user, model.Password);
-            if (!action.Succeeded)
+            this.result = await this.userManager.CreateAsync(user, model.Password);
+            if (!result.Succeeded)
             {
-                return this.BadRequest(action.Errors);
+                return this.BadRequest(result.Errors);
             }
 
             await this.userManager.AddToRoleAsync(user, "User");
@@ -84,22 +89,22 @@ namespace Ngnet.Web.Controllers
 
             if (user == null)
             {
-                var errors = this.GetErrors().InvalidUsername;
-                return this.Unauthorized(errors);
+                this.errors = this.GetErrors().InvalidUsername;
+                return this.Unauthorized(this.errors);
             }
 
             var validPassword = await this.userManager.CheckPasswordAsync(user, model.Password);
 
             if (!validPassword)
             {
-                var errors = this.GetErrors().InvalidPasswords;
-                return this.Unauthorized(errors);
+                this.errors = this.GetErrors().InvalidPasswords;
+                return this.Unauthorized(this.errors);
             }
 
             if (user.IsDeleted)
             {
-                var errors = this.GetErrors().UserNotFound;
-                return this.NotFound(errors);
+                this.errors = this.GetErrors().UserNotFound;
+                return this.NotFound(this.errors);
             }
 
             string token = this.userService.CreateJwtToken(user.Id, user.UserName, this.configuration["ApplicationSettings:Secret"]);
@@ -118,8 +123,8 @@ namespace Ngnet.Web.Controllers
 
             if (users.Length == 0)
             {
-                var errors = this.GetErrors().UsersNotFound;
-                return this.BadRequest(errors);
+                this.errors = this.GetErrors().UsersNotFound;
+                return this.BadRequest(this.errors);
             }
 
             return users.Select(u => new UserResponseModel()
@@ -142,9 +147,8 @@ namespace Ngnet.Web.Controllers
 
             if (user == null)
             {
-                var errors = this.GetErrors().UserNotFound;
-
-                return this.Unauthorized(errors);
+                this.errors = this.GetErrors().UserNotFound;
+                return this.Unauthorized(this.errors);
             }
 
             return new UserResponseModel()
@@ -169,9 +173,8 @@ namespace Ngnet.Web.Controllers
 
             if (result == 0)
             {
-                var errors = this.GetErrors().UserNotFound;
-
-                return this.Unauthorized(errors);
+                this.errors = this.GetErrors().UserNotFound;
+                return this.Unauthorized(this.errors);
             }
 
             return this.Ok(this.GetSuccessMsg().UserUpdated);
@@ -183,18 +186,17 @@ namespace Ngnet.Web.Controllers
         public async Task<ActionResult> Change(ChangeRequestModel model)
         {
             User user = await this.userManager.FindByIdAsync(this.User.GetId());
-            LanguagesModel errors = null;
 
             if (user == null)
             {
-                errors = this.GetErrors().UserNotFound;
-                return this.Unauthorized(errors);
+                this.errors = this.GetErrors().UserNotFound;
+                return this.Unauthorized(this.errors);
             }
 
             if (model.New != model.RepeatNew)
             {
-                errors = this.GetErrors().NotEqualFields;
-                return this.Unauthorized(errors);
+                this.errors = this.GetErrors().NotEqualFields;
+                return this.Unauthorized(this.errors);
             }
 
             switch (model.Value.ToLower())
@@ -203,13 +205,15 @@ namespace Ngnet.Web.Controllers
 
                     if (model.Old != user.Email)
                     {
-                        errors = GetErrors().InvalidEmail;
+                        this.errors = GetErrors().InvalidEmail;
+                        break;
                     }
 
-                    //better email validation?!
-                    if (model.New.Length < 7 || !model.New.Contains('@') || !model.New.Contains('.'))
+                    this.errors = await this.EmailValidator(model.New);
+                    if (this.errors != null)
                     {
-                        errors = GetErrors().InvalidEmail;
+                        this.errors = GetErrors().InvalidEmail;
+                        break;
                     }
 
                     var token = await this.userManager.GenerateChangeEmailTokenAsync(user, model.New);
@@ -220,7 +224,7 @@ namespace Ngnet.Web.Controllers
 
                     if (model.New.Length < 6)
                     {
-                        errors = this.GetErrors().NotEqualPasswords;
+                        this.errors = this.GetErrors().NotEqualPasswords;
                         break;
                     }
 
@@ -242,6 +246,33 @@ namespace Ngnet.Web.Controllers
             }
 
             return this.Ok(this.GetSuccessMsg().UserUpdated);
+        }
+
+        private async Task<LanguagesModel> EmailValidator(string emailAddress)
+        {
+            // ------- Local validation ------- 
+
+            string pattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"; //needs to be upgraded, copied from: regexr.com/3e48o
+            var matching = Regex.IsMatch(emailAddress, pattern);
+
+            if (!matching)
+            {
+                return this.GetErrors().InvalidEmail;
+            }
+
+            return null; // need valid send grid api key before code below...
+
+            // ------- real email validation ------- 
+
+            EmailSenderModel model = new EmailSenderModel() { ToAddress = emailAddress };
+            Response response = await this.emailSenderService.SendEmailAsync("Email confirmation", model);
+
+            if (response == null || !response.IsSuccessStatusCode)
+            {
+                return this.GetErrors().InvalidEmail;
+            }
+
+            return null;
         }
     }
 }
