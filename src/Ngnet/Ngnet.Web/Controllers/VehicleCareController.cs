@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Ngnet.Web.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
-using Ngnet.ApiModels.VehicleModels;
+using Ngnet.ApiModels.CareModels;
 using Ngnet.Services.Vehicle;
 using Microsoft.AspNetCore.Identity;
 using Ngnet.Database.Models;
@@ -30,7 +30,7 @@ namespace Ngnet.Web.Controllers
 
         [HttpPost]
         [Route(nameof(Save))]
-        public async Task<ActionResult> Save(VehicleCareRequestModel model)
+        public async Task<ActionResult> Save(CareRequestModel model)
         {
             string userId = this.User.GetId();
             if (userId == null)
@@ -63,9 +63,9 @@ namespace Ngnet.Web.Controllers
 
         [HttpPost]
         [Route(nameof(ById))]
-        public ActionResult<VehicleCareResponseModel> ById(VehicleCareRequestModel model)
+        public ActionResult<CareResponseModel> ById(CareRequestModel model)
         {
-            VehicleCareResponseModel response = this.vehicleCareService.GetById<VehicleCareResponseModel>(model.Id);
+            CareResponseModel response = this.vehicleCareService.GetById<CareResponseModel>(model.Id);
 
             if (response == null)
             {
@@ -78,25 +78,25 @@ namespace Ngnet.Web.Controllers
 
         [HttpPost]
         [Route(nameof(ByUserId))]
-        public ActionResult<VehicleCareResponseModel[]> ByUserId(VehicleCareRequestModel model)
+        public ActionResult<CareResponseModel[]> ByUserId(CareRequestModel model)
         {
-            VehicleCareResponseModel[] response = this.vehicleCareService.GetByUserId<VehicleCareResponseModel>(model.UserId);
+            CareResponseModel[] response = this.vehicleCareService.GetByUserId<CareResponseModel>(model.UserId);
 
             return response;
         }
 
         [HttpGet]
         [Route(nameof(Self))]
-        public ActionResult<VehicleCareResponseModel[]> Self()
+        public ActionResult<CareResponseModel[]> Self()
         {
-            VehicleCareResponseModel[] response = this.vehicleCareService.GetByUserId<VehicleCareResponseModel>(this.User.GetId());
+            CareResponseModel[] response = this.vehicleCareService.GetByUserId<CareResponseModel>(this.User.GetId());
 
             return response;
         }
 
         [HttpPost]
         [Route(nameof(Delete))]
-        public async Task<ActionResult> Delete(VehicleCareRequestModel model)
+        public async Task<ActionResult> Delete(CareRequestModel model)
         {
             var role = await this.User.GetRoleAsync(this.userManager);
 

@@ -1,4 +1,4 @@
-﻿using Ngnet.ApiModels.HealthModels;
+﻿using Ngnet.ApiModels.CareModels;
 using Ngnet.Common;
 using System.Threading.Tasks;
 
@@ -6,7 +6,7 @@ namespace Ngnet.Services.Health
 {
     public interface IHealthCareService
     {
-        public Task<CRUD> SaveAsync(HealthCareRequestModel apiModel);
+        public Task<CRUD> SaveAsync(CareRequestModel apiModel);
 
         public T GetById<T>(string id);
 

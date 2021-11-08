@@ -1,4 +1,4 @@
-﻿using Ngnet.ApiModels.VehicleModels;
+﻿using Ngnet.ApiModels.CareModels;
 using Ngnet.Common;
 using System.Threading.Tasks;
 
@@ -6,7 +6,7 @@ namespace Ngnet.Services.Vehicle
 {
     public interface IVehicleCareService
     {
-        public Task<CRUD> SaveAsync(VehicleCareRequestModel apiModel);
+        public Task<CRUD> SaveAsync(CareRequestModel apiModel);
 
         public T GetById<T>(string id);
 
