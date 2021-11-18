@@ -1,8 +1,10 @@
 ﻿using Microsoft.IdentityModel.Tokens;
+using Ngnet.ApiModels.AuthModels;
 using Ngnet.Database;
 using Ngnet.Database.Models;
 using Ngnet.Mapper;
 using System;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
 using System.Security.Claims;
@@ -54,6 +56,23 @@ namespace Ngnet.Services.Auth
             user = this.ModifyEntity(mappedModel, user);
 
             return await this.database.SaveChangesAsync();
+        }
+
+        public async Task<int> AddExperience(UserExperience exp)
+        {
+            User user = this.database.Users.FirstOrDefault(x => x.Id == exp.UserId);
+            if (user == null)
+            {
+                return 0;
+            }
+
+            user.Experiences.Add(exp);
+            return await this.database.SaveChangesAsync();
+        }
+
+        public ICollection<UserExperienceModel> GetExperiences(string UserId)
+        {
+            return this.database.UserExperiences.Where(x => x.UserId == UserId).To<UserExperienceModel>().ToHashSet();
         }
 
         private User ModifyEntity(User mappedModel, User user)
