@@ -76,6 +76,8 @@ namespace Ngnet.Services.Auth
                 .To<UserExperienceModel>()
                 .OrderByDescending(x => x.LoggedIn)
                 .ThenByDescending(x => x.LoggedOut)
+                //To avoid too many records in client
+                .Take(20)
                 .ToHashSet();
         }
 
