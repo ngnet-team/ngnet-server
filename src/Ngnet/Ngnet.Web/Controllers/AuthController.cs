@@ -288,13 +288,15 @@ namespace Ngnet.Web.Controllers
         {
             var user = await this.userManager.Users
                 .FirstOrDefaultAsync(u => u.Id == model.Id);
-            await this.userManager.DeleteAsync(user);
 
             if (user == null)
             {
                 this.errors = this.GetErrors().UserNotFound;
                 return this.BadRequest(this.errors);
             }
+
+            //permanent deletion!!!
+            //this.result = await this.userManager.DeleteAsync(user);
 
             return null;
         }
