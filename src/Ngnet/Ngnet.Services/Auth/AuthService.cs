@@ -72,7 +72,11 @@ namespace Ngnet.Services.Auth
 
         public ICollection<UserExperienceModel> GetExperiences(string UserId)
         {
-            return this.database.UserExperiences.Where(x => x.UserId == UserId).To<UserExperienceModel>().ToHashSet();
+            return this.database.UserExperiences.Where(x => x.UserId == UserId)
+                .To<UserExperienceModel>()
+                .OrderByDescending(x => x.LoggedIn)
+                .ThenByDescending(x => x.LoggedOut)
+                .ToHashSet();
         }
 
         private User ModifyEntity(User mappedModel, User user)
