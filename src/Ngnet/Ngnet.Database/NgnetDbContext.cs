@@ -17,6 +17,8 @@ namespace Ngnet.Database
 
         public DbSet<HealthCare> HealthCares { get; set; }
 
+        public DbSet<UserExperience> UserExperiences { get; set; }
+
         protected override void OnModelCreating(ModelBuilder builder)
         {
             //add custom builders

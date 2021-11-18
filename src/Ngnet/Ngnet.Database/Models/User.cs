@@ -13,6 +13,7 @@ namespace Ngnet.Database.Models
 
             this.VehicleCares = new HashSet<VehicleCare>();
             this.HealthCares = new HashSet<HealthCare>();
+            this.Experiences = new HashSet<UserExperience>();
         }
 
         [MaxLength(50)]
@@ -30,6 +31,8 @@ namespace Ngnet.Database.Models
         public ICollection<HealthCare> HealthCares { get; set; }
 
         public DateTime CreatedOn { get; set; }
+
+        public ICollection<UserExperience> Experiences { get; set; }
 
         public DateTime? ModifiedOn { get; set; }
 
