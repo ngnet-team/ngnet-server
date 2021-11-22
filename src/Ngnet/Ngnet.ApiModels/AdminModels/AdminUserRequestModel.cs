@@ -1,18 +1,19 @@
-﻿using AutoMapper;
+﻿using Ngnet.ApiModels.AuthModels;
 using Ngnet.Database.Models;
 using Ngnet.Mapper;
-using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 
-namespace Ngnet.ApiModels.AuthModels
+namespace Ngnet.ApiModels.AdminModels
 {
-    public class AdminUserResponseModel : IMapFrom<User>
+    public class AdminUserRequestModel : IMapTo<User>
     {
-        public AdminUserResponseModel()
+        public AdminUserRequestModel()
         {
             this.Experiances = new HashSet<UserExperienceModel>();
         }
 
+        [Required]
         public string Id { get; set; }
 
         public string Email { get; set; }
@@ -38,5 +39,7 @@ namespace Ngnet.ApiModels.AuthModels
         public string DeletedOn { get; set; }
 
         public bool IsDeleted { get; set; }
+
+        public bool PermanentDeletion { get; set; }
     }
 }

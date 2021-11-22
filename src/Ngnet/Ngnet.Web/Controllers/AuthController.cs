@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ngnet.ApiModels.AuthModels;
 using Ngnet.Common.Json.Models;
@@ -241,64 +240,6 @@ namespace Ngnet.Web.Controllers
             }
 
             return this.Ok(this.GetSuccessMsg().UserUpdated);
-        }
-
-        // ----------------- Admin -----------------
-
-        [Authorize/*(Roles = "Admin")*/]
-        [HttpGet]
-        [Route(nameof(All))]
-        public async Task<ActionResult<AdminUserResponseModel[]>> All()
-        {
-            var users = await this.userManager.Users
-                .OrderByDescending(u => u.CreatedOn)
-                .ToArrayAsync();
-
-            if (users.Length == 0)
-            {
-                this.errors = this.GetErrors().UsersNotFound;
-                return this.BadRequest(this.errors);
-            }
-
-            var result = users.Select(u => new AdminUserResponseModel()
-            {
-                Id = u.Id,
-                RoleName = this.userManager.GetRolesAsync(u).GetAwaiter().GetResult().FirstOrDefault(),
-                Email = u.Email,
-                UserName = u.UserName,
-                FirstName = u.FirstName,
-                LastName = u.LastName,
-                Age = u.Age,
-                CreatedOn = u.CreatedOn.ToShortDateString(),
-                ModifiedOn = u.ModifiedOn != null ? u.ModifiedOn.Value.ToShortTimeString() : null,
-                DeletedOn = u.DeletedOn != null ? u.DeletedOn.Value.ToShortDateString() : null,
-                IsDeleted = u.IsDeleted,
-                Experiances = this.userService.GetExperiences(u.Id),
-            }).ToArray();
-
-
-
-            return result;
-        }
-
-        [Authorize/*(Roles = "Admin")*/]
-        [HttpPost]
-        [Route(nameof(Delete))]
-        public async Task<ActionResult> Delete(AdminUserResponseModel model)
-        {
-            var user = await this.userManager.Users
-                .FirstOrDefaultAsync(u => u.Id == model.Id);
-
-            if (user == null)
-            {
-                this.errors = this.GetErrors().UserNotFound;
-                return this.BadRequest(this.errors);
-            }
-
-            //permanent deletion!!!
-            //this.result = await this.userManager.DeleteAsync(user);
-
-            return null;
         }
 
         // ----------------- Private -----------------
