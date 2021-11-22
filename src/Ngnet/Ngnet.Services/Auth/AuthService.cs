@@ -73,11 +73,12 @@ namespace Ngnet.Services.Auth
         public ICollection<UserExperienceModel> GetExperiences(string UserId)
         {
             return this.database.UserExperiences.Where(x => x.UserId == UserId)
+                .OrderByDescending(x => x.Id)
                 .To<UserExperienceModel>()
-                .OrderByDescending(x => x.LoggedIn)
-                .ThenByDescending(x => x.LoggedOut)
                 //To avoid too many records in client
                 .Take(20)
+                .OrderByDescending(x => x.LoggedIn)
+                .ThenByDescending(x => x.LoggedOut)
                 .ToHashSet();
         }
 
