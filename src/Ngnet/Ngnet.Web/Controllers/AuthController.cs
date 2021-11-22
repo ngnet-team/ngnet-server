@@ -179,7 +179,8 @@ namespace Ngnet.Web.Controllers
         [Route(nameof(Change))]
         public async Task<ActionResult> Change(ChangeRequestModel model)
         {
-            User user = await this.userManager.FindByIdAsync(this.User.GetId());
+            string userId = model.UserId == null ? this.User.GetId() : model.UserId;
+            User user = await this.userManager.FindByIdAsync(userId);
 
             if (user == null)
             {

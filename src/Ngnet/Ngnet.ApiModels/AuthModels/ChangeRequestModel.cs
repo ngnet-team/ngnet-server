@@ -4,6 +4,8 @@ namespace Ngnet.ApiModels.AuthModels
 {
     public class ChangeRequestModel
     {
+        public string UserId { get; set; }
+
         [Required]
         public string Old { get; set; }
 
