@@ -12,6 +12,7 @@ using Ngnet.Services.Auth;
 using Ngnet.Services.Email;
 using Ngnet.Web.Controllers.Base;
 using Ngnet.Web.Infrastructure;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -113,6 +114,36 @@ namespace Ngnet.Web.Controllers
             }
 
             return this.Ok(this.GetSuccessMsg().UserUpdated);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route(nameof(ResetPassword))]
+        public async Task<ActionResult> ResetPassword(AdminUserRequestModel model)
+        {
+            User user = await this.userManager.FindByIdAsync(model.Id);
+            if (user == null)
+            {
+                this.errors = GetErrors().UserNotFound;
+                return this.BadRequest(errors);
+            }
+
+            string resetToken = await this.userManager.GeneratePasswordResetTokenAsync(user);
+
+            string newPassword = Guid.NewGuid().ToString().Substring(0, 7);
+            this.result = await this.userManager.ResetPasswordAsync(user, resetToken, newPassword);
+            if (!result.Succeeded)
+            {
+                this.errors = GetErrors().NoPermissions;
+                return this.BadRequest(errors);
+            }
+
+            var response = new
+            {
+                NewPassword = newPassword,
+                Msg = this.GetSuccessMsg().UserUpdated
+            };
+            return this.Ok(response);
         }
     }
 }

@@ -113,6 +113,9 @@ namespace Ngnet.Web.Controllers.Base
             return this.Ok(this.GetSuccessMsg().UserUpdated);
         }
 
+        [Authorize]
+        [HttpPost]
+        [Route(nameof(Update))]
         public async Task<ActionResult> Update<T>(T model)
         {
             CRUD result = await this.userService.Update<T>(model);
