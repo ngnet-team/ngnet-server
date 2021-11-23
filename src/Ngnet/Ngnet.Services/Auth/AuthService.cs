@@ -1,5 +1,6 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Ngnet.ApiModels.AuthModels;
+using Ngnet.Common;
 using Ngnet.Database;
 using Ngnet.Database.Models;
 using Ngnet.Mapper;
@@ -43,31 +44,47 @@ namespace Ngnet.Services.Auth
             return encryptedToken;
         }
 
-        public async Task<int> Update<T>(T model)
+        public async Task<CRUD> Update<T>(T model)
         {
+            CRUD response = CRUD.None;
+
             User mappedModel = MappingFactory.Mapper.Map<User>(model);
 
             User user = this.database.Users.FirstOrDefault(x => x.Id == mappedModel.Id);
             if (user == null)
             {
-                return 0;
+                response = CRUD.NotFound;
             }
 
             user = this.ModifyEntity(mappedModel, user);
 
-            return await this.database.SaveChangesAsync();
+            var result = await this.database.SaveChangesAsync();
+            if (result > 0)
+            {
+                response = CRUD.Updated;
+            }
+
+            return response;
         }
 
-        public async Task<int> AddExperience(UserExperience exp)
+        public async Task<CRUD> AddExperience(UserExperience exp)
         {
+            CRUD response = CRUD.None;
+
             User user = this.database.Users.FirstOrDefault(x => x.Id == exp.UserId);
             if (user == null)
             {
-                return 0;
+                return response = CRUD.NotFound;
             }
 
             user.Experiences.Add(exp);
-            return await this.database.SaveChangesAsync();
+            var result = await this.database.SaveChangesAsync();
+            if (result > 0)
+            {
+                response = CRUD.Updated;
+            }
+
+            return response;
         }
 
         public ICollection<UserExperienceModel> GetExperiences(string UserId)

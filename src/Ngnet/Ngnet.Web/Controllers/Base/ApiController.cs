@@ -3,7 +3,7 @@ using Ngnet.ApiModels;
 using Microsoft.AspNetCore.Mvc;
 using Ngnet.Common.Json.Service;
 
-namespace Ngnet.Web.Controllers
+namespace Ngnet.Web.Controllers.Base
 {
     [ApiController]
     [Route("[controller]")]

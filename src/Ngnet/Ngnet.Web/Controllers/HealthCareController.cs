@@ -8,6 +8,7 @@ using Ngnet.Web.Infrastructure;
 using System.Threading.Tasks;
 using Ngnet.Common;
 using Ngnet.ApiModels.CareModels;
+using Ngnet.Web.Controllers.Base;
 
 namespace Ngnet.Web.Controllers
 {

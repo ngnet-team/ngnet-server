@@ -9,6 +9,7 @@ using Ngnet.Database.Models;
 using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
 using Ngnet.Common;
+using Ngnet.Web.Controllers.Base;
 
 namespace Ngnet.Web.Controllers
 {

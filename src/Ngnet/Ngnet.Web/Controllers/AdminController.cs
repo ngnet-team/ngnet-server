@@ -4,27 +4,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Ngnet.ApiModels.AdminModels;
-using Ngnet.Common.Json.Models;
+using Ngnet.Common;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database.Models;
+using Ngnet.Database.Seeding;
 using Ngnet.Services.Auth;
 using Ngnet.Services.Email;
+using Ngnet.Web.Controllers.Base;
+using Ngnet.Web.Infrastructure;
+using System;
 using System.Linq;
 using System.Threading.Tasks;
 
 namespace Ngnet.Web.Controllers
 {
     [Authorize(/*Roles = "Admin"*/)]
-    public class AdminController : ApiController
+    public class AdminController : UserController
     {
-        private IAuthService userService;
-        private UserManager<User> userManager;
-        private RoleManager<Role> roleManager;
-        private IConfiguration configuration;
-        private IEmailSenderService emailSenderService;
-        private IdentityResult result;
-        private LanguagesModel errors;
-
         public AdminController
             (IAuthService userService,
              UserManager<User> userManager,
@@ -32,13 +28,8 @@ namespace Ngnet.Web.Controllers
              IConfiguration configuration,
              JsonService jsonService,
              IEmailSenderService emailSenderService)
-            : base(jsonService)
+            : base(userService, userManager, roleManager, configuration, jsonService, emailSenderService)
         {
-            this.userService = userService;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
-            this.configuration = configuration;
-            this.emailSenderService = emailSenderService;
         }
 
         [HttpGet]
@@ -75,9 +66,16 @@ namespace Ngnet.Web.Controllers
         }
 
         [HttpPost]
-        [Route(nameof(Update))]
-        public async Task<ActionResult> Update(AdminUserRequestModel model)
+        [Route(nameof(ChangeRole))]
+        public async Task<ActionResult> ChangeRole(AdminUserRequestModel model)
         {
+            //needs better check
+            if (model.RoleName != RoleType.Admin.ToString() && model.RoleName != RoleType.User.ToString())
+            {
+                this.errors = this.GetErrors().NoPermissions;
+                return this.BadRequest(this.errors);
+            }
+
             var user = await this.userManager.Users
                 .FirstOrDefaultAsync(u => u.Id == model.Id);
 
@@ -87,23 +85,65 @@ namespace Ngnet.Web.Controllers
                 return this.BadRequest(this.errors);
             }
 
-            int result = await this.userService.Update<AdminUserRequestModel>(model);
-
-            if (result == 0)
+            //The initial Admin can't change his role
+            var adminSeederModel = configuration.GetSection("Admin").Get<AdminSeederModel>();
+            if (user.UserName == adminSeederModel.UserName)
             {
-                this.errors = this.GetErrors().UserNotFound;
+                this.errors = this.GetErrors().NoPermissions;
+                return this.BadRequest(this.errors);
+            }
+
+            string role = await this.User.GetRoleAsync(this.userManager, user);
+            if (role == model.RoleName)
+            {
+                return Ok();
+            }
+
+            this.result = await this.userManager.RemoveFromRoleAsync(user, role);
+            if (!this.result.Succeeded)
+            {
+                this.errors = this.GetErrors().NoPermissions;
+                return this.Unauthorized(this.errors);
+            }
+
+            this.result = await this.userManager.AddToRoleAsync(user, model.RoleName);
+            if (!this.result.Succeeded)
+            {
+                this.errors = this.GetErrors().NoPermissions;
                 return this.Unauthorized(this.errors);
             }
 
             return this.Ok(this.GetSuccessMsg().UserUpdated);
+        }
 
-            // ----- still not ready ----- 
-            if (model.PermanentDeletion)
+        [Authorize]
+        [HttpPost]
+        [Route(nameof(ResetPassword))]
+        public async Task<ActionResult> ResetPassword(AdminUserRequestModel model)
+        {
+            User user = await this.userManager.FindByIdAsync(model.Id);
+            if (user == null)
             {
-                this.result = await this.userManager.DeleteAsync(user);
+                this.errors = GetErrors().UserNotFound;
+                return this.BadRequest(errors);
             }
 
-            return null;
+            string resetToken = await this.userManager.GeneratePasswordResetTokenAsync(user);
+
+            string newPassword = Guid.NewGuid().ToString().Substring(0, 7);
+            this.result = await this.userManager.ResetPasswordAsync(user, resetToken, newPassword);
+            if (!result.Succeeded)
+            {
+                this.errors = GetErrors().NoPermissions;
+                return this.BadRequest(errors);
+            }
+
+            var response = new
+            {
+                NewPassword = newPassword,
+                Msg = this.GetSuccessMsg().UserUpdated
+            };
+            return this.Ok(response);
         }
     }
 }
