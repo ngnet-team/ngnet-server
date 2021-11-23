@@ -4,6 +4,7 @@ using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database.Models;
 using Ngnet.Services.Companies;
+using Ngnet.Web.Controllers.Base;
 
 namespace Ngnet.Web.Controllers
 {

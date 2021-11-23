@@ -11,15 +11,24 @@ namespace Ngnet.Web.Infrastructure
         public static string GetId(this ClaimsPrincipal user)
             => user.FindFirst(ClaimTypes.NameIdentifier).Value;
 
-        public async static Task<string> GetRoleAsync(this ClaimsPrincipal user, UserManager<User> userManager)
+        public async static Task<string> GetRoleAsync(this ClaimsPrincipal user, UserManager<User> userManager, User otherUser = null)
         {
             if (user == null)
             {
                 return null;
             }
 
-            User u = await userManager.FindByIdAsync(GetId(user));
-            string role = userManager.GetRolesAsync(u).GetAwaiter().GetResult().FirstOrDefault();
+            User result;
+            if (otherUser != null)
+            {
+                result = otherUser;
+            } 
+            else
+            {
+                result = await userManager.FindByIdAsync(GetId(user));
+            }
+
+            string role = userManager.GetRolesAsync(result).GetAwaiter().GetResult().FirstOrDefault();
 
             return role;
         }

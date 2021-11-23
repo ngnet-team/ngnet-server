@@ -3,31 +3,21 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Ngnet.ApiModels.AuthModels;
-using Ngnet.Common.Json.Models;
+using Ngnet.Common;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database.Models;
 using Ngnet.Services.Auth;
 using Ngnet.Services.Email;
+using Ngnet.Web.Controllers.Base;
 using Ngnet.Web.Infrastructure;
 using Ngnet.Web.Models.AuthModels;
-using SendGrid;
 using System;
-using System.Linq;
-using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Ngnet.Web.Controllers
 {
-    public class AuthController : ApiController
+    public class AuthController : UserController
     {
-        private readonly IAuthService userService;
-        private readonly UserManager<User> userManager;
-        private readonly RoleManager<Role> roleManager;
-        private readonly IConfiguration configuration;
-        private readonly IEmailSenderService emailSenderService;
-        private IdentityResult result;
-        private LanguagesModel errors;
-
         public AuthController
             (IAuthService userService,
              UserManager<User> userManager,
@@ -35,13 +25,8 @@ namespace Ngnet.Web.Controllers
              IConfiguration configuration,
              JsonService jsonService,
              IEmailSenderService emailSenderService)
-            : base(jsonService)
+            : base(userService, userManager, roleManager, configuration, jsonService, emailSenderService)
         {
-            this.userService = userService;
-            this.userManager = userManager;
-            this.roleManager = roleManager;
-            this.configuration = configuration;
-            this.emailSenderService = emailSenderService;
         }
 
         [HttpPost]
@@ -123,13 +108,26 @@ namespace Ngnet.Web.Controllers
 
         [HttpGet]
         [Route(nameof(Logout))]
-        public async Task<int> Logout()
+        public async Task<ActionResult> Logout()
         {
-            return await this.userService.AddExperience(new UserExperience()
+            CRUD result = await this.userService.AddExperience(new UserExperience()
             {
                 UserId = this.User.GetId(),
                 LoggedOut = DateTime.UtcNow
             });
+
+            if (result.HasFlag(CRUD.NotFound))
+            {
+                this.errors = this.GetErrors().UserNotFound;
+                return this.Unauthorized(this.errors);
+            }
+
+            if (result.HasFlag(CRUD.None))
+            {
+                return this.Ok();
+            }
+
+            return this.Ok(this.GetSuccessMsg().UserUpdated);
         }
 
         [Authorize]
@@ -155,121 +153,6 @@ namespace Ngnet.Web.Controllers
                 Gender = user.Gender,
                 Age = user.Age
             };
-        }
-
-        [Authorize]
-        [HttpPost]
-        [Route(nameof(Update))]
-        public async Task<ActionResult> Update(UserRequestModel model)
-        {
-            model.Id = this.User.GetId();
-            int result = await this.userService.Update<UserRequestModel>(model);
-
-            if (result == 0)
-            {
-                this.errors = this.GetErrors().UserNotFound;
-                return this.Unauthorized(this.errors);
-            }
-
-            return this.Ok(this.GetSuccessMsg().UserUpdated);
-        }
-
-        [Authorize]
-        [HttpPost]
-        [Route(nameof(Change))]
-        public async Task<ActionResult> Change(ChangeRequestModel model)
-        {
-            string userId = model.UserId == null ? this.User.GetId() : model.UserId;
-            User user = await this.userManager.FindByIdAsync(userId);
-
-            if (user == null)
-            {
-                this.errors = this.GetErrors().UserNotFound;
-                return this.Unauthorized(this.errors);
-            }
-
-            if (model.New != model.RepeatNew)
-            {
-                this.errors = this.GetErrors().NotEqualFields;
-                return this.Unauthorized(this.errors);
-            }
-
-            switch (model.Value.ToLower())
-            {
-                case "email":
-
-                    if (model.Old != user.Email)
-                    {
-                        this.errors = GetErrors().InvalidEmail;
-                        break;
-                    }
-
-                    this.errors = await this.EmailValidator(model.New);
-                    if (this.errors != null)
-                    {
-                        this.errors = GetErrors().InvalidEmail;
-                        break;
-                    }
-
-                    var token = await this.userManager.GenerateChangeEmailTokenAsync(user, model.New);
-                    this.result = await this.userManager.ChangeEmailAsync(user, model.New, token);
-                    break;
-
-                case "password":
-
-                    if (model.New.Length < 6)
-                    {
-                        this.errors = this.GetErrors().NotEqualPasswords;
-                        break;
-                    }
-
-                    this.result = await this.userManager.ChangePasswordAsync(user, model.Old, model.New);
-                    break;
-
-                default:
-                    break;
-            }
-
-            if (errors != null)
-            {
-                return this.BadRequest(errors);
-            }
-
-            if (!this.result.Succeeded)
-            {
-                return this.BadRequest(result.Errors.FirstOrDefault().Description);
-            }
-
-            return this.Ok(this.GetSuccessMsg().UserUpdated);
-        }
-
-        // ----------------- Private -----------------
-
-        private async Task<LanguagesModel> EmailValidator(string emailAddress)
-        {
-            // ------- Local validation ------- 
-
-            string pattern = @"^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$"; //needs to be upgraded, copied from: regexr.com/3e48o
-            var matching = Regex.IsMatch(emailAddress, pattern);
-
-            if (!matching)
-            {
-                return this.GetErrors().InvalidEmail;
-            }
-
-            return null; // need valid send grid api key before code below...
-
-            // ------- real email validation ------- 
-
-            EmailSenderModel model = new EmailSenderModel() { ToAddress = emailAddress };
-            Response response = await this.emailSenderService.SendEmailAsync("Email confirmation", model);
-
-            if (response == null || !response.IsSuccessStatusCode)
-            {
-                return this.GetErrors().InvalidEmail;
-            }
-
-            return null;
         }
     }
 }
