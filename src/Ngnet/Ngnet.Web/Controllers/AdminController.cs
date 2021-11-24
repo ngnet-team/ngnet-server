@@ -145,5 +145,13 @@ namespace Ngnet.Web.Controllers
             };
             return this.Ok(response);
         }
+
+        [Authorize]
+        [HttpPost]
+        [Route(nameof(Update))]
+        public async Task<ActionResult> Update(AdminUserRequestModel model)
+        {
+            return await this.UpdateBase<AdminUserRequestModel>(model);
+        }
     }
 }
