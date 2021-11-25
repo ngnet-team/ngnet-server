@@ -1,4 +1,5 @@
-﻿using Ngnet.ApiModels.CareModels;
+﻿using Ngnet.ApiModels;
+using Ngnet.ApiModels.CareModels;
 using Ngnet.Common;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database;
@@ -11,17 +12,11 @@ using System.Threading.Tasks;
 
 namespace Ngnet.Services.Health
 {
-    public class HealthCareService : IHealthCareService
+    public class HealthCareService : CareBaseService, IHealthCareService
     {
-        private readonly NgnetDbContext database;
-        private readonly JsonService jsonService;
-        private readonly ICompanyService companyService;
-
         public HealthCareService(NgnetDbContext database, JsonService jsonService, ICompanyService companyService)
+            : base(database, jsonService, companyService)
         {
-            this.database = database;
-            this.jsonService = jsonService;
-            this.companyService = companyService;
         }
 
         public async Task<int> DeleteAsync(string healthCareId, bool hardDelete)

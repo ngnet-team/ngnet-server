@@ -106,6 +106,7 @@ namespace Ngnet.Web.Infrastructure
                 .AddTransient<ICompanyService, CompanyService>()
                 .AddTransient<IVehicleCareService, VehicleCareService>()
                 .AddTransient<IHealthCareService, HealthCareService>()
+                .AddTransient<ICareBaseService, CareBaseService>()
                 .AddSingleton<IEmailSenderService, EmailSenderService>(x => new EmailSenderService(configuration))
                 .AddSingleton<JsonService>();
         }

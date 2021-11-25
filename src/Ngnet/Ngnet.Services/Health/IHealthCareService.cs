@@ -1,4 +1,5 @@
-﻿using Ngnet.ApiModels.CareModels;
+﻿using Ngnet.ApiModels;
+using Ngnet.ApiModels.CareModels;
 using Ngnet.Common;
 using System.Threading.Tasks;
 

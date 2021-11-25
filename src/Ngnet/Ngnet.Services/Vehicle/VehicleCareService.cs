@@ -8,20 +8,15 @@ using System;
 using Ngnet.Common;
 using Ngnet.Common.Json.Service;
 using Ngnet.Services.Companies;
+using Ngnet.ApiModels;
 
 namespace Ngnet.Services.Vehicle
 {
-    public class VehicleCareService : IVehicleCareService
+    public class VehicleCareService : CareBaseService, IVehicleCareService
     {
-        private readonly NgnetDbContext database;
-        private readonly JsonService jsonService;
-        private readonly ICompanyService companyService;
-
         public VehicleCareService(NgnetDbContext database, JsonService jsonService, ICompanyService companyService)
+            : base(database, jsonService, companyService)
         {
-            this.database = database;
-            this.jsonService = jsonService;
-            this.companyService = companyService;
         }
 
         public async Task<int> DeleteAsync(string vehicleCareId, bool hardDelete = false)
