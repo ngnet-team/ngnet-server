@@ -11,11 +11,11 @@ using AutoMapper;
 using Ngnet.Mapper;
 using Ngnet.Services.Email;
 using Ngnet.Services.Auth;
-using Ngnet.Services.Vehicle;
 using Ngnet.Common.Json.Service;
-using Ngnet.Services.Health;
 using Ngnet.Services.Companies;
 using Microsoft.AspNetCore.Identity;
+using Ngnet.Services.Cares.Interfaces;
+using Ngnet.Services.Cares;
 
 namespace Ngnet.Web.Infrastructure
 {

@@ -1,16 +1,16 @@
-﻿using Ngnet.ApiModels;
-using Ngnet.ApiModels.CareModels;
+﻿using Ngnet.ApiModels.CareModels;
 using Ngnet.Common;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database;
 using Ngnet.Database.Models;
 using Ngnet.Mapper;
+using Ngnet.Services.Cares.Interfaces;
 using Ngnet.Services.Companies;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace Ngnet.Services.Health
+namespace Ngnet.Services.Cares
 {
     public class HealthCareService : CareBaseService, IHealthCareService
     {
@@ -19,13 +19,15 @@ namespace Ngnet.Services.Health
         {
         }
 
-        public async Task<int> DeleteAsync(string healthCareId, bool hardDelete)
+        public async Task<CRUD> DeleteAsync(string healthCareId, bool hardDelete)
         {
+            this.response = CRUD.None;
+
             var healthCare = this.database.HealthCares.FirstOrDefault(x => x.Id == healthCareId);
 
             if (healthCare == null)
             {
-                return 0;
+                this.response = CRUD.NotFound;
             }
 
             if (hardDelete)
@@ -38,7 +40,14 @@ namespace Ngnet.Services.Health
                 healthCare.DeletedOn = DateTime.UtcNow;
             }
 
-            return await this.database.SaveChangesAsync();
+            this.response = CRUD.Deleted;
+            this.result = await this.database.SaveChangesAsync();
+            if (this.result == 0)
+            {
+                this.response = CRUD.None;
+            }
+
+            return this.response;
         }
 
         public T[] GetByUserId<T>(string userId)
@@ -58,28 +67,24 @@ namespace Ngnet.Services.Health
                 .FirstOrDefault();
         }
 
-        public T GetNames<T>()
-        {
-            return this.jsonService.Deserialiaze<T>(Paths.HealthCareNames);
-        }
-
         public async Task<CRUD> SaveAsync(CareRequestModel apiModel)
         {
-            CRUD response = CRUD.None;
+            this.response = CRUD.None;
 
             HealthCare healthCare = this.database.HealthCares.FirstOrDefault(x => x.Id == apiModel.Id);
 
             //Create new entity
             if (healthCare == null)
             {
-                response = CRUD.Created;
+                this.response = CRUD.Created;
 
                 healthCare = MappingFactory.Mapper.Map<HealthCare>(apiModel);
                 await this.database.HealthCares.AddAsync(healthCare);
             }
+            //Modify an existing one
             else
             {
-                response = apiModel.IsDeleted ? CRUD.Deleted : CRUD.Updated;
+                this.response = apiModel.IsDeleted ? CRUD.Deleted : CRUD.Updated;
 
                 bool companyReceived = apiModel?.Company != null;
 
@@ -89,31 +94,16 @@ namespace Ngnet.Services.Health
                 }
 
                 //Modify existing entity
-                healthCare = this.ModifyEntity<CareRequestModel>(apiModel, healthCare);
+                healthCare = (HealthCare)this.ModifyEntity<CareRequestModel>(apiModel, healthCare);
             }
 
-            await this.database.SaveChangesAsync();
+            this.result = await this.database.SaveChangesAsync();
+            if (this.result == 0)
+            {
+                this.response = CRUD.None;
+            }
 
-            return response;
-        }
-
-        private HealthCare ModifyEntity<T>(T apiModel, HealthCare healthCare)
-        {
-            var mappedModel = MappingFactory.Mapper.Map<HealthCare>(apiModel);
-
-            healthCare.Name = mappedModel.Name == null ? healthCare.Name : mappedModel.Name;
-            healthCare.StartDate = mappedModel.StartDate == null ? healthCare.StartDate : mappedModel.StartDate;
-            healthCare.EndDate = mappedModel.EndDate == null ? healthCare.EndDate : mappedModel.EndDate;
-            healthCare.PaidEndDate = mappedModel.PaidEndDate == null ? healthCare.PaidEndDate : mappedModel.PaidEndDate;
-            healthCare.Reminder = mappedModel.Reminder == null ? healthCare.Reminder : mappedModel.Reminder;
-            healthCare.Price = mappedModel.Price == null ? healthCare.Price : mappedModel.Price;
-            healthCare.CompanyId = mappedModel?.Company?.Id == null ? healthCare.CompanyId : mappedModel.Company.Id;
-            healthCare.Notes = mappedModel.Notes == null ? healthCare.Notes : mappedModel.Notes;
-            healthCare.ModifiedOn = DateTime.UtcNow;
-            healthCare.IsDeleted = mappedModel.IsDeleted == true ? mappedModel.IsDeleted : healthCare.IsDeleted;
-            healthCare.DeletedOn = mappedModel.IsDeleted == true ? DateTime.UtcNow : healthCare.DeletedOn;
-
-            return healthCare;
+            return this.response;
         }
     }
 }

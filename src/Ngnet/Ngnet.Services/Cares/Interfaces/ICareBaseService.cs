@@ -1,6 +1,6 @@
 ﻿using Ngnet.ApiModels;
 
-namespace Ngnet.Services
+namespace Ngnet.Services.Cares.Interfaces
 {
     public interface ICareBaseService
     {

@@ -2,7 +2,7 @@
 using Ngnet.ApiModels;
 using Ngnet.ApiModels.CareModels;
 using Ngnet.Common.Json.Service;
-using Ngnet.Services;
+using Ngnet.Services.Cares.Interfaces;
 using Ngnet.Web.Infrastructure;
 
 namespace Ngnet.Web.Controllers.Base

@@ -1,18 +1,9 @@
-﻿using Ngnet.Database.Models.Interfaces;
-using System;
-using System.ComponentModel.DataAnnotations;
+﻿using System;
 
-namespace Ngnet.Database.Models
+namespace Ngnet.Database.Models.Interfaces
 {
-    public class HealthCare : BaseModel<string>, ICare
+    public interface ICare : IBaseModel
     {
-        public HealthCare()
-        {
-            this.Id = Guid.NewGuid().ToString();
-        }
-
-        [Required]
-        [MaxLength(50)]
         public string Name { get; set; }
 
         public DateTime? StartDate { get; set; }
@@ -23,14 +14,12 @@ namespace Ngnet.Database.Models
 
         public DateTime? Reminder { get; set; }
 
-        [Range(0, 2147483647)]
         public decimal? Price { get; set; }
 
         public int? CompanyId { get; set; }
 
         public Company Company { get; set; }
 
-        [MaxLength(500)]
         public string Notes { get; set; }
 
         public string UserId { get; set; }
