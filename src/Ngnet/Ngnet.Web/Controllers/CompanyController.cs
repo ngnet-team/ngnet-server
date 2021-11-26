@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database.Models;
@@ -13,8 +14,12 @@ namespace Ngnet.Web.Controllers
         private readonly ICompanyService companyService;
         private readonly UserManager<User> userManager;
 
-        public CompanyController(ICompanyService companyService, UserManager<User> userManager, JsonService jsonService)
-            :base (jsonService)
+        public CompanyController(
+            ICompanyService companyService,
+            UserManager<User> userManager, 
+            JsonService jsonService,
+            IConfiguration configuration)
+            :base (jsonService, configuration)
         {
             this.companyService = companyService;
             this.userManager = userManager;

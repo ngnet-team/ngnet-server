@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Ngnet.ApiModels;
 using Ngnet.ApiModels.CareModels;
 using Ngnet.Common.Json.Service;
@@ -9,15 +10,14 @@ namespace Ngnet.Web.Controllers.Base
 {
     public class MessageController : ApiController
     {
-        private readonly JsonService jsonService;
         private ICareBaseService careBaseService;
 
         public MessageController
             (JsonService jsonService,
-            ICareBaseService careBaseService)
-            : base(jsonService)
+            ICareBaseService careBaseService,
+            IConfiguration configuration)
+            : base(jsonService, configuration)
         {
-            this.jsonService = jsonService;
             this.careBaseService = careBaseService;
         }
 

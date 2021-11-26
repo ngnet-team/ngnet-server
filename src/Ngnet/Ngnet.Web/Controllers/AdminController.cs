@@ -86,8 +86,7 @@ namespace Ngnet.Web.Controllers
             }
 
             //The initial Admin can't change his role
-            var adminSeederModel = configuration.GetSection("Admin").Get<AdminSeederModel>();
-            if (user.UserName == adminSeederModel.UserName)
+            if (this.Admin.UserName == this.Admin.UserName)
             {
                 this.errors = this.GetErrors().NoPermissions;
                 return this.BadRequest(this.errors);

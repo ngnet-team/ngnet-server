@@ -1,9 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Ngnet.Common;
+using Ngnet.Database.Seeding;
 using Ngnet.Services.Email;
 using SendGrid;
 using SendGrid.Helpers.Mail;
 using System;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace Ngnet.Services
@@ -12,58 +14,65 @@ namespace Ngnet.Services
     {
         private readonly SendGridClient sender;
         private readonly IConfiguration configuration;
+        private readonly EmailConfigModel emailConfig;
+
+        private Response response;
 
         public EmailSenderService(IConfiguration configuration)
         {
             this.configuration = configuration;
+            this.emailConfig = this.configuration.GetSection("EmailSender").Get<EmailConfigModel>();
 
-            string key = this.configuration.GetSection("EmailSender:Key").ToString();
-            this.sender = new SendGridClient(key);
+            this.sender = new SendGridClient(emailConfig.Key);
         }
 
-        public async Task<Response> SendEmailAsync(string type, EmailSenderModel model)
+        public async Task<Response> SendEmailAsync(EmailSenderModel model)
         {
-            if (type == "Email confirmation") // needs to be put in types model
-            {
-                model = EmailConfirmation(model);
-            }
-
             if (string.IsNullOrWhiteSpace(model.FromAddress) && string.IsNullOrWhiteSpace(model.ToAddress))
             {
                 throw new ArgumentException(ValidationMessages.EmptryEmailSenderAddresses);
             }
 
-            var fromAddress = new EmailAddress(model.FromAddress, model.FromName);
-            var toAddress = new EmailAddress(model.ToAddress);
-
-            var mail = MailHelper.CreateSingleEmail(fromAddress, toAddress, model.Subject, null, model.Content);
-
-            Response response = null;
+            var from = new EmailAddress(model.FromAddress, model.FromName);
+            var to = new EmailAddress(model.ToAddress);
+            var mail = MailHelper.CreateSingleEmail(from, to, model.Subject, null, model.Content);
 
             try
             {
-                response = await this.sender.SendEmailAsync(mail);
+                this.response = await this.sender.SendEmailAsync(mail);
             }
             catch (Exception err)
             {
+                this.response = null;
                 Console.WriteLine(err);
             }
 
-            return response;
+            return this.response;
         }
 
-        private EmailSenderModel EmailConfirmation(EmailSenderModel model)
+        public async Task<Response> EmailConfirmation(EmailSenderModel model)
         {
-            var admin = this.configuration.GetSection("Admin");
-
-            return new EmailSenderModel()
+            var admin = this.configuration.GetSection("Admin").Get<AdminSeederModel>();
+            EmailSenderModel mailModel = new EmailSenderModel(admin.Email, model.ToAddress)
             {
-                FromAddress = admin.GetSection("Email").Value,
-                FromName = admin.GetSection("FirstName").Value + " " + admin.GetSection("LastName").Value,
-                ToAddress = model.ToAddress,
+                FromName = admin.FirstName + " " + admin.LastName,
                 Subject = "Email confirmation message",
-                Content = "Please confirm your email by clicking the button below"
+                Content = "Please confirm your email by clicking the link below."
             };
+
+            return await this.SendEmailAsync(mailModel);
+        }
+
+        public string GetTemplate(string fileName)
+        {
+            try
+            {
+                return File.ReadAllText(Paths.HtmlTemplatesDirectory + fileName);
+            }
+            catch (Exception)
+            {
+                return default;
+            }
         }
     }
 }

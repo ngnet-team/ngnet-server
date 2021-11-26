@@ -9,7 +9,7 @@ namespace Ngnet.Web.Infrastructure
     public static class ClaimsPrincipalExtensions
     {
         public static string GetId(this ClaimsPrincipal user)
-            => user.FindFirst(ClaimTypes.NameIdentifier).Value;
+            => user.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
         public async static Task<string> GetRoleAsync(this ClaimsPrincipal user, UserManager<User> userManager, User otherUser = null)
         {

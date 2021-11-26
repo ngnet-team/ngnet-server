@@ -22,7 +22,6 @@ namespace Ngnet.Web.Controllers.Base
         protected IAuthService userService;
         protected UserManager<User> userManager;
         protected RoleManager<Role> roleManager;
-        protected IConfiguration configuration;
         protected IEmailSenderService emailSenderService;
 
         protected IdentityResult result;
@@ -35,12 +34,11 @@ namespace Ngnet.Web.Controllers.Base
              IConfiguration configuration,
              JsonService jsonService,
              IEmailSenderService emailSenderService)
-            : base(jsonService)
+            : base(jsonService, configuration)
         {
             this.userService = userService;
             this.userManager = userManager;
             this.roleManager = roleManager;
-            this.configuration = configuration;
             this.emailSenderService = emailSenderService;
         }
 
@@ -148,8 +146,8 @@ namespace Ngnet.Web.Controllers.Base
 
             // ------- real email validation ------- 
 
-            EmailSenderModel model = new EmailSenderModel() { ToAddress = emailAddress };
-            Response response = await this.emailSenderService.SendEmailAsync("Email confirmation", model);
+            EmailSenderModel model = new EmailSenderModel(this.Admin.Email, emailAddress);
+            Response response = await this.emailSenderService.EmailConfirmation(model);
 
             if (response == null || !response.IsSuccessStatusCode)
             {
