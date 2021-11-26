@@ -10,6 +10,7 @@ using Ngnet.ApiModels.CareModels;
 using Ngnet.Web.Controllers.Base;
 using Ngnet.Services.Cares.Interfaces;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 
 namespace Ngnet.Web.Controllers
 {
@@ -21,8 +22,9 @@ namespace Ngnet.Web.Controllers
         public HealthCareController
             (IHealthCareService healthCareService,
             UserManager<User> userManager,
-            JsonService jsonService)
-            : base(jsonService, userManager)
+            JsonService jsonService,
+            IConfiguration configuration)
+            : base(jsonService, configuration, userManager)
         {
             this.healthCareService = healthCareService;
         }

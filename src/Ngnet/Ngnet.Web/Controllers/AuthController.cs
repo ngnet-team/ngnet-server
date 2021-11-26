@@ -65,6 +65,15 @@ namespace Ngnet.Web.Controllers
             await this.userManager.AddToRoleAsync(user, "User");
 
             return this.Ok(this.GetSuccessMsg().UserRegistered);
+
+            //sendgrid is not ready yet
+            EmailSenderModel email = new EmailSenderModel(this.Admin.Email, model.Email)
+            {
+                Content = this.emailSenderService.GetTemplate(Paths.SuccessfulRegistration)
+            };
+            var response = await this.emailSenderService.EmailConfirmation(email);
+
+            return this.Ok(this.GetSuccessMsg().UserRegistered);
         }
 
         [HttpPost]

@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Configuration;
 using Ngnet.ApiModels.CareModels;
 using Ngnet.Common;
 using Ngnet.Common.Json.Models;
@@ -15,8 +16,9 @@ namespace Ngnet.Web.Controllers.Base
 
         protected CareController(
             JsonService jsonService,
+            IConfiguration configuration,
             UserManager<User> userManager)
-            : base(jsonService)
+            : base(jsonService, configuration)
         {
             this.userManager = userManager;
         }

@@ -10,6 +10,7 @@ using Ngnet.Common.Json.Service;
 using Ngnet.Common;
 using Ngnet.Web.Controllers.Base;
 using Ngnet.Services.Cares.Interfaces;
+using Microsoft.Extensions.Configuration;
 
 namespace Ngnet.Web.Controllers
 {
@@ -21,8 +22,9 @@ namespace Ngnet.Web.Controllers
         public VehicleCareController
             (IVehicleCareService vehicleCareService,
             UserManager<User> userManager,
-            JsonService jsonService)
-            : base(jsonService, userManager)
+            JsonService jsonService,
+            IConfiguration configuration)
+            : base(jsonService, configuration, userManager)
         {
             this.vehicleCareService = vehicleCareService;
         }
