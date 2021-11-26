@@ -2,9 +2,9 @@
 using Ngnet.Common;
 using System.Threading.Tasks;
 
-namespace Ngnet.Services.Health
+namespace Ngnet.Services.Cares.Interfaces
 {
-    public interface IHealthCareService
+    public interface ICareService
     {
         public Task<CRUD> SaveAsync(CareRequestModel apiModel);
 
@@ -12,8 +12,8 @@ namespace Ngnet.Services.Health
 
         public T[] GetByUserId<T>(string userId);
 
-        public Task<int> DeleteAsync(string vehicleCareId, bool hardDelete);
+        public Task<CRUD> DeleteAsync(string vehicleCareId, bool hardDelete);
 
-        public T GetNames<T>();
+        public T GetDropdown<T>(string path);
     }
 }

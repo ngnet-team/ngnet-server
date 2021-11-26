@@ -56,7 +56,7 @@ namespace Ngnet.Web.Controllers
                 LastName = u.LastName,
                 Age = u.Age,
                 CreatedOn = u.CreatedOn.ToShortDateString(),
-                ModifiedOn = u.ModifiedOn != null ? u.ModifiedOn.Value.ToShortTimeString() : null,
+                ModifiedOn = u.ModifiedOn != null ? u.ModifiedOn.Value.ToShortDateString() : null,
                 DeletedOn = u.DeletedOn != null ? u.DeletedOn.Value.ToShortDateString() : null,
                 IsDeleted = u.IsDeleted,
                 Experiances = this.userService.GetExperiences(u.Id),
@@ -144,6 +144,14 @@ namespace Ngnet.Web.Controllers
                 Msg = this.GetSuccessMsg().UserUpdated
             };
             return this.Ok(response);
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route(nameof(Update))]
+        public async Task<ActionResult> Update(AdminUserRequestModel model)
+        {
+            return await this.UpdateBase<AdminUserRequestModel>(model);
         }
     }
 }

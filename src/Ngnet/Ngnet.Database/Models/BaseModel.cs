@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Ngnet.Database.Models.Interfaces;
+using System;
 
 namespace Ngnet.Database.Models
 {

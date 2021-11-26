@@ -113,20 +113,18 @@ namespace Ngnet.Web.Controllers.Base
             return this.Ok(this.GetSuccessMsg().UserUpdated);
         }
 
-        [Authorize]
-        [HttpPost]
-        [Route(nameof(Update))]
-        public async Task<ActionResult> Update<T>(T model)
+        protected async Task<ActionResult> UpdateBase<T>(T model)
         {
             CRUD result = await this.userService.Update<T>(model);
 
-            if (result.HasFlag(CRUD.NotFound))
+            if (result.Equals(CRUD.NotFound))
             {
                 this.errors = this.GetErrors().UserNotFound;
                 return this.Unauthorized(this.errors);
             }
 
-            if (result.HasFlag(CRUD.None))
+
+            if (result.Equals(CRUD.None))
             {
                 return this.Ok();
             }

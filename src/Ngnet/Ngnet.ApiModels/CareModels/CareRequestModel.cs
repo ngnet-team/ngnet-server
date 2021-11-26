@@ -1,13 +1,14 @@
 ﻿using AutoMapper;
 using Ngnet.ApiModels.CompanyModels;
 using Ngnet.Database.Models;
+using Ngnet.Database.Models.Interfaces;
 using Ngnet.Mapper;
 using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ngnet.ApiModels.CareModels
 {
-    public class CareRequestModel : IMapTo<VehicleCare>, IMapTo<HealthCare>, IHaveCustomMappings
+    public class CareRequestModel : IMapTo<VehicleCare>, IMapTo<HealthCare>, IMapTo<ICare>, IHaveCustomMappings
     {
         public string Id { get; set; }
 

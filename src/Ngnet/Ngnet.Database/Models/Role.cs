@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Ngnet.Database.Models.Interfaces;
 using System;
 
 namespace Ngnet.Database.Models

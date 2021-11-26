@@ -116,13 +116,13 @@ namespace Ngnet.Web.Controllers
                 LoggedOut = DateTime.UtcNow
             });
 
-            if (result.HasFlag(CRUD.NotFound))
+            if (result.Equals(CRUD.NotFound))
             {
                 this.errors = this.GetErrors().UserNotFound;
                 return this.Unauthorized(this.errors);
             }
 
-            if (result.HasFlag(CRUD.None))
+            if (result.Equals(CRUD.None))
             {
                 return this.Ok();
             }
@@ -153,6 +153,23 @@ namespace Ngnet.Web.Controllers
                 Gender = user.Gender,
                 Age = user.Age
             };
+        }
+
+        [Authorize]
+        [HttpPost]
+        [Route(nameof(Update))]
+        public async Task<ActionResult> Update(UserRequestModel model)
+        {
+            User user = await this.userManager.FindByIdAsync(this.User.GetId());
+
+            if (user == null)
+            {
+                this.errors = this.GetErrors().UserNotFound;
+                return this.Unauthorized(this.errors);
+            }
+
+            model.Id = this.User.GetId();
+            return await this.UpdateBase<UserRequestModel>(model);
         }
     }
 }

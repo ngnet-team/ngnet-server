@@ -1,9 +1,10 @@
-﻿using System;
+﻿using Ngnet.Database.Models.Interfaces;
+using System;
 using System.ComponentModel.DataAnnotations;
 
 namespace Ngnet.Database.Models
 {
-    public class VehicleCare : BaseModel<string>
+    public class VehicleCare : BaseModel<string>, ICare
     {
         public VehicleCare()
         {
