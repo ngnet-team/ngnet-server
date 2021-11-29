@@ -33,7 +33,7 @@ namespace Ngnet.Web.Controllers
         [Route(nameof(Save))]
         public async Task<ActionResult> Save(CareRequestModel model)
         {
-            var errors = this.NoPermissions(model);
+            var errors = await this.NoPermissions(model);
             if (errors != null)
             {
                 return this.Unauthorized(errors);
