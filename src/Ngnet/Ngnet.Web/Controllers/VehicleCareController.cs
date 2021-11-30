@@ -21,10 +21,11 @@ namespace Ngnet.Web.Controllers
 
         public VehicleCareController
             (IVehicleCareService vehicleCareService,
+            ICareBaseService careBaseService,
             UserManager<User> userManager,
             JsonService jsonService,
             IConfiguration configuration)
-            : base(jsonService, configuration, userManager)
+            : base(careBaseService, jsonService, configuration, userManager)
         {
             this.vehicleCareService = vehicleCareService;
         }

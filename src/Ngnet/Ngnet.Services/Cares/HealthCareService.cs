@@ -14,23 +14,9 @@ namespace Ngnet.Services.Cares
 {
     public class HealthCareService : CareBaseService, IHealthCareService
     {
-        public HealthCareService(NgnetDbContext database, JsonService jsonService, ICompanyService companyService)
-            : base(database, jsonService, companyService)
+        public HealthCareService(ICompanyService companyService, NgnetDbContext database, JsonService jsonService)
+            : base(companyService, database, jsonService)
         {
-        }
-
-        public async Task<CRUD> DeleteAsync(ICare care)
-        {
-            if (care == null)
-            {
-                return CRUD.NotFound;
-            }
-
-            this.response = await this.companyService.DeleteAsync(care?.CompanyId);
-            var result = this.database.HealthCares.Remove((HealthCare)care);
-            await this.database.SaveChangesAsync();
-
-            return CRUD.Deleted;
         }
 
         public T[] GetByUserId<T>(string userId)
@@ -78,18 +64,33 @@ namespace Ngnet.Services.Cares
 
                 this.response = CRUD.Updated;
 
-                bool companyReceived = apiModel?.Company != null;
-                if (companyReceived)
+                //Modify company
+                int companyId = await this.companyService.SaveAsync(apiModel.Company);
+                if (companyId != 0)
                 {
-                    apiModel.Company.Id = await this.companyService.SaveAsync(apiModel.Company);
+                    apiModel.Company.Id = companyId;
                 }
 
-                //Modify existing entity
+                //Modify existing care entity
                 healthCare = (HealthCare)this.ModifyEntity<CareRequestModel>(apiModel, healthCare);
             }
 
             await this.database.SaveChangesAsync();
             return this.response;
+        }
+
+        public async Task<CRUD> DeleteAsync(ICare care)
+        {
+            if (care == null)
+            {
+                return CRUD.NotFound;
+            }
+
+            this.response = await this.companyService.DeleteAsync(care?.CompanyId);
+            var result = this.database.HealthCares.Remove((HealthCare)care);
+            await this.database.SaveChangesAsync();
+
+            return CRUD.Deleted;
         }
     }
 }

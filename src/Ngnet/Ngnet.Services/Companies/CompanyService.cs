@@ -10,17 +10,13 @@ using System.Threading.Tasks;
 
 namespace Ngnet.Services.Companies
 {
-    public class CompanyService : ICompanyService
+    public class CompanyService : BaseService, ICompanyService
     {
-        private readonly NgnetDbContext database;
-        private readonly JsonService jsonService;
-
         private Company company;
 
         public CompanyService(NgnetDbContext database, JsonService jsonService)
+            : base(database, jsonService)
         {
-            this.database = database;
-            this.jsonService = jsonService;
         }
 
         public T GetNames<T>()
@@ -31,6 +27,11 @@ namespace Ngnet.Services.Companies
 
         public async Task<int> SaveAsync(CompanyRequestModel apiModel)
         {
+            if (apiModel == null)
+            {
+                return 0;
+            }
+
             this.company = this.database.Companies.FirstOrDefault(x => x.Id == apiModel.Id);
             if (this.company == null)
             {

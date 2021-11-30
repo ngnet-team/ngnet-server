@@ -1,7 +1,7 @@
 ﻿using Ngnet.Database.Models.Interfaces;
 using System;
 
-namespace Ngnet.Database.Models
+namespace Ngnet.Database.Models.Base
 {
     public class BaseModel<IdType> : IBaseModel
     {

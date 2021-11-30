@@ -5,17 +5,17 @@ using Ngnet.Mapper;
 using System.Linq;
 using System.Threading.Tasks;
 using Ngnet.Common;
-using Ngnet.Common.Json.Service;
 using Ngnet.Services.Companies;
 using Ngnet.Services.Cares.Interfaces;
 using Ngnet.Database.Models.Interfaces;
+using Ngnet.Common.Json.Service;
 
 namespace Ngnet.Services.Cares
 {
     public class VehicleCareService : CareBaseService, IVehicleCareService
     {
-        public VehicleCareService(NgnetDbContext database, JsonService jsonService, ICompanyService companyService)
-            : base(database, jsonService, companyService)
+        public VehicleCareService(ICompanyService companyService, NgnetDbContext database, JsonService jsonService)
+            : base(companyService, database, jsonService)
         {
         }
 
@@ -77,13 +77,14 @@ namespace Ngnet.Services.Cares
 
                 this.response = CRUD.Updated;
 
-                bool companyReceived = apiModel?.Company != null;
-                if (companyReceived)
+                //Modify company
+                int companyId = await this.companyService.SaveAsync(apiModel.Company);
+                if (companyId != 0)
                 {
-                    apiModel.Company.Id = await this.companyService.SaveAsync(apiModel.Company);
+                    apiModel.Company.Id = companyId;
                 }
 
-                //Modify existing entity
+                //Modify existing care entity
                 vehicleCare = (VehicleCare)this.ModifyEntity<CareRequestModel>(apiModel, vehicleCare);
             }
 

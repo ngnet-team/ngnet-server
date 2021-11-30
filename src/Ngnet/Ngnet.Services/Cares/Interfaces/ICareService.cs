@@ -16,5 +16,7 @@ namespace Ngnet.Services.Cares.Interfaces
         public Task<CRUD> DeleteAsync(ICare care);
 
         public T GetDropdown<T>(string path);
+
+        public Task<CRUD> RemindToggle(CareRequestModel apiModel);
     }
 }

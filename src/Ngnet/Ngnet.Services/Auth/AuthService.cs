@@ -1,6 +1,7 @@
 ﻿using Microsoft.IdentityModel.Tokens;
 using Ngnet.ApiModels.AuthModels;
 using Ngnet.Common;
+using Ngnet.Common.Json.Service;
 using Ngnet.Database;
 using Ngnet.Database.Models;
 using Ngnet.Mapper;
@@ -14,13 +15,11 @@ using System.Threading.Tasks;
 
 namespace Ngnet.Services.Auth
 {
-    public class AuthService : IAuthService
+    public class AuthService : BaseService, IAuthService
     {
-        private readonly NgnetDbContext database;
-
-        public AuthService(NgnetDbContext database)
+        public AuthService(NgnetDbContext database, JsonService jsonService)
+            :base(database, jsonService)
         {
-            this.database = database;
         }
 
         public string CreateJwtToken(string userId, string username, string secret)
