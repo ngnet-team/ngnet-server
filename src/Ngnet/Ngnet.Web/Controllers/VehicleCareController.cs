@@ -72,14 +72,7 @@ namespace Ngnet.Web.Controllers
         [Route(nameof(Delete))]
         public async Task<ActionResult> Delete(CareRequestModel model)
         {
-            var result = await this.vehicleCareService.DeleteAsync(model.Id, true);
-
-            if (result == 0)
-            {
-                var errors = this.GetErrors().VehicleCareNotFound;
-                return this.NotFound(errors);
-            }
-
+            //TODO
             return this.Ok(this.GetSuccessMsg().Deleted);
         }
 

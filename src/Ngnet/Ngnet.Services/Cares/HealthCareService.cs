@@ -3,10 +3,10 @@ using Ngnet.Common;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database;
 using Ngnet.Database.Models;
+using Ngnet.Database.Models.Interfaces;
 using Ngnet.Mapper;
 using Ngnet.Services.Cares.Interfaces;
 using Ngnet.Services.Companies;
-using System;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -19,35 +19,18 @@ namespace Ngnet.Services.Cares
         {
         }
 
-        public async Task<CRUD> DeleteAsync(string healthCareId, bool hardDelete)
+        public async Task<CRUD> DeleteAsync(ICare care)
         {
-            this.response = CRUD.None;
-
-            var healthCare = this.database.HealthCares.FirstOrDefault(x => x.Id == healthCareId);
-
-            if (healthCare == null)
+            if (care == null)
             {
-                this.response = CRUD.NotFound;
+                return CRUD.NotFound;
             }
 
-            if (hardDelete)
-            {
-                this.database.HealthCares.Remove(healthCare);
-            }
-            else
-            {
-                healthCare.IsDeleted = true;
-                healthCare.DeletedOn = DateTime.UtcNow;
-            }
+            this.response = await this.companyService.DeleteAsync(care?.CompanyId);
+            var result = this.database.HealthCares.Remove((HealthCare)care);
+            await this.database.SaveChangesAsync();
 
-            this.response = CRUD.Deleted;
-            this.result = await this.database.SaveChangesAsync();
-            if (this.result == 0)
-            {
-                this.response = CRUD.None;
-            }
-
-            return this.response;
+            return CRUD.Deleted;
         }
 
         public T[] GetByUserId<T>(string userId)
@@ -72,8 +55,7 @@ namespace Ngnet.Services.Cares
             this.response = CRUD.None;
 
             HealthCare healthCare = this.database.HealthCares.FirstOrDefault(x => x.Id == apiModel.Id);
-
-            //Create new entity
+            //Create a new entity
             if (healthCare == null)
             {
                 this.response = CRUD.Created;
@@ -84,10 +66,19 @@ namespace Ngnet.Services.Cares
             //Modify an existing one
             else
             {
-                this.response = apiModel.IsDeleted ? CRUD.Deleted : CRUD.Updated;
+                //Permanently delete
+                if (apiModel.IsDeleted)
+                {
+                    CRUD result = await this.DeleteAsync(healthCare);
+                    if (result == CRUD.Deleted)
+                    {
+                        return CRUD.Deleted;
+                    }
+                }
+
+                this.response = CRUD.Updated;
 
                 bool companyReceived = apiModel?.Company != null;
-
                 if (companyReceived)
                 {
                     apiModel.Company.Id = await this.companyService.SaveAsync(apiModel.Company);
@@ -97,12 +88,7 @@ namespace Ngnet.Services.Cares
                 healthCare = (HealthCare)this.ModifyEntity<CareRequestModel>(apiModel, healthCare);
             }
 
-            this.result = await this.database.SaveChangesAsync();
-            if (this.result == 0)
-            {
-                this.response = CRUD.None;
-            }
-
+            await this.database.SaveChangesAsync();
             return this.response;
         }
     }

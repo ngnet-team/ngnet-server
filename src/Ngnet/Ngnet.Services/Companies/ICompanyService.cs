@@ -1,5 +1,5 @@
 ﻿using Ngnet.ApiModels.CompanyModels;
-using Ngnet.Database.Models;
+using Ngnet.Common;
 using System.Threading.Tasks;
 
 namespace Ngnet.Services.Companies
@@ -9,5 +9,7 @@ namespace Ngnet.Services.Companies
         public T GetNames<T>();
 
         public Task<int> SaveAsync(CompanyRequestModel model);
+
+        public Task<CRUD> DeleteAsync(int? companyId);
     }
 }

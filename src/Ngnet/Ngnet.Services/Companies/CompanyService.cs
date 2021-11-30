@@ -15,6 +15,8 @@ namespace Ngnet.Services.Companies
         private readonly NgnetDbContext database;
         private readonly JsonService jsonService;
 
+        private Company company;
+
         public CompanyService(NgnetDbContext database, JsonService jsonService)
         {
             this.database = database;
@@ -26,23 +28,36 @@ namespace Ngnet.Services.Companies
             var result = this.jsonService.Deserialiaze<T>(Paths.CompanyNames);
             return result;
         }
+
         public async Task<int> SaveAsync(CompanyRequestModel apiModel)
         {
-            Company company;
-            if (apiModel?.Id == null)
+            this.company = this.database.Companies.FirstOrDefault(x => x.Id == apiModel.Id);
+            if (this.company == null)
             {
-                company = MappingFactory.Mapper.Map<Company>(apiModel);
-                await this.database.Companies.AddAsync(company);
-            }
-            else
-            {
-                company = this.database.Companies.FirstOrDefault(x => x.Id == apiModel.Id);
-                company = this.ModifyEntity<CompanyRequestModel>(apiModel, company);
+                this.company = MappingFactory.Mapper.Map<Company>(apiModel);
+                await this.database.Companies.AddAsync(this.company);
             }
 
+            this.company = this.ModifyEntity<CompanyRequestModel>(apiModel, this.company);
             await this.database.SaveChangesAsync();
-            return company.Id;
+
+            return this.company.Id;
         }
+
+        public async Task<CRUD> DeleteAsync(int? companyId)
+        {
+            this.company = this.database.Companies.FirstOrDefault(x => x.Id == companyId);
+            if (this.company == null)
+            {
+                return CRUD.NotFound;
+            }
+
+            var result = this.database.Companies.Remove(this.company);
+            await this.database.SaveChangesAsync();
+
+            return CRUD.Deleted;
+        }
+
         private Company ModifyEntity<T>(T apiModel, Company company)
         {
             var mappedModel = MappingFactory.Mapper.Map<Company>(apiModel);
