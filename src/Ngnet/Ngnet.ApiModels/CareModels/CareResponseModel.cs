@@ -19,6 +19,8 @@ namespace Ngnet.ApiModels.CareModels
 
         public string Reminder { get; set; }
 
+        public bool Remind { get; set; }
+
         public decimal? Price { get; set; }
 
         public CompanyResponseModel Company { get; set; }
