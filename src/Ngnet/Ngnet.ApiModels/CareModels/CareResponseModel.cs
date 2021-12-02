@@ -2,7 +2,6 @@
 using Ngnet.ApiModels.CompanyModels;
 using Ngnet.Database.Models;
 using Ngnet.Mapper;
-using System;
 
 namespace Ngnet.ApiModels.CareModels
 {

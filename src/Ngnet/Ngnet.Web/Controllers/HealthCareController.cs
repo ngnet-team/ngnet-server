@@ -21,10 +21,11 @@ namespace Ngnet.Web.Controllers
 
         public HealthCareController
             (IHealthCareService healthCareService,
+            ICareBaseService careBaseService,
             UserManager<User> userManager,
             JsonService jsonService,
             IConfiguration configuration)
-            : base(jsonService, configuration, userManager)
+            : base(careBaseService, jsonService, configuration, userManager)
         {
             this.healthCareService = healthCareService;
         }
@@ -33,7 +34,7 @@ namespace Ngnet.Web.Controllers
         [Route(nameof(Save))]
         public async Task<ActionResult> Save(CareRequestModel model)
         {
-            var errors = this.NoPermissions(model);
+            var errors = await this.NoPermissions(model);
             if (errors != null)
             {
                 return this.Unauthorized(errors);
@@ -72,14 +73,7 @@ namespace Ngnet.Web.Controllers
         [Route(nameof(Delete))]
         public async Task<ActionResult> Delete(CareResponseModel model)
         {
-            var result = await this.healthCareService.DeleteAsync(model.Id, true);
-
-            if (result == 0)
-            {
-                var errors = this.GetErrors().HealthCareNotFound;
-                return this.NotFound(errors);
-            }
-
+            //TODO
             return this.Ok(this.GetSuccessMsg().Deleted);
         }
 

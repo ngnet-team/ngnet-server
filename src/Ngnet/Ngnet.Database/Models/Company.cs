@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Ngnet.Database.Models.Base;
+using System.ComponentModel.DataAnnotations;
 
 namespace Ngnet.Database.Models
 {

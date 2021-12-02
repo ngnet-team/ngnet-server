@@ -1,4 +1,5 @@
 ﻿using Ngnet.ApiModels;
+using Ngnet.ApiModels.CareModels;
 using Ngnet.Common;
 using Ngnet.Common.Json.Service;
 using Ngnet.Database;
@@ -8,22 +9,20 @@ using Ngnet.Services.Cares.Interfaces;
 using Ngnet.Services.Companies;
 using System;
 using System.Linq;
+using System.Threading.Tasks;
 
 namespace Ngnet.Services.Cares
 {
-    public class CareBaseService : ICareBaseService
+    public class CareBaseService : BaseService, ICareBaseService
     {
-        protected readonly NgnetDbContext database;
-        protected readonly JsonService jsonService;
         protected readonly ICompanyService companyService;
 
         protected CRUD response;
         protected int result;
 
-        public CareBaseService(NgnetDbContext database, JsonService jsonService, ICompanyService companyService)
+        public CareBaseService(ICompanyService companyService, NgnetDbContext database, JsonService jsonService)
+            : base(database, jsonService)
         {
-            this.database = database;
-            this.jsonService = jsonService;
             this.companyService = companyService;
         }
 
@@ -31,22 +30,23 @@ namespace Ngnet.Services.Cares
         {
             T[] cares = new T[1];
 
+            var a = this.database;
             var healthCares = this.database.HealthCares
                 .Where(x => x.UserId == userId)
-                .Where(x => !x.IsDeleted)
-                .Where(x => x.Reminder >= this.GetTime(model))
+                .Where(x => x.Reminder >= DateTime.UtcNow && 
+                    x.Reminder <= this.GetTime(model) && x.Remind)
                 .To<T>()
                 .ToArray();
 
             if (healthCares != null)
             {
-                cares = cares.Concat(cares).ToArray();
+                cares = cares.Concat(healthCares).ToArray();
             }
 
             var vehicleCares = this.database.VehicleCares
                 .Where(x => x.UserId == userId)
-                .Where(x => !x.IsDeleted)
-                .Where(x => x.Reminder >= this.GetTime(model))
+                .Where(x => x.Reminder >= DateTime.UtcNow &&
+                    x.Reminder <= this.GetTime(model) && x.Remind)
                 .To<T>()
                 .ToArray();
 
@@ -61,6 +61,23 @@ namespace Ngnet.Services.Cares
         public T GetDropdown<T>(string path)
         {
             return this.jsonService.Deserialiaze<T>(path);
+        }
+
+        public async Task<CRUD> RemindToggle(CareRequestModel apiModel)
+        {
+            ICare care =
+                //Add all care tables
+                (ICare)this.database.VehicleCares.FirstOrDefault(x => x.Id == apiModel.Id) ??
+                (ICare)this.database.HealthCares.FirstOrDefault(x => x.Id == apiModel.Id);
+
+            if (care != null)
+            {
+                care.Remind = !care.Remind;
+                await this.database.SaveChangesAsync();
+                return CRUD.Updated;
+            }
+
+            return CRUD.NotFound;
         }
 
         protected ICare ModifyEntity<T>(T apiModel, ICare care)

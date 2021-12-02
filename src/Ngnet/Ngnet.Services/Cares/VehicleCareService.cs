@@ -4,50 +4,33 @@ using Ngnet.Database.Models;
 using Ngnet.Mapper;
 using System.Linq;
 using System.Threading.Tasks;
-using System;
 using Ngnet.Common;
-using Ngnet.Common.Json.Service;
 using Ngnet.Services.Companies;
 using Ngnet.Services.Cares.Interfaces;
+using Ngnet.Database.Models.Interfaces;
+using Ngnet.Common.Json.Service;
 
 namespace Ngnet.Services.Cares
 {
     public class VehicleCareService : CareBaseService, IVehicleCareService
     {
-        public VehicleCareService(NgnetDbContext database, JsonService jsonService, ICompanyService companyService)
-            : base(database, jsonService, companyService)
+        public VehicleCareService(ICompanyService companyService, NgnetDbContext database, JsonService jsonService)
+            : base(companyService, database, jsonService)
         {
         }
 
-        public async Task<CRUD> DeleteAsync(string vehicleCareId, bool hardDelete = false)
+        public async Task<CRUD> DeleteAsync(ICare care)
         {
-            this.response = CRUD.None;
-
-            var vehicleCare = this.database.VehicleCares.FirstOrDefault(x => x.Id == vehicleCareId);
-
-            if (vehicleCare == null)
+            if (care == null)
             {
-                this.response = CRUD.NotFound;
+                return CRUD.NotFound;
             }
 
-            if (hardDelete)
-            {
-                this.database.VehicleCares.Remove(vehicleCare);
-            }
-            else
-            {
-                vehicleCare.IsDeleted = true;
-                vehicleCare.DeletedOn = DateTime.UtcNow;
-            }
+            this.response = await this.companyService.DeleteAsync(care?.CompanyId);
+            var result = this.database.VehicleCares.Remove((VehicleCare)care);
+            await this.database.SaveChangesAsync();
 
-            this.response = CRUD.Deleted;
-            var result = await this.database.SaveChangesAsync();
-            if (result == 0)
-            {
-                this.response = CRUD.None;
-            }
-
-            return this.response;
+            return CRUD.Deleted;
         }
 
         public T[] GetByUserId<T>(string userId)
@@ -71,8 +54,7 @@ namespace Ngnet.Services.Cares
             this.response = CRUD.None;
 
             VehicleCare vehicleCare = this.database.VehicleCares.FirstOrDefault(x => x.Id == apiModel.Id);
-
-            //Create new entity
+            //Create a new entity
             if (vehicleCare == null)
             {
                 this.response = CRUD.Created;
@@ -80,27 +62,33 @@ namespace Ngnet.Services.Cares
                 vehicleCare = MappingFactory.Mapper.Map<VehicleCare>(apiModel);
                 await this.database.VehicleCares.AddAsync(vehicleCare);
             }
+            //Modify an existing one
             else
             {
-                this.response = apiModel.IsDeleted ? CRUD.Deleted : CRUD.Updated;
-
-                bool companyReceived = apiModel?.Company != null;
-
-                if (companyReceived)
+                //Permanently delete
+                if (apiModel.IsDeleted)
                 {
-                    apiModel.Company.Id = await this.companyService.SaveAsync(apiModel.Company);
+                    CRUD result = await this.DeleteAsync(vehicleCare);
+                    if (result == CRUD.Deleted)
+                    {
+                        return CRUD.Deleted;
+                    }
                 }
 
-                //Modify existing entity
+                this.response = CRUD.Updated;
+
+                //Modify company
+                int companyId = await this.companyService.SaveAsync(apiModel.Company);
+                if (companyId != 0)
+                {
+                    apiModel.Company.Id = companyId;
+                }
+
+                //Modify existing care entity
                 vehicleCare = (VehicleCare)this.ModifyEntity<CareRequestModel>(apiModel, vehicleCare);
             }
 
-            this.result = await this.database.SaveChangesAsync();
-            if (this.result == 0)
-            {
-                this.response = CRUD.None;
-            }
-
+            await this.database.SaveChangesAsync();
             return this.response;
         }
     }

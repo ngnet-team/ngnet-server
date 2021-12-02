@@ -1,10 +1,10 @@
-﻿using AutoMapper;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
+using AutoMapper;
+using Ngnet.Mapper;
 using Ngnet.ApiModels.CompanyModels;
 using Ngnet.Database.Models;
 using Ngnet.Database.Models.Interfaces;
-using Ngnet.Mapper;
-using System;
-using System.ComponentModel.DataAnnotations;
 
 namespace Ngnet.ApiModels.CareModels
 {
