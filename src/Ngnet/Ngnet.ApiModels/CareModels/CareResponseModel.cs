@@ -2,6 +2,7 @@
 using Ngnet.ApiModels.CompanyModels;
 using Ngnet.Database.Models;
 using Ngnet.Mapper;
+using System;
 
 namespace Ngnet.ApiModels.CareModels
 {
@@ -19,6 +20,8 @@ namespace Ngnet.ApiModels.CareModels
 
         public string Reminder { get; set; }
 
+        public bool Remind { get; set; }
+
         public decimal? Price { get; set; }
 
         public CompanyResponseModel Company { get; set; }
@@ -30,6 +33,8 @@ namespace Ngnet.ApiModels.CareModels
         public bool IsDeleted { get; set; }
 
         public string DeletedOn { get; set; }
+
+        public DateTime CreatedOn { get; set; }
 
         public void CreateMappings(IProfileExpression configuration)
         {
