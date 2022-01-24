@@ -18,11 +18,8 @@
     },
     "Ngnet.Web": {
       "commandName": "Project",
-      "launchBrowser": true,
-      "launchUrl": "home",
-      "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
-      }
+      "dotnetRunMessages": true,
+      "applicationUrl": "http://localhost:5000;http://localhost:5001"
     }
   }
 }
