@@ -4,7 +4,6 @@ using Ngnet.ApiModels;
 using Ngnet.ApiModels.CareModels;
 using Ngnet.Common.Json.Service;
 using Ngnet.Services.Cares.Interfaces;
-using Ngnet.Web.Infrastructure;
 
 namespace Ngnet.Web.Controllers.Base
 {
@@ -26,7 +25,7 @@ namespace Ngnet.Web.Controllers.Base
         public ActionResult<CareResponseModel[]> GetReminders(TimeModel model)
         {
             return this.careBaseService
-                .GetReminders<CareResponseModel>(model, this.User.GetId());
+                .GetReminders<CareResponseModel>(model);
         }
     }
 }

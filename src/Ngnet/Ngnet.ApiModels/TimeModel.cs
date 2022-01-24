@@ -2,6 +2,8 @@
 {
     public class TimeModel
     {
+        public string UserId { get; set; }
+
         public int Hours { get; set; }
 
         public int Days { get; set; }

@@ -7,7 +7,7 @@ namespace Ngnet.Services.Cares.Interfaces
 {
     public interface ICareBaseService
     {
-        public T[] GetReminders<T>(TimeModel model, string userId);
+        public T[] GetReminders<T>(TimeModel model);
 
         public Task<CRUD> RemindToggle(CareRequestModel apiModel);
     }

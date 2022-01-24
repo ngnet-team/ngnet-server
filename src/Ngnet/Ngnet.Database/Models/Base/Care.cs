@@ -36,7 +36,5 @@ namespace Ngnet.Database.Models.Base
         public string Notes { get; set; }
 
         public string UserId { get; set; }
-
-        public User User { get; set; }
     }
 }

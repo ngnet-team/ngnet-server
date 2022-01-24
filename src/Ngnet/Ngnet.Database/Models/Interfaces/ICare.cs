@@ -25,7 +25,5 @@ namespace Ngnet.Database.Models.Interfaces
         public string Notes { get; set; }
 
         public string UserId { get; set; }
-
-        public User User { get; set; }
     }
 }

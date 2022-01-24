@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
-using Ngnet.Database.Models;
+﻿using Microsoft.AspNetCore.Mvc;
 using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
-using Ngnet.Web.Infrastructure;
 using System.Threading.Tasks;
 using Ngnet.Common;
 using Ngnet.ApiModels.CareModels;
@@ -22,10 +19,9 @@ namespace Ngnet.Web.Controllers
         public HealthCareController
             (IHealthCareService healthCareService,
             ICareBaseService careBaseService,
-            UserManager<User> userManager,
             JsonService jsonService,
             IConfiguration configuration)
-            : base(careBaseService, jsonService, configuration, userManager)
+            : base(careBaseService, jsonService, configuration)
         {
             this.healthCareService = healthCareService;
         }
@@ -34,13 +30,6 @@ namespace Ngnet.Web.Controllers
         [Route(nameof(Save))]
         public async Task<ActionResult> Save(CareRequestModel model)
         {
-            var errors = await this.NoPermissions(model);
-            if (errors != null)
-            {
-                return this.Unauthorized(errors);
-            }
-
-            model.UserId = model.UserId == null ? this.User.GetId() : model.UserId;
             CRUD result = await this.healthCareService.SaveAsync(model);
 
             LanguagesModel msg = this.GetCrudMsg(result);
@@ -61,11 +50,11 @@ namespace Ngnet.Web.Controllers
             return this.healthCareService.GetByUserId<CareResponseModel>(model.UserId);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route(nameof(Self))]
-        public ActionResult<CareResponseModel[]> Self()
+        public ActionResult<CareResponseModel[]> Self(CareRequestModel model)
         {
-            return this.healthCareService.GetByUserId<CareResponseModel>(this.User.GetId());
+            return this.healthCareService.GetByUserId<CareResponseModel>(model.UserId);
         }
 
         [Authorize(/*Roles = "Admin"*/)]
