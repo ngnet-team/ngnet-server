@@ -17,8 +17,7 @@ namespace Ngnet.Web.Infrastructure
 
             dbContext.Database.Migrate();
 
-            var adminSeederModel = configuration.GetSection("Admin").Get<AdminSeederModel>();
-            new DatabaseSeeder(adminSeederModel).SeedAsync(dbContext, servicesScope.ServiceProvider).GetAwaiter().GetResult();
+            new DatabaseSeeder().SeedAsync(dbContext, servicesScope.ServiceProvider).GetAwaiter().GetResult();
         }
     }
 }

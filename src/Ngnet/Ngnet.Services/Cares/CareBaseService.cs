@@ -26,13 +26,13 @@ namespace Ngnet.Services.Cares
             this.companyService = companyService;
         }
 
-        public T[] GetReminders<T>(TimeModel model, string userId)
+        public T[] GetReminders<T>(TimeModel model)
         {
             T[] cares = new T[1];
 
             var a = this.database;
             var healthCares = this.database.HealthCares
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == model.UserId)
                 .Where(x => x.Reminder >= DateTime.UtcNow && 
                     x.Reminder <= this.GetTime(model) && x.Remind)
                 .To<T>()
@@ -44,7 +44,7 @@ namespace Ngnet.Services.Cares
             }
 
             var vehicleCares = this.database.VehicleCares
-                .Where(x => x.UserId == userId)
+                .Where(x => x.UserId == model.UserId)
                 .Where(x => x.Reminder >= DateTime.UtcNow &&
                     x.Reminder <= this.GetTime(model) && x.Remind)
                 .To<T>()

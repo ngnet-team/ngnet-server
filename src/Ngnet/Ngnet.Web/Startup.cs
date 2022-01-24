@@ -26,9 +26,6 @@ namespace Ngnet.Web
                 //.AddAutoMapper()
                 .AddDatabase(this.Configuration)
                 .AddDbContext<NgnetDbContext>()
-                .AddIdentity()
-                .AddAuthorization()
-                .AddJwtAuthentication(services.GetApplicationSettings(this.Configuration))
                 .AddServices(this.Configuration)
                 .AddControllers();
         }
@@ -48,8 +45,6 @@ namespace Ngnet.Web
                       .AllowAnyOrigin()
                       .AllowAnyHeader()
                       .AllowAnyMethod())
-                .UseAuthentication()
-                .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllers();

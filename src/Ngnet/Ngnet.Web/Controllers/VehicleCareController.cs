@@ -1,10 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using Ngnet.Web.Infrastructure;
 using Microsoft.AspNetCore.Authorization;
 using Ngnet.ApiModels.CareModels;
-using Microsoft.AspNetCore.Identity;
-using Ngnet.Database.Models;
 using Ngnet.Common.Json.Models;
 using Ngnet.Common.Json.Service;
 using Ngnet.Common;
@@ -22,10 +19,9 @@ namespace Ngnet.Web.Controllers
         public VehicleCareController
             (IVehicleCareService vehicleCareService,
             ICareBaseService careBaseService,
-            UserManager<User> userManager,
             JsonService jsonService,
             IConfiguration configuration)
-            : base(careBaseService, jsonService, configuration, userManager)
+            : base(careBaseService, jsonService, configuration)
         {
             this.vehicleCareService = vehicleCareService;
         }
@@ -34,13 +30,6 @@ namespace Ngnet.Web.Controllers
         [Route(nameof(Save))]
         public async Task<ActionResult> Save(CareRequestModel model)
         {
-            var errors = await this.NoPermissions(model);
-            if (errors != null)
-            {
-                return this.Unauthorized(errors);
-            }
-
-            model.UserId = model.UserId == null ? this.User.GetId() : model.UserId;
             CRUD result = await this.vehicleCareService.SaveAsync(model);
 
             LanguagesModel msg = this.GetCrudMsg(result);
@@ -61,11 +50,11 @@ namespace Ngnet.Web.Controllers
             return this.vehicleCareService.GetByUserId<CareResponseModel>(model.UserId);
         }
 
-        [HttpGet]
+        [HttpPost]
         [Route(nameof(Self))]
-        public ActionResult<CareResponseModel[]> Self()
+        public ActionResult<CareResponseModel[]> Self(CareRequestModel model)
         {
-            return this.vehicleCareService.GetByUserId<CareResponseModel>(this.User.GetId());
+            return this.vehicleCareService.GetByUserId<CareResponseModel>(model.UserId);
         }
 
         [Authorize(/*Roles = "Admin"*/)]
