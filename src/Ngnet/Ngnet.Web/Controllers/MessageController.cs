@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Ngnet.ApiModels;
+using Ngnet.ApiModels.Common;
 using Ngnet.ApiModels.CareModels;
 using Ngnet.Common.Json.Service;
 using Ngnet.Services.Cares.Interfaces;

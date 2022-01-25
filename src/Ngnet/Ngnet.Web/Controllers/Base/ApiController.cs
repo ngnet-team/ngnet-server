@@ -1,5 +1,5 @@
 ﻿using Ngnet.Common;
-using Ngnet.ApiModels;
+using Ngnet.ApiModels.Common;
 using Microsoft.AspNetCore.Mvc;
 using Ngnet.Common.Json.Service;
 using Microsoft.Extensions.Configuration;

@@ -41,42 +41,42 @@ namespace Ngnet.Services.Cares
             this.response = CRUD.None;
 
             HealthCare healthCare = this.database.HealthCares.FirstOrDefault(x => x.Id == apiModel.Id);
-            //Create a new entity
             if (healthCare == null)
-            {
-                this.response = CRUD.Created;
-
-                healthCare = MappingFactory.Mapper.Map<HealthCare>(apiModel);
-                await this.database.HealthCares.AddAsync(healthCare);
+    {
+                this.response = await this.CreateAsync(apiModel);
             }
-            //Modify an existing one
             else
             {
-                //Permanently delete
-                if (apiModel.IsDeleted)
-                {
-                    CRUD result = await this.DeleteAsync(healthCare);
-                    if (result == CRUD.Deleted)
-                    {
-                        return CRUD.Deleted;
-                    }
-                }
-
-                this.response = CRUD.Updated;
-
-                //Modify company
-                int companyId = await this.companyService.SaveAsync(apiModel.Company);
-                if (companyId != 0)
-                {
-                    apiModel.Company.Id = companyId;
-                }
-
-                //Modify existing care entity
-                healthCare = (HealthCare)this.ModifyEntity<CareRequestModel>(apiModel, healthCare);
+                this.response = await this.UpdateAsync(healthCare, apiModel);
             }
 
             await this.database.SaveChangesAsync();
             return this.response;
+        }
+
+        private async Task<CRUD> CreateAsync(CareRequestModel apiModel)
+        {
+            HealthCare healthCare = MappingFactory.Mapper.Map<HealthCare>(apiModel);
+            await this.database.HealthCares.AddAsync(healthCare);
+
+            return CRUD.Created;
+        }
+
+        private async Task<CRUD> UpdateAsync(HealthCare healthCare, CareRequestModel apiModel)
+        {
+            this.response = CRUD.Updated;
+
+            //Modify company
+            int companyId = await this.companyService.SaveAsync(apiModel.Company);
+            if (companyId != 0)
+            {
+                apiModel.Company.Id = companyId;
+            }
+
+            //Modify existing care entity
+            healthCare = (HealthCare)this.ModifyEntity<CareRequestModel>(apiModel, healthCare);
+
+            return CRUD.Updated;
         }
 
         public async Task<CRUD> DeleteAsync(ICare care)

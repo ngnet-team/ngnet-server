@@ -8,10 +8,10 @@ using Ngnet.Common;
 using Ngnet.Web.Controllers.Base;
 using Ngnet.Services.Cares.Interfaces;
 using Microsoft.Extensions.Configuration;
+using Ngnet.ApiModels.Common;
 
 namespace Ngnet.Web.Controllers
 {
-    [Authorize]
     public class VehicleCareController : CareController
     {
         private readonly IVehicleCareService vehicleCareService;
@@ -52,7 +52,7 @@ namespace Ngnet.Web.Controllers
 
         [HttpPost]
         [Route(nameof(Self))]
-        public ActionResult<CareResponseModel[]> Self(CareRequestModel model)
+        public ActionResult<CareResponseModel[]> Self(SimpleRequestModel model)
         {
             return this.vehicleCareService.GetByUserId<CareResponseModel>(model.UserId);
         }

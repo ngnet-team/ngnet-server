@@ -1,4 +1,4 @@
-﻿using Ngnet.ApiModels;
+﻿using Ngnet.ApiModels.Common;
 using Ngnet.ApiModels.CareModels;
 using Ngnet.Common;
 using Ngnet.Common.Json.Service;
