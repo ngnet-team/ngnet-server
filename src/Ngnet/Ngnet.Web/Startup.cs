@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Ngnet.ApiModels;
+using Ngnet.ApiModels.Common;
 using Ngnet.Database;
 using Ngnet.Mapper;
 using Ngnet.Web.Infrastructure;
@@ -26,6 +26,8 @@ namespace Ngnet.Web
                 //.AddAutoMapper()
                 .AddDatabase(this.Configuration)
                 .AddDbContext<NgnetDbContext>()
+                .AddJwtAuthentication()
+                .AddAuthorization()
                 .AddServices(this.Configuration)
                 .AddControllers();
         }
@@ -45,6 +47,8 @@ namespace Ngnet.Web
                       .AllowAnyOrigin()
                       .AllowAnyHeader()
                       .AllowAnyMethod())
+                .UseAuthentication()
+                .UseAuthorization()
                 .UseEndpoints(endpoints =>
                 {
                     endpoints.MapControllers();

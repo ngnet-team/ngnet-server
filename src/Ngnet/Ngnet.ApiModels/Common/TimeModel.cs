@@ -1,4 +1,4 @@
-﻿namespace Ngnet.ApiModels
+﻿namespace Ngnet.ApiModels.Common
 {
     public class TimeModel
     {

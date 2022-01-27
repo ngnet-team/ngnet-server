@@ -54,42 +54,42 @@ namespace Ngnet.Services.Cares
             this.response = CRUD.None;
 
             VehicleCare vehicleCare = this.database.VehicleCares.FirstOrDefault(x => x.Id == apiModel.Id);
-            //Create a new entity
             if (vehicleCare == null)
             {
-                this.response = CRUD.Created;
-
-                vehicleCare = MappingFactory.Mapper.Map<VehicleCare>(apiModel);
-                await this.database.VehicleCares.AddAsync(vehicleCare);
+                this.response = await this.CreateAsync(apiModel);
             }
-            //Modify an existing one
             else
             {
-                //Permanently delete
-                if (apiModel.IsDeleted)
-                {
-                    CRUD result = await this.DeleteAsync(vehicleCare);
-                    if (result == CRUD.Deleted)
-                    {
-                        return CRUD.Deleted;
-                    }
-                }
-
-                this.response = CRUD.Updated;
-
-                //Modify company
-                int companyId = await this.companyService.SaveAsync(apiModel.Company);
-                if (companyId != 0)
-                {
-                    apiModel.Company.Id = companyId;
-                }
-
-                //Modify existing care entity
-                vehicleCare = (VehicleCare)this.ModifyEntity<CareRequestModel>(apiModel, vehicleCare);
+                this.response = await this.UpdateAsync(vehicleCare, apiModel);
             }
 
             await this.database.SaveChangesAsync();
             return this.response;
+        }
+
+        private async Task<CRUD> CreateAsync(CareRequestModel apiModel)
+        {
+            VehicleCare vehicleCare = MappingFactory.Mapper.Map<VehicleCare>(apiModel);
+            await this.database.VehicleCares.AddAsync(vehicleCare);
+
+            return CRUD.Created;
+        }
+
+        private async Task<CRUD> UpdateAsync(VehicleCare vehicleCare, CareRequestModel apiModel)
+        {
+            this.response = CRUD.Updated;
+
+            //Modify company
+            int companyId = await this.companyService.SaveAsync(apiModel.Company);
+            if (companyId != 0)
+            {
+                apiModel.Company.Id = companyId;
+            }
+
+            //Modify existing care entity
+            vehicleCare = (VehicleCare)this.ModifyEntity(apiModel, vehicleCare);
+
+            return CRUD.Updated;
         }
     }
 }

@@ -1,6 +1,6 @@
 ﻿using Ngnet.Common.Json.Models;
 
-namespace Ngnet.ApiModels
+namespace Ngnet.ApiModels.Common
 {
     public class SuccessMessagesModel
     {
